@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<meta name="theme-color" content="#0A0A0A"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="RidaSwift"/>
+<meta name="application-name" content="RidaSwift"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RidaSwift — Kenya's Bold Boda Boda</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@500;700&display=swap');
+
+  /* Fallback font stack in case Google Fonts fails */
+  :root {
+    --font-display: 'Bebas Neue', 'Arial Narrow', Arial, sans-serif;
+    --font-body: 'Barlow', 'Arial', sans-serif;
+    --font-condensed: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+  }
+  :root {
+    --ink:     #0A0A0A;
+    --cream:   #F5F0E8;
+    --saffron: #E8A020;
+    --rust:    #C43B1A;
+    --slate:   #1C2B3A;
+    --fog:     #D6D0C4;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .7rem 4vw;
+    background: var(--ink);
+    border-bottom: 3px solid var(--saffron);
+    flex-wrap: wrap;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.8rem; letter-spacing: .08em;
+    color: var(--cream);
+  }
+  .nav-logo span { color: var(--saffron); }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav ul a {
+    font-family: var(--font-condensed);
+    font-size: .95rem; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--fog); text-decoration: none;
+    transition: color .2s;
+  }
+  nav ul a:hover { color: var(--saffron); }
+  .nav-cta {
+    background: var(--saffron); color: var(--ink) !important;
+    padding: .45rem 1.2rem; font-weight: 700 !important;
+    clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+    transition: background .2s !important;
+  }
+  .nav-cta:hover { background: var(--rust) !important; color: var(--cream) !important; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    background: var(--ink);
+    display: grid; grid-template-columns: 1fr 1fr;
+    padding-top: 72px; overflow: hidden; position: relative;
+  }
+  .hero-noise {
+    position: absolute; inset: 0; opacity: .04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 6vw 4vw 6vw 8vw; position: relative; z-index: 2;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-condensed);
+    font-size: .8rem; font-weight: 700; letter-spacing: .3em;
+    text-transform: uppercase; color: var(--saffron);
+    margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 32px; height: 2px;
+    background: var(--saffron);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 9vw, 8rem);
+    line-height: .95; letter-spacing: .03em;
+    color: var(--cream);
+  }
+  h1 .accent { color: var(--saffron); display: block; }
+  h1 .sub-accent { color: var(--rust); }
+  .hero-desc {
+    margin-top: 1.8rem; max-width: 420px;
+    font-size: 1.05rem; line-height: 1.65;
+    color: var(--fog);
+  }
+  .hero-btns {
+    margin-top: 2.4rem; display: flex; gap: 1rem; flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--saffron); color: var(--ink);
+    font-family: var(--font-condensed);
+    font-size: 1rem; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; border: none; cursor: pointer;
+    padding: .85rem 2.2rem; text-decoration: none;
+    clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+    transition: background .2s, transform .15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--rust); color: var(--cream); transform: translateY(-2px); }
+  .btn-outline {
+    border: 2px solid var(--fog); color: var(--fog);
+    font-family: var(--font-condensed);
+    font-size: 1rem; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; background: transparent; cursor: pointer;
+    padding: .82rem 2.2rem; text-decoration: none;
+    clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+    transition: border-color .2s, color .2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--saffron); color: var(--saffron); }
+
+  .hero-stats {
+    margin-top: 3rem; display: flex; gap: 2.5rem;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 2.4rem; color: var(--saffron); line-height: 1;
+  }
+  .stat-label {
+    font-size: .75rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--fog); margin-top: .2rem;
+  }
+
+  .hero-right {
+    position: relative; display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-graphic {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--rust) 0%, var(--saffron) 100%);
+    clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  .hero-moto-wrap {
+    position: relative; z-index: 2; text-align: center;
+    padding: 2rem;
+  }
+  .hero-moto-icon {
+    font-size: 9rem; filter: drop-shadow(0 8px 32px rgba(0,0,0,.4));
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-12px); }
+  }
+  .hero-badge {
+    margin-top: 1rem;
+    background: var(--ink); color: var(--saffron);
+    font-family: var(--font-display);
+    font-size: 1.4rem; letter-spacing: .15em;
+    padding: .5rem 1.6rem;
+    display: inline-block;
+  }
+  .diagonal-divider {
+    height: 80px; background: var(--ink);
+    clip-path: polygon(0 0, 100% 0, 100% 30%, 0 100%);
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 6rem 8vw; }
+  .section-label {
+    font-family: var(--font-condensed);
+    font-size: .78rem; font-weight: 700; letter-spacing: .35em;
+    text-transform: uppercase; color: var(--rust);
+    margin-bottom: .8rem;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .section-label::before {
+    content: ''; display: block; width: 24px; height: 2px;
+    background: var(--rust);
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    line-height: 1; letter-spacing: .04em; color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  h2 .hl { color: var(--rust); }
+
+  /* ── HOW IT WORKS ── */
+  #how { background: var(--slate); }
+  #how h2, #how .section-label { color: var(--cream); }
+  #how .section-label { color: var(--saffron); }
+  #how .section-label::before { background: var(--saffron); }
+  .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; margin-top: 3rem; }
+  .step {
+    border: 1px solid rgba(245,240,232,.12);
+    padding: 2rem;
+    position: relative; overflow: hidden;
+    transition: border-color .25s, transform .2s;
+  }
+  .step:hover { border-color: var(--saffron); transform: translateY(-4px); }
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 5rem; line-height: 1;
+    color: rgba(232,160,32,.15);
+    position: absolute; top: .5rem; right: 1rem;
+    pointer-events: none;
+  }
+  .step-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+  .step h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem; letter-spacing: .06em;
+    color: var(--cream); margin-bottom: .6rem;
+  }
+  .step p { font-size: .92rem; line-height: 1.6; color: var(--fog); }
+
+  /* ── PRICING ── */
+  #pricing { background: var(--cream); }
+  .price-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
+  .price-card {
+    border: 2px solid var(--ink);
+    padding: 2.2rem 1.8rem;
+    position: relative;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .price-card:hover { transform: translateY(-5px); box-shadow: 6px 6px 0 var(--ink); }
+  .price-card.featured {
+    background: var(--ink); color: var(--cream);
+    border-color: var(--saffron);
+  }
+  .price-card.featured h3, .price-card.featured .price-zone { color: var(--cream); }
+  .featured-tag {
+    position: absolute; top: -1px; right: 1.5rem;
+    background: var(--saffron); color: var(--ink);
+    font-family: var(--font-condensed);
+    font-size: .7rem; font-weight: 700; letter-spacing: .2em;
+    text-transform: uppercase; padding: .3rem .8rem;
+  }
+  .price-zone {
+    font-family: var(--font-condensed);
+    font-size: .75rem; font-weight: 700; letter-spacing: .25em;
+    text-transform: uppercase; color: var(--rust); margin-bottom: .5rem;
+  }
+  .price-card.featured .price-zone { color: var(--saffron); }
+  .price-card h3 {
+    font-family: var(--font-display);
+    font-size: 2rem; letter-spacing: .06em;
+    color: var(--ink); margin-bottom: 1rem;
+  }
+  .price-amount {
+    font-family: var(--font-display);
+    font-size: 3.2rem; line-height: 1;
+    color: var(--saffron);
+  }
+  .price-unit { font-size: .85rem; color: var(--fog); margin-top: .3rem; }
+  .price-card.featured .price-unit { color: var(--fog); }
+  .price-features { margin-top: 1.5rem; list-style: none; }
+  .price-features li {
+    padding: .45rem 0; font-size: .9rem;
+    border-bottom: 1px solid rgba(10,10,10,.08);
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .price-card.featured .price-features li { border-color: rgba(245,240,232,.1); color: var(--fog); }
+  .price-features li::before { content: '✓'; color: var(--saffron); font-weight: 700; }
+
+  /* ── BOOKING FORM ── */
+  #book { background: var(--ink); }
+  #book h2 { color: var(--cream); }
+  #book .section-label { color: var(--saffron); }
+  #book .section-label::before { background: var(--saffron); }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem; }
+  .form-group { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1.2rem; }
+  label {
+    font-family: var(--font-condensed);
+    font-size: .78rem; font-weight: 700; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--fog);
+  }
+  input, select, textarea {
+    background: transparent;
+    border: none; border-bottom: 2px solid rgba(245,240,232,.2);
+    color: var(--cream); font-family: var(--font-body); font-size: .95rem;
+    padding: .7rem 0; outline: none;
+    transition: border-color .2s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--saffron); }
+  select option { background: var(--ink); color: var(--cream); }
+  textarea { resize: vertical; min-height: 80px; }
+  .form-note {
+    font-size: .82rem; color: var(--fog); line-height: 1.5;
+    margin-top: 1.5rem;
+    border-left: 3px solid var(--saffron); padding-left: 1rem;
+  }
+  .form-success {
+    display: none; background: rgba(232,160,32,.15);
+    border: 2px solid var(--saffron); padding: 1.5rem;
+    color: var(--saffron);
+    font-family: var(--font-condensed);
+    font-size: 1rem; letter-spacing: .02em;
+    margin-top: 1rem; border-radius: 4px;
+  }
+
+  /* ── RIDER SIGNUP ── */
+  #riders { background: var(--cream); }
+  .rider-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; margin-top: 3rem; }
+  .rider-perks { list-style: none; }
+  .rider-perks li {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1.2rem 0; border-bottom: 1px solid var(--fog);
+  }
+  .perk-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .perk-title {
+    font-family: var(--font-condensed);
+    font-size: 1rem; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--ink); margin-bottom: .25rem;
+  }
+  .perk-desc { font-size: .88rem; color: #555; line-height: 1.5; }
+  .rider-form-box {
+    background: var(--ink); padding: 2.5rem;
+    border-top: 4px solid var(--saffron);
+  }
+  .rider-form-box h3 {
+    font-family: var(--font-display);
+    font-size: 2rem; letter-spacing: .06em;
+    color: var(--cream); margin-bottom: 1.8rem;
+  }
+  .rider-form-box label { color: var(--fog); }
+  .rider-form-box input, .rider-form-box select {
+    border-bottom: 2px solid rgba(245,240,232,.2);
+    color: var(--cream);
+  }
+  .rider-form-box input:focus, .rider-form-box select:focus { border-color: var(--saffron); }
+  .checkbox-row {
+    display: flex; align-items: flex-start; gap: .8rem; margin: 1.2rem 0;
+  }
+  .checkbox-row input[type=checkbox] {
+    width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0;
+    accent-color: var(--saffron); cursor: pointer;
+    border-bottom: none; padding: 0;
+  }
+  .checkbox-row span { font-size: .85rem; color: var(--fog); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #060606; border-top: 3px solid var(--saffron);
+    padding: 4rem 8vw 2rem;
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 3rem;
+  }
+  .footer-brand { font-family: var(--font-display); font-size: 2rem; color: var(--cream); }
+  .footer-brand span { color: var(--saffron); }
+  .footer-tagline { font-size: .88rem; color: var(--fog); margin-top: .6rem; line-height: 1.5; }
+  .footer-heading {
+    font-family: var(--font-condensed);
+    font-size: .75rem; font-weight: 700; letter-spacing: .25em;
+    text-transform: uppercase; color: var(--saffron); margin-bottom: 1rem;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: .5rem; }
+  .footer-links a { color: var(--fog); text-decoration: none; font-size: .88rem; transition: color .2s; }
+  .footer-links a:hover { color: var(--saffron); }
+  .footer-bottom {
+    grid-column: 1/-1; border-top: 1px solid rgba(245,240,232,.08);
+    padding-top: 1.5rem; margin-top: 1rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy { font-size: .8rem; color: #555; }
+  .footer-country {
+    font-family: var(--font-condensed);
+    font-size: .8rem; letter-spacing: .15em; color: var(--saffron);
+  }
+
+  /* ── ANIMATIONS ── */
+  .reveal { opacity: 1; transform: none; }
+
+  /* ── WHATSAPP FLOATING BUTTON ── */
+  .wa-float {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+    display: flex; flex-direction: column; align-items: flex-end; gap: .6rem;
+  }
+  .wa-bubble {
+    background: #25D366; color: #fff;
+    width: 58px; height: 58px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; cursor: pointer;
+    box-shadow: 0 4px 20px rgba(37,211,102,.45);
+    transition: transform .2s, box-shadow .2s;
+    text-decoration: none;
+  }
+  .wa-bubble:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,.6); }
+  .wa-tooltip {
+    background: var(--ink); color: var(--cream);
+    font-family: var(--font-condensed);
+    font-size: .82rem; font-weight: 700; letter-spacing: .1em;
+    padding: .4rem .9rem; white-space: nowrap;
+    opacity: 0; transform: translateX(8px);
+    transition: opacity .2s, transform .2s;
+    pointer-events: none;
+  }
+  .wa-float:hover .wa-tooltip { opacity: 1; transform: translateX(0); }
+  .wa-ping {
+    position: absolute; top: 0; right: 0;
+    width: 16px; height: 16px; background: var(--rust);
+    border-radius: 50%; border: 2px solid var(--cream);
+    animation: ping 1.8s ease-in-out infinite;
+  }
+  @keyframes ping {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.4); opacity: .6; }
+  }
+
+  /* ── WHATSAPP BOOK BUTTON ── */
+  .btn-whatsapp {
+    background: #25D366; color: #fff;
+    font-family: var(--font-condensed);
+    font-size: 1rem; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; border: none; cursor: pointer;
+    padding: .85rem 2.2rem; text-decoration: none;
+    clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+    transition: background .2s, transform .15s;
+    display: inline-flex; align-items: center; gap: .5rem;
+  }
+  .btn-whatsapp:hover { background: #1da851; transform: translateY(-2px); }
+
+  /* ── REVIEWS ── */
+  #reviews { background: var(--slate); }
+  #reviews h2 { color: var(--cream); }
+  #reviews .section-label { color: var(--saffron); }
+  #reviews .section-label::before { background: var(--saffron); }
+  .reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
+  .review-card {
+    background: rgba(245,240,232,.05);
+    border: 1px solid rgba(245,240,232,.1);
+    padding: 1.8rem; position: relative;
+    transition: border-color .25s, transform .2s;
+  }
+  .review-card:hover { border-color: var(--saffron); transform: translateY(-4px); }
+  .review-stars { color: var(--saffron); font-size: 1rem; letter-spacing: .1em; margin-bottom: .8rem; }
+  .review-text {
+    font-size: .92rem; line-height: 1.65; color: var(--fog);
+    font-style: italic; margin-bottom: 1.2rem;
+  }
+  .review-text::before { content: '"'; font-size: 2rem; color: var(--saffron); line-height: 0; vertical-align: -.4em; margin-right: .2rem; }
+  .reviewer {
+    display: flex; align-items: center; gap: .8rem;
+  }
+  .reviewer-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--rust), var(--saffron));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 1rem; color: var(--ink);
+    flex-shrink: 0;
+  }
+  .reviewer-name {
+    font-family: var(--font-condensed);
+    font-size: .85rem; font-weight: 700; letter-spacing: .08em;
+    color: var(--cream);
+  }
+  .reviewer-meta { font-size: .75rem; color: #888; margin-top: .1rem; }
+  .reviews-summary {
+    margin-top: 2.5rem;
+    display: flex; align-items: center; gap: 2rem;
+    padding: 1.5rem; border: 1px solid rgba(245,240,232,.1);
+  }
+  .summary-score {
+    font-family: var(--font-display);
+    font-size: 4rem; color: var(--saffron); line-height: 1; flex-shrink: 0;
+  }
+  .summary-text { font-size: .85rem; color: var(--fog); line-height: 1.6; }
+  .summary-text strong { color: var(--cream); }
+
+  /* ── MAP ── */
+  #map-section { background: var(--cream); }
+  .map-wrap {
+    margin-top: 2.5rem; position: relative;
+    border: 3px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+  .map-wrap iframe { display: block; width: 100%; height: 420px; border: none; }
+  .map-overlay-label {
+    position: absolute; top: 1rem; left: 1rem;
+    background: var(--ink); color: var(--saffron);
+    font-family: var(--font-display);
+    font-size: 1rem; letter-spacing: .12em;
+    padding: .4rem 1rem;
+    pointer-events: none;
+  }
+
+  /* ── MPESA BANNER ── */
+  .mpesa-banner {
+    background: var(--ink); border-top: 3px solid var(--saffron);
+    border-bottom: 3px solid var(--saffron);
+    padding: 2rem 8vw;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .mpesa-left {
+    font-family: var(--font-display);
+    font-size: 1.5rem; letter-spacing: .08em; color: var(--cream);
+  }
+  .mpesa-left span { color: var(--saffron); }
+  .mpesa-details {
+    display: flex; gap: 3rem; flex-wrap: wrap;
+  }
+  .mpesa-item { text-align: center; }
+  .mpesa-type {
+    font-family: var(--font-condensed);
+    font-size: .7rem; font-weight: 700; letter-spacing: .25em;
+    text-transform: uppercase; color: #888; margin-bottom: .3rem;
+  }
+  .mpesa-number {
+    font-family: var(--font-display);
+    font-size: 2rem; letter-spacing: .1em; color: var(--saffron);
+  }
+  .mpesa-name { font-size: .78rem; color: var(--fog); margin-top: .1rem; }
+  .mpesa-logo {
+    font-size: .75rem; font-weight: 700; letter-spacing: .15em;
+    color: #4CAF50; font-family: var(--font-condensed);
+    border: 1px solid #4CAF50; padding: .3rem .8rem;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 6rem 6vw 4rem; }
+    .steps, .price-grid, .form-grid, .rider-grid, .reviews-grid { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr 1fr; }
+    nav ul { display: none; }
+    .nav-social { display: none; }
+    .mpesa-banner { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ── SOCIAL BAR ── */
+  .social-bar {
+    background: var(--saffron);
+    padding: .7rem 8vw;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .social-bar-text {
+    font-family: var(--font-condensed);
+    font-size: .85rem; font-weight: 700; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .social-links { display: flex; gap: .8rem; }
+  .social-btn {
+    display: flex; align-items: center; gap: .5rem;
+    background: var(--ink); color: var(--cream);
+    font-family: var(--font-condensed); font-size: .82rem;
+    font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    padding: .45rem 1rem; text-decoration: none;
+    transition: background .2s;
+  }
+  .social-btn:hover { background: var(--slate); }
+  .social-btn.fb { border-left: 3px solid #1877F2; }
+  .social-btn.tk { border-left: 3px solid #ff0050; }
+
+  /* ── DELIVERY SECTION ── */
+  #delivery { background: var(--cream); }
+  .delivery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 3rem; }
+  .delivery-cards { display: flex; flex-direction: column; gap: 1rem; }
+  .delivery-card {
+    border: 2px solid var(--ink); padding: 1.5rem;
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .delivery-card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 var(--ink); }
+  .delivery-icon { font-size: 2rem; flex-shrink: 0; }
+  .delivery-title {
+    font-family: var(--font-condensed); font-size: 1rem;
+    font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink); margin-bottom: .3rem;
+  }
+  .delivery-desc { font-size: .88rem; color: #555; line-height: 1.5; }
+  .delivery-cta-box {
+    background: var(--ink); padding: 2.5rem;
+    border-top: 4px solid var(--saffron);
+    position: sticky; top: 90px;
+  }
+  .delivery-cta-box h3 {
+    font-family: var(--font-display); font-size: 2rem;
+    letter-spacing: .06em; color: var(--cream); margin-bottom: .5rem;
+  }
+  .delivery-cta-box p { color: var(--fog); font-size: .9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+  .delivery-price {
+    font-family: var(--font-display); font-size: 3rem;
+    color: var(--saffron); line-height: 1; margin-bottom: .3rem;
+  }
+  .delivery-price-note { font-size: .8rem; color: var(--fog); margin-bottom: 1.5rem; }
+
+  /* ── REFERRAL SECTION ── */
+  #referral { background: var(--slate); }
+  #referral h2 { color: var(--cream); }
+  #referral .section-label { color: var(--saffron); }
+  #referral .section-label::before { background: var(--saffron); }
+  .referral-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 3rem; }
+  .referral-steps { display: flex; flex-direction: column; gap: 1.5rem; }
+  .referral-step {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+  }
+  .referral-num {
+    font-family: var(--font-display); font-size: 3rem;
+    color: var(--saffron); line-height: 1; flex-shrink: 0; width: 50px;
+  }
+  .referral-step-title {
+    font-family: var(--font-condensed); font-size: 1rem;
+    font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--cream); margin-bottom: .3rem;
+  }
+  .referral-step-desc { font-size: .88rem; color: var(--fog); line-height: 1.5; }
+  .referral-reward-box {
+    background: rgba(232,160,32,.08);
+    border: 2px solid var(--saffron);
+    padding: 2.5rem; text-align: center;
+  }
+  .referral-reward-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+  .referral-reward-amount {
+    font-family: var(--font-display); font-size: 4rem;
+    color: var(--saffron); line-height: 1; margin-bottom: .3rem;
+  }
+  .referral-reward-label { color: var(--fog); font-size: .9rem; margin-bottom: 1.5rem; line-height: 1.6; }
+  .referral-reward-box p { color: var(--fog); font-size: .82rem; line-height: 1.5; margin-top: 1rem; }
+
+  @media (max-width: 900px) {
+    .delivery-grid, .referral-grid { grid-template-columns: 1fr; }
+    .social-bar { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ── PWA INSTALL BANNER ── */
+  #installOverlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.75); z-index: 9999;
+    align-items: center; justify-content: center;
+    padding: 1.5rem;
+  }
+  #installOverlay.show { display: flex; }
+  .install-modal {
+    background: var(--ink); border: 3px solid var(--saffron);
+    padding: 2rem; max-width: 360px; width: 100%;
+    text-align: center; position: relative;
+    animation: popIn .3s ease;
+  }
+  @keyframes popIn {
+    from { transform: scale(.85); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  .install-modal-logo {
+    width: 80px; height: 80px; object-fit: contain;
+    margin: 0 auto 1rem; display: block;
+  }
+  .install-modal-title {
+    font-family: var(--font-display); font-size: 2rem;
+    letter-spacing: .06em; color: var(--cream); margin-bottom: .4rem;
+  }
+  .install-modal-title span { color: var(--saffron); }
+  .install-modal-desc {
+    font-size: .88rem; color: var(--fog); line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  .install-modal-btn {
+    display: block; background: var(--saffron); color: var(--ink);
+    font-family: var(--font-condensed); font-size: 1.1rem;
+    font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    border: none; cursor: pointer; padding: 1rem; width: 100%;
+    margin-bottom: .8rem; transition: background .2s;
+  }
+  .install-modal-btn:hover { background: var(--rust); color: var(--cream); }
+  .install-modal-skip {
+    background: none; border: none; color: #555;
+    font-size: .8rem; cursor: pointer; text-decoration: underline;
+    display: block; margin: 0 auto;
+  }
+  .install-modal-close {
+    position: absolute; top: .8rem; right: .8rem;
+    background: none; border: none; color: var(--fog);
+    font-size: 1.4rem; cursor: pointer; line-height: 1;
+  }
+  .install-features {
+    display: flex; justify-content: center; gap: 1.5rem;
+    margin-bottom: 1.5rem; flex-wrap: wrap;
+  }
+  .install-feature {
+    font-size: .75rem; color: var(--fog); text-align: center;
+  }
+  .install-feature-icon { font-size: 1.4rem; display: block; margin-bottom: .2rem; }
+
+  /* ── PWA INSTALL BANNER (kept for fallback) ── */
+  #installBanner {
+    display: none;
+    position: fixed; bottom: 5rem; left: 1rem; right: 5rem;
+    background: var(--slate); border: 2px solid var(--saffron);
+    padding: 1rem 1.2rem; z-index: 998;
+    align-items: center; justify-content: space-between; gap: 1rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  }
+  .install-text {
+    font-family: var(--font-condensed); font-size: .9rem;
+    font-weight: 700; color: var(--cream); letter-spacing: .05em;
+  }
+  .install-text span { color: var(--saffron); display: block; font-size: .75rem; font-weight: 400; margin-top: .1rem; }
+  .install-btn {
+    background: var(--saffron); color: var(--ink);
+    font-family: var(--font-condensed); font-size: .85rem;
+    font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    border: none; cursor: pointer; padding: .6rem 1.2rem; white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .install-close {
+    background: none; border: none; color: var(--fog);
+    font-size: 1.2rem; cursor: pointer; padding: 0; flex-shrink: 0;
+  }
+
+  /* ── HAMBURGER MENU ── */
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 5px; cursor: pointer;
+    padding: .4rem; background: none; border: none;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--cream); transition: all .3s;
+  }
+  .mobile-menu {
+    display: none; width: 100%;
+    background: var(--ink); padding: 1rem 0;
+    border-top: 1px solid rgba(245,240,232,.1);
+    flex-direction: column;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: var(--font-condensed); font-size: 1rem;
+    font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--fog); text-decoration: none;
+    padding: .7rem 4vw; border-bottom: 1px solid rgba(245,240,232,.05);
+    transition: color .2s, background .2s;
+  }
+  .mobile-menu a:hover { color: var(--saffron); background: rgba(245,240,232,.03); }
+  .mobile-menu .m-cta {
+    background: var(--saffron); color: var(--ink) !important;
+    margin: .8rem 4vw 0; text-align: center; font-weight: 700 !important;
+  }
+  .mobile-menu .m-fb { color: #1877F2 !important; }
+  .mobile-menu .m-tk { color: #ff0050 !important; }
+  @media (max-width: 900px) {
+    .hamburger { display: flex; }
+    .nav-social { display: none !important; }
+  }
+
+  /* ── FARE ESTIMATOR ── */
+  #fare-estimator { background: var(--ink); }
+  #fare-estimator h2 { color: var(--cream); }
+  #fare-estimator .section-label { color: var(--saffron); }
+  #fare-estimator .section-label::before { background: var(--saffron); }
+  .estimator-box {
+    background: var(--slate); border: 2px solid var(--saffron);
+    padding: 2.5rem; max-width: 600px; margin: 2.5rem auto 0;
+  }
+  .estimator-row {
+    display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1.5rem;
+  }
+  .estimator-label {
+    font-family: var(--font-condensed); font-size: .78rem;
+    font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--fog);
+  }
+  .estimator-input {
+    background: transparent; border: none;
+    border-bottom: 2px solid rgba(245,240,232,.2);
+    color: var(--cream); font-family: var(--font-body);
+    font-size: 1rem; padding: .7rem 0; outline: none; width: 100%;
+    transition: border-color .2s;
+  }
+  .estimator-input:focus { border-color: var(--saffron); }
+  .estimator-result {
+    background: rgba(232,160,32,.1); border: 1px solid var(--saffron);
+    padding: 1.5rem; text-align: center; margin-top: 1rem;
+    display: none;
+  }
+  .estimator-fare {
+    font-family: var(--font-display); font-size: 3.5rem;
+    color: var(--saffron); line-height: 1;
+  }
+  .estimator-breakdown {
+    font-size: .82rem; color: var(--fog); margin-top: .5rem; line-height: 1.6;
+  }
+  .estimator-note {
+    font-size: .75rem; color: #666; margin-top: .8rem; font-style: italic;
+  }
+
+  /* ── ABOUT SECTION ── */
+  #about { background: var(--cream); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1.5fr;
+    gap: 4rem; align-items: center; margin-top: 3rem;
+  }
+  .about-photo-wrap { position: relative; }
+  .about-photo {
+    width: 100%; max-width: 280px;
+    border: 4px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--saffron);
+    display: block;
+  }
+  .about-badge {
+    position: absolute; bottom: -1rem; right: -1rem;
+    background: var(--ink); color: var(--saffron);
+    font-family: var(--font-display); font-size: 1rem;
+    letter-spacing: .1em; padding: .5rem 1rem;
+  }
+  .about-name {
+    font-family: var(--font-display); font-size: 2.5rem;
+    letter-spacing: .05em; color: var(--ink); line-height: 1;
+    margin-bottom: .3rem;
+  }
+  .about-title {
+    font-family: var(--font-condensed); font-size: .85rem;
+    font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--rust); margin-bottom: 1.2rem;
+  }
+  .about-bio { font-size: .95rem; color: #444; line-height: 1.7; margin-bottom: 1.5rem; }
+  .about-stats {
+    display: flex; gap: 2rem; flex-wrap: wrap;
+    border-top: 2px solid var(--fog); padding-top: 1.2rem;
+  }
+  .about-stat-num {
+    font-family: var(--font-display); font-size: 2rem;
+    color: var(--ink); line-height: 1;
+  }
+  .about-stat-label {
+    font-size: .72rem; letter-spacing: .15em;
+    text-transform: uppercase; color: #888;
+  }
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .about-photo { max-width: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" style="text-decoration:none;"><img src="ridaswift-logo.png" alt="RidaSwift Logo" style="height:52px;width:auto;"/></a>
+  <ul>
+    <li><a href="#about">About</a>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#pricing">Fares</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#delivery">Delivery</a></li>
+    <li><a href="#referral">Refer & Earn</a></li>
+    <li><a href="#riders">Ride With Us</a></li>
+    <li><a href="#book" class="nav-cta">Book Now</a></li>
+  </ul>
+  <div style="display:flex;gap:.6rem;align-items:center;">
+    <a href="https://www.facebook.com/evans.abok" target="_blank"
+      style="display:flex;align-items:center;gap:.4rem;background:#1877F2;color:#fff;
+      padding:.4rem .9rem;font-family:var(--font-condensed);font-size:.78rem;font-weight:700;
+      letter-spacing:.1em;text-decoration:none;text-transform:uppercase;transition:opacity .2s;"
+      onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+      📘 Facebook
+    </a>
+    <a href="https://www.tiktok.com/@evansabok" target="_blank"
+      style="display:flex;align-items:center;gap:.4rem;background:#ff0050;color:#fff;
+      padding:.4rem .9rem;font-family:var(--font-condensed);font-size:.78rem;font-weight:700;
+      letter-spacing:.1em;text-decoration:none;text-transform:uppercase;transition:opacity .2s;"
+      onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+      🎵 TikTok
+    </a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about">About</a>
+    <li><a href="#how">How It Works</a>
+    <a href="#pricing">Fares</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#delivery">Delivery</a>
+    <a href="#referral">Refer &amp; Earn</a>
+    <a href="#riders">Ride With Us</a>
+    <a href="#book" class="m-cta" onclick="toggleMenu()">Book Now</a>
+    <a href="https://www.facebook.com/evans.abok" target="_blank" class="m-fb">📘 Facebook</a>
+    <a href="https://www.tiktok.com/@evansabok" target="_blank" class="m-tk">🎵 TikTok</a>
+  </div>
+</nav>
+
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-left">
+    <div class="hero-eyebrow">Eldoret's Premier Boda Boda</div>
+    <h1>
+      Fast.<br>
+      <span class="accent">Safe.</span>
+      Re<span class="sub-accent">lia</span>ble.
+    </h1>
+    <p class="hero-desc">RidaSwift connects you with trusted, professional boda boda riders across Eldoret City. Book a ride in seconds — no waiting, no haggling.</p>
+    <div class="hero-btns">
+      <a href="#book" class="btn-primary">Book a Ride</a>
+      <a href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%20need%20a%20boda%20boda%20ride.%20My%20pickup%20is%3A" target="_blank" class="btn-whatsapp">💬 WhatsApp to Book</a>
+    </div>
+    <div style="margin-top:1rem;display:flex;gap:1rem;flex-wrap:wrap;">
+      <a href="#riders" class="btn-outline">Become a Rider</a>
+      <a href="tel:+254716651788" class="btn-outline" style="border-color:var(--saffron);color:var(--saffron);">
+        📞 Call Now
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Active Riders</div>
+      </div>
+      <div>
+        <div class="stat-num">12K+</div>
+        <div class="stat-label">Rides Done</div>
+      </div>
+      <div>
+        <div class="stat-num">4.8★</div>
+        <div class="stat-label">Avg Rating</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-graphic"></div>
+    <div class="hero-moto-wrap">
+      <div class="hero-moto-icon">🏍️</div>
+      <div class="hero-badge">Available 24 / 7</div>
+    </div>
+  </div>
+</section>
+<div class="diagonal-divider"></div>
+
+<!-- MPESA BANNER -->
+<div class="mpesa-banner">
+  <div class="mpesa-left">Pay with <span>M-Pesa</span> — Fast & Easy</div>
+  <div class="mpesa-details">
+    <div class="mpesa-item">
+      <div class="mpesa-type">Send Money To</div>
+      <div class="mpesa-number">0716 651 788</div>
+      <div class="mpesa-name">RidaSwift — Evans</div>
+    </div>
+  </div>
+  <div class="mpesa-logo">✓ M-PESA ACCEPTED</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div style="display:flex;justify-content:center;margin-bottom:2rem;"><img src="ridaswift-logo.png" alt="RidaSwift Logo" style="height:80px;width:auto;"/></div>
+  <div class="section-label">Simple Process</div>
+  <h2>HOW <span style="color:var(--saffron)">RIDASWIFT</span> WORKS</h2>
+  <div class="steps">
+    <div class="step reveal" data-delay="1">
+      <div class="step-num">01</div>
+      <div class="step-icon">📍</div>
+      <h3>Tell Us Where</h3>
+      <p>Fill in your pickup and drop-off location using our booking form. Takes less than 60 seconds.</p>
+    </div>
+    <div class="step reveal" data-delay="2">
+      <div class="step-num">02</div>
+      <div class="step-icon">🤝</div>
+      <h3>Get Matched</h3>
+      <p>We confirm your booking via WhatsApp or call and connect you with the nearest available rider.</p>
+    </div>
+    <div class="step reveal" data-delay="3">
+      <div class="step-num">03</div>
+      <div class="step-icon">🚀</div>
+      <h3>Ride & Arrive</h3>
+      <p>Your rider arrives, you get there fast and safely. Pay cash or M-Pesa — your choice.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div style="display:flex;justify-content:center;margin-bottom:2rem;"><img src="ridaswift-logo.png" alt="RidaSwift Logo" style="height:80px;width:auto;"/></div>
+  <div class="section-label">Transparent Fares</div>
+  <h2>SIMPLE <span class="hl">PRICING</span></h2>
+  <p style="max-width:520px;color:#444;line-height:1.65;margin-top:.5rem">No hidden charges. No surprises. All fares are fixed by zone — what you see is what you pay.</p>
+  <div class="price-grid">
+    <div class="price-card reveal" data-delay="1">
+      <div class="price-zone">Within Town</div>
+      <h3>Short Hop</h3>
+      <div class="price-amount">KES 80</div>
+      <div class="price-unit">Up to 3 km</div>
+      <ul class="price-features">
+        <li>Town centre routes</li>
+        <li>Market & shopping runs</li>
+        <li>M-Pesa or cash</li>
+        <li>Helmet provided</li>
+      </ul>
+    </div>
+    <div class="price-card featured reveal" data-delay="2">
+      <div class="featured-tag">Most Popular</div>
+      <div class="price-zone">Mid Distance</div>
+      <h3>Standard Ride</h3>
+      <div class="price-amount">KES 150</div>
+      <div class="price-unit">3 – 10 km</div>
+      <ul class="price-features">
+        <li>Cross-estate trips</li>
+        <li>Office commutes</li>
+        <li>M-Pesa or cash</li>
+        <li>Helmet + luggage rack</li>
+      </ul>
+    </div>
+    <div class="price-card reveal" data-delay="3">
+      <div class="price-zone">Long Distance</div>
+      <h3>Express Run</h3>
+      <div class="price-amount">KES 300+</div>
+      <div class="price-unit">10+ km — quoted on request</div>
+      <ul class="price-features">
+        <li>Out-of-town deliveries</li>
+        <li>Airport transfers</li>
+        <li>M-Pesa or cash</li>
+        <li>Dedicated rider assigned</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING FORM -->
+<section id="book">
+  <div style="display:flex;justify-content:center;margin-bottom:2rem;"><img src="ridaswift-logo.png" alt="RidaSwift Logo" style="height:80px;width:auto;"/></div>
+  <div class="section-label">Get Moving</div>
+  <h2>BOOK <span style="color:var(--saffron)">YOUR RIDE</span></h2>
+  <div class="form-grid">
+    <div>
+      <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="bName" placeholder="e.g. Amina Wanjiku" oninput="updateBookLinks()" />
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="bPhone" placeholder="07XX XXX XXX" oninput="updateBookLinks()" />
+        </div>
+        <div class="form-group">
+          <label>Pickup Location</label>
+          <input type="text" id="bPickup" placeholder="Street, estate or landmark" oninput="updateBookLinks()" />
+        </div>
+        <div class="form-group">
+          <label>Drop-off Location</label>
+          <input type="text" id="bDropoff" placeholder="Where are you going?" oninput="updateBookLinks()" />
+        </div>
+        <div class="form-group">
+          <label>When do you need the ride?</label>
+          <select id="bTiming" onchange="updateBookLinks()">
+            <option>Right now — ASAP</option>
+            <option>Within the hour</option>
+            <option>Schedule for later today</option>
+            <option>Schedule for tomorrow</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Payment Method</label>
+          <select id="bPayment" onchange="updateBookLinks()">
+            <option>M-Pesa</option>
+            <option>Cash</option>
+          </select>
+        </div>
+        <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:.8rem;">
+          <a id="bWaBtn" href="#" target="_blank"
+            style="display:block;background:#25D366;color:#fff;padding:1rem;text-align:center;font-weight:700;text-decoration:none;font-size:1rem;border-radius:2px;">
+            💬 Book via WhatsApp
+          </a>
+          <a href="tel:+254716651788"
+            style="display:block;background:var(--saffron);color:var(--ink);padding:1rem;text-align:center;font-weight:700;text-decoration:none;font-size:1rem;border-radius:2px;">
+            📞 Call to Book
+          </a>
+        </div>
+        <p style="color:var(--fog);font-size:.8rem;margin-top:.8rem;line-height:1.5;">
+          Tap <strong style="color:var(--saffron)">WhatsApp</strong> above to send your booking. A copy is also emailed to RidaSwift automatically.
+        </p>
+        <div id="bEmailStatus" style="display:none;color:#4CAF50;font-size:.85rem;margin-top:.5rem;">✅ Email also sent!</div>
+    </div>
+    <div>
+      <div class="form-note">
+        <strong style="color:var(--cream)">How confirmation works:</strong><br><br>
+        After submitting, our team will WhatsApp or call you within 2 minutes to confirm your rider's name, bike plate, and estimated arrival time.<br><br>
+        <strong style="color:var(--cream)">Operating hours:</strong> 6:00 AM – 8:00 PM daily.<br><br>
+        <strong style="color:var(--cream)">Questions?</strong> WhatsApp us directly at <span style="color:var(--saffron)">+254 716 651 788</span>
+      </div>
+      <div style="margin-top:2.5rem;padding:2rem;border:1px solid rgba(245,240,232,.1)">
+        <div style="font-family:var(--font-display);font-size:1.3rem;color:var(--cream);letter-spacing:.08em;margin-bottom:1rem">SAFETY PROMISE</div>
+        <div style="display:flex;flex-direction:column;gap:.8rem">
+          <div style="display:flex;gap:.8rem;align-items:center;color:var(--fog);font-size:.88rem">
+            <span style="color:var(--saffron);font-size:1.1rem">🪖</span> Every rider carries a passenger helmet
+          </div>
+          <div style="display:flex;gap:.8rem;align-items:center;color:var(--fog);font-size:.88rem">
+            <span style="color:var(--saffron);font-size:1.1rem">📋</span> All riders are vetted and licensed
+          </div>
+          <div style="display:flex;gap:.8rem;align-items:center;color:var(--fog);font-size:.88rem">
+            <span style="color:var(--saffron);font-size:1.1rem">⭐</span> Rated after every ride for accountability
+          </div>
+          <div style="display:flex;gap:.8rem;align-items:center;color:var(--fog);font-size:.88rem">
+            <span style="color:var(--saffron);font-size:1.1rem">📞</span> 24/7 support line for any issues
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div style="display:flex;justify-content:center;margin-bottom:2rem;"><img src="ridaswift-logo.png" alt="RidaSwift Logo" style="height:80px;width:auto;"/></div>
+  <div class="section-label">Real Riders, Real Stories</div>
+  <h2>WHAT CUSTOMERS <span style="color:var(--saffron)">SAY</span></h2>
+  <div class="reviews-grid">
+    <div class="review-card reveal" data-delay="1">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Ordered a ride at 6am and the boda was at my gate in under 5 minutes. Professional, helmet ready, no drama. This is how it should be done.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">AW</div>
+        <div>
+          <div class="reviewer-name">Amina Wanjiku</div>
+          <div class="reviewer-meta">Eldoret Town · Regular customer</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal" data-delay="2">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">I was late for a meeting in Eldoret Town. RidaSwift got me there faster than a taxi and cost me half the price. I use them every morning now.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">BK</div>
+        <div>
+          <div class="reviewer-name">Brian Kamau</div>
+          <div class="reviewer-meta">Pioneer · Daily commuter</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal" data-delay="3">
+      <div class="review-stars">★★★★☆</div>
+      <p class="review-text">Needed a delivery across town urgently — called RidaSwift and they sorted it within the hour. Reliable, honest pricing, M-Pesa works perfectly.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">FO</div>
+        <div>
+          <div class="reviewer-name">Faith Otieno</div>
+          <div class="reviewer-meta">Langas · Business owner</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reviews-summary reveal">
+    <div class="summary-score">4.8</div>
+    <div class="summary-text">
+      <strong>Rated 4.8 out of 5</strong> based on 300+ verified ride reviews.<br>
+      96% of customers say they would recommend RidaSwift to a friend.<br>
+      <span style="color:var(--saffron)">★★★★★</span> — Kenya's highest-rated boda boda service.
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map-section">
+  <div style="display:flex;justify-content:center;margin-bottom:2rem;"><img src="ridaswift-logo.png" alt="RidaSwift Logo" style="height:80px;width:auto;"/></div>
+  <div class="section-label">Service Area</div>
+  <h2>WHERE WE <span class="hl">OPERATE</span></h2>
+  <p style="color:#444;line-height:1.65;margin-top:.4rem;max-width:520px">Currently serving Eldoret City, Elgonview, Huruma, Langas and surrounding areas. Expanding to Nakuru and Kisumu in 2026.</p>
+  <div class="map-wrap reveal" id="mapContainer">
+    <div class="map-overlay-label">📍 ELDORET SERVICE ZONE</div>
+    <iframe
+      src="https://maps.google.com/maps?q=Eldoret,Kenya&t=&z=13&ie=UTF8&iwloc=&output=embed"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      onerror="showMapFallback()" onload="checkMap(this)">
+    </iframe>
+    <div id="mapFallback" style="display:none;align-items:center;justify-content:center;
+      flex-direction:column;gap:1rem;height:420px;background:var(--slate);cursor:pointer;"
+      onclick="window.open('https://www.google.com/maps/place/Eldoret,+Kenya','_blank')">
+      <div style="font-size:4rem;">🗺️</div>
+      <div style="font-family:var(--font-display);font-size:2rem;letter-spacing:.1em;color:var(--saffron);">ELDORET, KENYA</div>
+      <div style="font-size:.9rem;color:var(--fog);text-align:center;padding:0 1rem;">Serving Eldoret CBD · Elgonview · Huruma · Langas</div>
+      <div style="background:var(--saffron);color:var(--ink);padding:.6rem 1.6rem;
+        font-family:var(--font-condensed);font-weight:700;letter-spacing:.12em;margin-top:.5rem;">
+        📍 TAP TO OPEN IN GOOGLE MAPS
+      </div>
+    </div>
+  </div>
+  <script>
+    function showMapFallback() {
+      var f = document.getElementById('mapFallback');
+      var iframe = document.querySelector('#mapContainer iframe');
+      if (f) { f.style.display = 'flex'; }
+      if (iframe) { iframe.style.display = 'none'; }
+    }
+    function checkMap(iframe) {
+      try {
+        if (!iframe.contentDocument && !iframe.contentWindow) showMapFallback();
+      } catch(e) { /* cross-origin, map loaded fine */ }
+    }
+    // Show fallback after 5 seconds if map hasn't loaded
+    setTimeout(function() {
+      var iframe = document.querySelector('#mapContainer iframe');
+      if (iframe && iframe.style.display !== 'none') {
+        try { var t = iframe.contentWindow.location.href; }
+        catch(e) { return; } // loaded fine, cross-origin block is normal
+        showMapFallback();
+      }
+    }, 5000);
+  </script>
+</div>
+</section>
+
+<!-- RIDER SIGNUP -->
+<section id="riders">
+  <div style="display:flex;justify-content:center;margin-bottom:2rem;"><img src="ridaswift-logo.png" alt="RidaSwift Logo" style="height:80px;width:auto;"/></div>
+  <div class="section-label">Join the Team</div>
+  <h2>RIDE WITH <span class="hl">US</span></h2>
+  <div class="rider-grid">
+    <div>
+      <p style="color:#444;line-height:1.65;margin-bottom:2rem;max-width:400px">Turn your boda boda into a steady income. Join Kenya's most professional rider network and earn more, every day.</p>
+      <ul class="rider-perks">
+        <li class="reveal">
+          <div class="perk-icon">💰</div>
+          <div>
+            <div class="perk-title">Earn KES 1,500–3,000 / day</div>
+            <div class="perk-desc">Top riders earn above average thanks to our busy booking volume and fair commission structure.</div>
+          </div>
+        </li>
+        <li class="reveal" data-delay="1">
+          <div class="perk-icon">🕐</div>
+          <div>
+            <div class="perk-title">Set Your Own Hours</div>
+            <div class="perk-desc">Work mornings, evenings, or full days. You're in control of your schedule.</div>
+          </div>
+        </li>
+        <li class="reveal" data-delay="2">
+          <div class="perk-icon">🛡️</div>
+          <div>
+            <div class="perk-title">Accident Cover Included</div>
+            <div class="perk-desc">All active RidaSwift riders are covered under our group accident insurance policy.</div>
+          </div>
+        </li>
+        <li class="reveal" data-delay="3">
+          <div class="perk-icon">📱</div>
+          <div>
+            <div class="perk-title">M-Pesa Daily Payouts</div>
+            <div class="perk-desc">Your earnings hit your M-Pesa every evening. No delays, no paperwork.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="rider-form-box reveal">
+      <h3>Apply to Ride →</h3>
+      <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="rName" placeholder="Your full name" oninput="updateRiderLinks()" />
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="rPhone" placeholder="07XX XXX XXX" oninput="updateRiderLinks()" />
+        </div>
+        <div class="form-group">
+          <label>Town / Area you ride in</label>
+          <input type="text" id="rArea" placeholder="e.g. Eldoret, Huruma, Langas, Elgonview" oninput="updateRiderLinks()" />
+        </div>
+        <div class="form-group">
+          <label>Years of riding experience</label>
+          <select id="rExp" onchange="updateRiderLinks()">
+            <option>Less than 1 year</option>
+            <option>1–3 years</option>
+            <option>3–5 years</option>
+            <option>5+ years</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Do you have a valid licence?</label>
+          <select id="rLicence" onchange="updateRiderLinks()">
+            <option>Yes — valid PSV or Class A</option>
+            <option>Yes — standard licence</option>
+            <option>No — I'm working on it</option>
+          </select>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="rTerms" />
+          <span>I confirm my bike is roadworthy and I agree to RidaSwift's rider code of conduct.</span>
+        </div>
+        <div style="background:rgba(37,211,102,.08);border:1px solid #25D366;padding:.8rem;margin:.8rem 0;border-radius:2px;">
+          <p style="color:var(--fog);font-size:.82rem;line-height:1.5;">
+            ✅ After submitting your application, join our official riders WhatsApp group to receive ride assignments and updates.
+          </p>
+        </div>
+        <div style="margin-top:1.2rem;display:flex;flex-direction:column;gap:.8rem;">
+          <a id="rWaBtn" href="#" target="_blank"
+            style="display:block;background:#25D366;color:#fff;padding:1rem;text-align:center;font-weight:700;text-decoration:none;font-size:1rem;border-radius:2px;">
+            💬 Apply via WhatsApp
+          </a>
+          <a href="tel:+254716651788"
+            style="display:block;background:var(--saffron);color:var(--ink);padding:1rem;text-align:center;font-weight:700;text-decoration:none;font-size:1rem;border-radius:2px;">
+            📞 Call Us Instead
+          </a>
+        </div>
+        <p style="color:var(--fog);font-size:.8rem;margin-top:.8rem;line-height:1.5;">
+          Tap <strong style="color:var(--saffron)">WhatsApp</strong> above to send your application. A copy is also emailed to RidaSwift automatically.
+        </p>
+        <div id="rEmailStatus" style="display:none;color:#4CAF50;font-size:.85rem;margin-top:.5rem;">✅ Email also sent!</div>
+        <div style="margin-top:1rem;padding:1rem;background:rgba(37,211,102,.08);border:1px solid #25D366;border-radius:2px;">
+          <p style="color:var(--fog);font-size:.82rem;line-height:1.5;margin-bottom:.8rem;">
+            🏍️ Once approved, join our official riders group to receive bookings and updates:
+          </p>
+          <a href="https://chat.whatsapp.com/IOTZBwiuSwSEWNsoJ1bfyE?mode=gi_t" target="_blank"
+            style="display:block;background:#25D366;color:#fff;padding:.9rem;text-align:center;
+            font-weight:700;text-decoration:none;font-size:.95rem;border-radius:2px;">
+            👥 Join RidaSwift Riders Group
+          </a>
+        </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- DELIVERY SERVICE -->
+<section id="delivery">
+  <div style="display:flex;justify-content:center;margin-bottom:2rem;"><img src="ridaswift-logo.png" alt="RidaSwift Logo" style="height:80px;width:auto;"/></div>
+  <div class="section-label">More Than Rides</div>
+  <h2>DELIVERY <span class="hl">SERVICE</span></h2>
+  <div class="delivery-grid">
+    <div class="delivery-cards">
+      <div class="delivery-card reveal">
+        <div class="delivery-icon">📦</div>
+        <div>
+          <div class="delivery-title">Package Delivery</div>
+          <div class="delivery-desc">Send parcels, documents and small packages anywhere in Eldoret. Fast, safe and trackable via WhatsApp updates.</div>
+        </div>
+      </div>
+      <div class="delivery-card reveal" data-delay="1">
+        <div class="delivery-icon">🛒</div>
+        <div>
+          <div class="delivery-title">Shopping Errands</div>
+          <div class="delivery-desc">Need something from the market or supermarket? We pick it up and bring it straight to your door.</div>
+        </div>
+      </div>
+      <div class="delivery-card reveal" data-delay="2">
+        <div class="delivery-icon">💊</div>
+        <div>
+          <div class="delivery-title">Pharmacy & Urgent Errands</div>
+          <div class="delivery-desc">Medicines, documents, forgotten items — we handle urgent deliveries fast, 6AM to 8PM daily.</div>
+        </div>
+      </div>
+      <div class="delivery-card reveal" data-delay="3">
+        <div class="delivery-icon">⛽</div>
+        <div>
+          <div class="delivery-title">Gas Refilling</div>
+          <div class="delivery-desc">Running low on cooking gas? We pick up your cylinder, get it refilled and bring it back to your door. Fast and convenient.</div>
+        </div>
+      </div>
+      <div class="delivery-card reveal" data-delay="4">
+        <div class="delivery-icon">🚚</div>
+        <div>
+          <div class="delivery-title">General Delivery</div>
+          <div class="delivery-desc">Anything that fits on a boda — we deliver it. From documents to small household items anywhere in Eldoret.</div>
+        </div>
+      </div>
+    </div>
+    <div class="delivery-cta-box reveal">
+      <h3>Book a Delivery</h3>
+      <p>Tell us what you need delivered, where it's coming from and where it's going. We'll handle the rest.</p>
+      <div class="delivery-price">KES 100+</div>
+      <div class="delivery-price-note">Starting price within Eldoret · Final price quoted on WhatsApp</div>
+      <a href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%20need%20a%20delivery.%20Details%3A" target="_blank"
+        onclick="sendSMS('NEW DELIVERY REQUEST - RidaSwift\nA customer has requested a delivery. Check WhatsApp for details.')"
+        style="display:block;background:#25D366;color:#fff;padding:1rem;text-align:center;
+        font-weight:700;text-decoration:none;font-size:1rem;margin-bottom:.8rem;">
+        💬 Book Delivery on WhatsApp
+      </a>
+      <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:1.2rem;">
+        <div style="display:flex;gap:.8rem;align-items:center;color:var(--fog);font-size:.85rem;">
+          <span style="color:var(--saffron)">✓</span> Same-day delivery within Eldoret
+        </div>
+        <div style="display:flex;gap:.8rem;align-items:center;color:var(--fog);font-size:.85rem;">
+          <span style="color:var(--saffron)">✓</span> WhatsApp updates on your delivery
+        </div>
+        <div style="display:flex;gap:.8rem;align-items:center;color:var(--fog);font-size:.85rem;">
+          <span style="color:var(--saffron)">✓</span> M-Pesa or cash payment
+        </div>
+        <div style="display:flex;gap:.8rem;align-items:center;color:var(--fog);font-size:.85rem;">
+          <span style="color:var(--saffron)">✓</span> Available 6AM – 8PM daily
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REFERRAL -->
+<section id="referral">
+  <div style="display:flex;justify-content:center;margin-bottom:2rem;"><img src="ridaswift-logo.png" alt="RidaSwift Logo" style="height:80px;width:auto;"/></div>
+  <div class="section-label">Earn With Us</div>
+  <h2>REFER & <span style="color:var(--saffron)">EARN</span></h2>
+  <div class="referral-grid">
+    <div class="referral-steps">
+      <p style="color:var(--fog);line-height:1.65;margin-bottom:1rem;max-width:400px;">
+        Know someone who needs reliable rides in Eldoret? Refer them to RidaSwift and earn cash every time they book their first ride.
+      </p>
+      <div class="referral-step reveal">
+        <div class="referral-num">01</div>
+        <div>
+          <div class="referral-step-title">Share With a Friend</div>
+          <div class="referral-step-desc">Tell a friend, neighbour or colleague about RidaSwift. Share our website link or WhatsApp number and ask them to mention your name when booking.</div>
+        </div>
+      </div>
+      <div class="referral-step reveal" data-delay="1">
+        <div class="referral-num">02</div>
+        <div>
+          <div class="referral-step-title">They Book a Ride</div>
+          <div class="referral-step-desc">Your friend books their first ride with RidaSwift and mentions your name. That's all they need to do.</div>
+        </div>
+      </div>
+      <div class="referral-step reveal" data-delay="2">
+        <div class="referral-num">03</div>
+        <div>
+          <div class="referral-step-title">You Get Paid</div>
+          <div class="referral-step-desc">Once their first ride is confirmed, your bonus is sent straight to your M-Pesa. No delays, no paperwork.</div>
+        </div>
+      </div>
+      <a href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%20want%20to%20refer%20a%20customer.%20My%20name%20is%3A" target="_blank"
+        style="display:inline-block;background:var(--saffron);color:var(--ink);padding:1rem 2rem;
+        font-family:var(--font-condensed);font-weight:700;letter-spacing:.12em;
+        text-transform:uppercase;text-decoration:none;margin-top:.5rem;font-size:1rem;">
+        💬 Refer a Rider Now →
+      </a>
+    </div>
+    <div class="referral-reward-box reveal">
+      <div class="referral-reward-icon">💰</div>
+      <div class="referral-reward-amount">KES 100</div>
+      <div class="referral-reward-label">
+        Earned per successful referral<br>
+        <strong style="color:var(--cream)">Paid via M-Pesa</strong>
+      </div>
+      <div style="border-top:1px solid rgba(232,160,32,.2);padding-top:1.2rem;margin-top:.5rem;">
+        <div style="font-family:var(--font-condensed);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--saffron);margin-bottom:.8rem;">Referral Bonuses</div>
+        <div style="display:flex;justify-content:space-between;color:var(--fog);font-size:.88rem;padding:.4rem 0;border-bottom:1px solid rgba(245,240,232,.08);">
+          <span>1 referral</span><span style="color:var(--cream);">KES 100</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;color:var(--fog);font-size:.88rem;padding:.4rem 0;border-bottom:1px solid rgba(245,240,232,.08);">
+          <span>5 referrals</span><span style="color:var(--cream);">KES 500</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;color:var(--fog);font-size:.88rem;padding:.4rem 0;">
+          <span>10+ referrals</span><span style="color:var(--saffron);font-weight:700;">KES 1,000</span>
+        </div>
+      </div>
+      <p>No limit on referrals. The more customers you refer, the more you earn — every month.</p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">Meet the Founder</div>
+  <h2>THE MAN <span class="hl">BEHIND</span> RIDASWIFT</h2>
+  <div class="about-grid">
+    <div class="about-photo-wrap reveal">
+      <img src="evans-photo.jpg" alt="Evans Abok" class="about-photo"/>
+      <div class="about-badge">Founder & CEO</div>
+    </div>
+    <div class="reveal" data-delay="1">
+      <div class="about-name">Evans Abok</div>
+      <div class="about-title">Founder & CEO — RidaSwift Eldoret</div>
+      <p class="about-bio">
+        Evans Abok is a passionate entrepreneur from Eldoret who founded RidaSwift
+        with one goal — to make boda boda rides in Eldoret safer, faster and more
+        professional. With deep roots in the community and a commitment to quality,
+        Evans built RidaSwift from the ground up to serve Eldoret CBD, Elgonview,
+        Huruma, Langas and surrounding areas.
+      </p>
+      <p class="about-bio">
+        His vision is simple: give every rider a steady income and every customer
+        a ride they can trust — every single time.
+      </p>
+      <div class="about-stats">
+        <div>
+          <div class="about-stat-num">500+</div>
+          <div class="about-stat-label">Active Riders</div>
+        </div>
+        <div>
+          <div class="about-stat-num">12K+</div>
+          <div class="about-stat-label">Rides Done</div>
+        </div>
+        <div>
+          <div class="about-stat-num">4.8★</div>
+          <div class="about-stat-label">Avg Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FARE ESTIMATOR -->
+<section id="fare-estimator">
+  <div class="section-label">Know Before You Ride</div>
+  <h2>ESTIMATE <span style="color:var(--saffron)">YOUR FARE</span></h2>
+  <div class="estimator-box reveal">
+    <div class="estimator-row">
+      <label class="estimator-label">Distance (km)</label>
+      <input type="number" id="fareDistance" class="estimator-input"
+        placeholder="e.g. 3" min="0" step="0.1"
+        oninput="calculateFare()"/>
+    </div>
+    <div class="estimator-row">
+      <label class="estimator-label">Number of Passengers</label>
+      <select id="farePassengers" class="estimator-input" onchange="calculateFare()">
+        <option value="1">1 Passenger</option>
+        <option value="2">2 Passengers (extra charge)</option>
+      </select>
+    </div>
+    <div class="estimator-result" id="fareResult">
+      <div class="estimator-fare" id="fareAmount">KES 0</div>
+      <div class="estimator-breakdown" id="fareBreakdown"></div>
+      <div class="estimator-note">* Final fare may vary slightly based on route and traffic</div>
+      <a id="fareWaBtn" href="#" target="_blank"
+        style="display:block;background:#25D366;color:#fff;padding:.9rem;
+        text-align:center;font-weight:700;text-decoration:none;
+        font-size:1rem;margin-top:1rem;border-radius:2px;">
+        💬 Book This Ride on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div style="margin-bottom:.5rem;"><img src="ridaswift-logo.png" alt="RidaSwift Logo" style="height:70px;width:auto;"/></div>
+    <p class="footer-tagline">Eldoret's bold, professional boda boda network.<br>Fast rides. Trusted riders. Fair fares.</p>
+    <p style="color:#555;font-size:.8rem;margin-top:1rem">📍 Eldoret, Kenya &nbsp;|&nbsp; 🕐 6AM – 8PM Daily</p>
+    <div style="display:flex;gap:.8rem;margin-top:1rem;">
+      <a href="https://www.facebook.com/evans.abok" target="_blank"
+        style="color:var(--fog);text-decoration:none;font-size:.85rem;transition:color .2s;"
+        onmouseover="this.style.color='#1877F2'" onmouseout="this.style.color=''">📘 Facebook</a>
+      <a href="https://www.tiktok.com/@evansabok" target="_blank"
+        style="color:var(--fog);text-decoration:none;font-size:.85rem;transition:color .2s;"
+        onmouseover="this.style.color='#ff0050'" onmouseout="this.style.color=''">🎵 TikTok</a>
+    </div>
+  </div>
+  <div>
+    <div class="footer-heading">Quick Links</div>
+    <ul class="footer-links">
+      <li><a href="#about">About</a>
+    <li><a href="#how">How It Works</a></li>
+      <li><a href="#pricing">Pricing & Fares</a></li>
+      <li><a href="#book">Book a Ride</a></li>
+      <li><a href="#riders">Become a Rider</a></li>
+      <li><a href="#delivery">Delivery Service</a></li>
+      <li><a href="#referral">Refer &amp; Earn</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="footer-heading">Contact Us</div>
+    <ul class="footer-links">
+      <li><a href="tel:+254716651788" style="color:var(--saffron)!important;font-weight:700;">📞 Call: +254 716 651 788</a></li>
+      <li><a href="https://wa.me/254716651788">💬 WhatsApp Us</a></li>
+      <li><span style="color:var(--fog);font-size:.88rem;">✉️ evansabok164&#64;gmail&#46;com</span></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 RidaSwift. All rights reserved.</div>
+    <div style="font-size:.75rem;color:#444;margin-top:.3rem;">
+      Designed & Developed by <strong style="color:var(--saffron)">Evans Abok</strong>
+      &nbsp;|&nbsp; Powered by <strong style="color:var(--saffron)">Claude AI</strong>
+    </div>
+    <div class="footer-country">🇰🇪 Proudly Kenyan</div>
+  </div>
+</footer>
+
+<!-- PWA INSTALL MODAL -->
+<div id="installOverlay">
+  <div class="install-modal">
+    <button class="install-modal-close" onclick="closeInstall()">✕</button>
+    <img src="ridaswift-logo.png" alt="RidaSwift" class="install-modal-logo"/>
+    <div class="install-modal-title">Rida<span>Swift</span></div>
+    <p class="install-modal-desc">Install the RidaSwift app for faster bookings, offline access and instant ride updates!</p>
+    <div class="install-features">
+      <div class="install-feature">
+        <span class="install-feature-icon">⚡</span>Faster Booking
+      </div>
+      <div class="install-feature">
+        <span class="install-feature-icon">📵</span>Works Offline
+      </div>
+      <div class="install-feature">
+        <span class="install-feature-icon">🔔</span>Notifications
+      </div>
+      <div class="install-feature">
+        <span class="install-feature-icon">🆓</span>100% Free
+      </div>
+    </div>
+    <div id="installSteps" style="text-align:left;margin-bottom:1rem;">
+      <div style="font-family:var(--font-condensed);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--saffron);margin-bottom:.8rem;text-align:center;">How to Install — 3 Easy Steps</div>
+      <div style="display:flex;align-items:center;gap:.8rem;padding:.6rem 0;border-bottom:1px solid rgba(245,240,232,.08);">
+        <div style="background:var(--saffron);color:var(--ink);font-family:var(--font-display);font-size:1.2rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+        <div style="font-size:.85rem;color:var(--fog);">Tap the <strong style="color:var(--cream);">⋮ three dots</strong> at the top right of Chrome</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.8rem;padding:.6rem 0;border-bottom:1px solid rgba(245,240,232,.08);">
+        <div style="background:var(--saffron);color:var(--ink);font-family:var(--font-display);font-size:1.2rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+        <div style="font-size:.85rem;color:var(--fog);">Tap <strong style="color:var(--cream);">"Add to Home Screen"</strong> or <strong style="color:var(--cream);">"Install App"</strong></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.8rem;padding:.6rem 0;">
+        <div style="background:var(--saffron);color:var(--ink);font-family:var(--font-display);font-size:1.2rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+        <div style="font-size:.85rem;color:var(--fog);">Tap <strong style="color:var(--cream);">"Add"</strong> — RidaSwift appears on your home screen! 🎉</div>
+      </div>
+    </div>
+    <button class="install-modal-btn" id="mainInstallBtn" onclick="installApp()">📲 Install RidaSwift Now</button>
+    <button class="install-modal-skip" onclick="closeInstall()">Maybe later</button>
+  </div>
+</div>
+
+<!-- PWA INSTALL BANNER (fallback) -->
+<div id="installBanner">
+  <div class="install-text">
+    📲 Add RidaSwift to your phone!
+    <span>Tap to install as an app — works offline</span>
+  </div>
+  <button class="install-btn" onclick="installApp()">Install</button>
+  <button class="install-close" onclick="this.parentElement.style.display='none'">✕</button>
+</div>
+
+<!-- WHATSAPP FLOATING WIDGET -->
+<div class="wa-float">
+  <div class="wa-tooltip">Chat on WhatsApp</div>
+  <a class="wa-bubble" href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%27d%20like%20to%20book%20a%20ride." target="_blank" aria-label="Chat on WhatsApp">
+    💬
+    <div class="wa-ping"></div>
+  </a>
+</div>
+
+<script>
+  // Scroll reveal
+  // SMS notification via Africa's Talking
+  var AT_KEY = 'atsk_3bdb8fcdc54fd288c582bfd5947d0d9cb45734bb8c80b87fc8f4f89c137eb5ebe69f20cd';
+  var AT_USER = 'ridaswift';
+  var MY_PHONE = '+254716651788';
+
+  function sendSMS(message) {
+    fetch('https://api.africastalking.com/version1/messaging', {
+      method: 'POST',
+      headers: {
+        'apiKey': AT_KEY,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      },
+      body: 'username=' + AT_USER + '&to=' + encodeURIComponent(MY_PHONE) + '&message=' + encodeURIComponent(message)
+    }).then(function(r) {
+      console.log('SMS sent');
+    }).catch(function(e) {
+      console.log('SMS error:', e);
+    });
+  }
+
+
+  function calculateFare() {
+    var dist = parseFloat(document.getElementById('fareDistance').value) || 0;
+    var pass = parseInt(document.getElementById('farePassengers').value) || 1;
+    if (dist <= 0) {
+      document.getElementById('fareResult').style.display = 'none';
+      return;
+    }
+    var base = 50;
+    var perKm = 30;
+    var fare = base + (dist * perKm);
+    if (pass === 2) fare += 30;
+    fare = Math.round(fare);
+    document.getElementById('fareResult').style.display = 'block';
+    document.getElementById('fareAmount').textContent = 'KES ' + fare;
+    var breakdown = 'Base fare: KES ' + base + ' + ' + dist + 'km × KES ' + perKm + '/km';
+    if (pass === 2) breakdown += ' + KES 30 (extra passenger)';
+    document.getElementById('fareBreakdown').textContent = breakdown;
+    var waMsg = encodeURIComponent('Hi RidaSwift! I need a ride.\nEstimated distance: ' + dist + 'km\nEstimated fare: KES ' + fare + '\nPassengers: ' + pass);
+    document.getElementById('fareWaBtn').href = 'https://wa.me/254716651788?text=' + waMsg;
+  }
+
+  function toggleMenu() {
+    var menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('open');
+  }
+  // Close menu when a link is clicked
+  document.addEventListener('DOMContentLoaded', function() {
+    var links = document.querySelectorAll('.mobile-menu a');
+    links.forEach(function(link) {
+      link.addEventListener('click', function() {
+        document.getElementById('mobileMenu').classList.remove('open');
+      });
+    });
+  });
+
+  function revealAll() {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.reveal').forEach(function(r) { obs.observe(r); });
+  } else { revealAll(); }
+  window.addEventListener('scroll', revealAll, { once: true });
+
+  var WA = '254716651788';
+  // Formspree endpoint — sends email to evansabok164@gmail.com
+  var WEB3KEY = 'b5fb72ee-c9dc-4bb3-9a5f-d0dbffb59afb';
+
+  function sendEmail(data, statusId) {
+    data['access_key'] = WEB3KEY;
+    data['from_name'] = 'RidaSwift Website';
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function(r) { return r.json(); }).then(function(res) {
+      var el = document.getElementById(statusId);
+      if (el) {
+        el.style.display = 'block';
+        if (res.success) {
+          el.style.color = '#4CAF50';
+          el.innerHTML = '\u2705 Email sent to evansabok164@gmail.com!';
+        } else {
+          el.style.color = '#E8A020';
+          el.innerHTML = '\u26A0\uFE0F WhatsApp sent! Email failed: ' + (res.message || 'unknown error');
+        }
+      }
+    }).catch(function(err) {
+      var el = document.getElementById(statusId);
+      if (el) {
+        el.style.display = 'block';
+        el.style.color = '#E8A020';
+        el.innerHTML = '\u26A0\uFE0F WhatsApp sent but email failed. Check your internet.';
+      }
+    });
+  }
+
+  function updateBookLinks() {
+    var name    = (document.getElementById('bName')||{value:''}).value || '(no name)';
+    var phone   = (document.getElementById('bPhone')||{value:''}).value || '(no phone)';
+    var pickup  = (document.getElementById('bPickup')||{value:''}).value || '(no pickup)';
+    var dropoff = (document.getElementById('bDropoff')||{value:''}).value || '(no dropoff)';
+    var timing  = (document.getElementById('bTiming')||{value:''}).value || 'ASAP';
+    var payment = (document.getElementById('bPayment')||{value:''}).value || 'M-Pesa';
+    var msg = 'New Ride Booking - RidaSwift' +
+      '%0A%0AName: ' + encodeURIComponent(name) +
+      '%0APhone: ' + encodeURIComponent(phone) +
+      '%0APickup: ' + encodeURIComponent(pickup) +
+      '%0ADrop-off: ' + encodeURIComponent(dropoff) +
+      '%0AWhen: ' + encodeURIComponent(timing) +
+      '%0APayment: ' + encodeURIComponent(payment);
+    var waBtn = document.getElementById('bWaBtn');
+    if (waBtn) {
+      waBtn.href = 'https://wa.me/' + WA + '?text=' + msg;
+      waBtn.onclick = function() {
+        sendEmail({
+          _subject: 'New Ride Booking - ' + name,
+          email: 'evansabok164@gmail.com',
+          Name: name, Phone: phone, Pickup: pickup,
+          Dropoff: dropoff, When: timing, Payment: payment
+        }, 'bEmailStatus');
+      };
+    }
+  }
+
+  function updateRiderLinks() {
+    var name    = (document.getElementById('rName')||{value:''}).value || '(no name)';
+    var phone   = (document.getElementById('rPhone')||{value:''}).value || '(no phone)';
+    var area    = (document.getElementById('rArea')||{value:''}).value || '(no area)';
+    var exp     = (document.getElementById('rExp')||{value:''}).value || 'Not specified';
+    var licence = (document.getElementById('rLicence')||{value:''}).value || 'Not specified';
+    var msg = 'New Rider Application - RidaSwift' +
+      '%0A%0AName: ' + encodeURIComponent(name) +
+      '%0APhone: ' + encodeURIComponent(phone) +
+      '%0AArea: ' + encodeURIComponent(area) +
+      '%0AExperience: ' + encodeURIComponent(exp) +
+      '%0ALicence: ' + encodeURIComponent(licence);
+    var waBtn = document.getElementById('rWaBtn');
+    if (waBtn) {
+      waBtn.href = 'https://wa.me/' + WA + '?text=' + msg;
+      waBtn.onclick = function() {
+        sendEmail({
+          _subject: 'New Rider Application - ' + name,
+          email: 'evansabok164@gmail.com',
+          Name: name, Phone: phone, Area: area,
+          Experience: exp, Licence: licence
+        }, 'rEmailStatus');
+      };
+    }
+  }
+
+  window.addEventListener('load', function() {
+    updateBookLinks();
+    updateRiderLinks();
+  });
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('sw.js').catch(function(err) {
+        console.log('SW failed: ', err);
+      });
+    });
+  }
+
+  var deferredPrompt;
+  var installShown = sessionStorage.getItem('installShown');
+
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Update button to show native install
+    var btn = document.getElementById('mainInstallBtn');
+    if (btn) {
+      btn.textContent = '📲 Install RidaSwift App';
+      btn.style.background = '#25D366';
+    }
+    // Show modal after 2 seconds
+    if (!installShown) {
+      setTimeout(function() {
+        document.getElementById('installOverlay').classList.add('show');
+        sessionStorage.setItem('installShown', '1');
+      }, 2000);
+    }
+  });
+
+  // Always show modal after 2 seconds on first visit
+  setTimeout(function() {
+    if (!installShown) {
+      document.getElementById('installOverlay').classList.add('show');
+      sessionStorage.setItem('installShown', '1');
+    }
+  }, 2000);
+
+  function installApp() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(result) {
+        closeInstall();
+        document.getElementById('installBanner').style.display = 'none';
+        deferredPrompt = null;
+      });
+    } else {
+      closeInstall();
+    }
+  }
+
+  function closeInstall() {
+    document.getElementById('installOverlay').classList.remove('show');
+  }
+
+  window.addEventListener('appinstalled', function() {
+    closeInstall();
+    document.getElementById('installBanner').style.display = 'none';
+  });
+</script>
+</body>
+</html>
