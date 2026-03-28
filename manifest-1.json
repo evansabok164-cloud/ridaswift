@@ -1,0 +1,77 @@
+{
+  "name": "RidaSwift \u2014 Eldoret Boda Boda",
+  "short_name": "RidaSwift",
+  "description": "Fast, safe and affordable boda boda rides in Eldoret. Book via WhatsApp instantly.",
+  "start_url": "/ridaswift/index.html",
+  "scope": "/ridaswift/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#E8A020",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "ridaswift-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "ridaswift-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "ridaswift-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "ridaswift-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "ridaswift-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "RidaSwift Home Screen"
+    }
+  ],
+  "categories": [
+    "transportation",
+    "lifestyle"
+  ],
+  "shortcuts": [
+    {
+      "name": "Book a Ride",
+      "short_name": "Book",
+      "description": "Book a boda boda ride now",
+      "url": "/ridaswift/index.html#book",
+      "icons": [
+        {
+          "src": "ridaswift-logo.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Become a Rider",
+      "short_name": "Join",
+      "description": "Apply to ride with RidaSwift",
+      "url": "/ridaswift/index.html#riders",
+      "icons": [
+        {
+          "src": "ridaswift-logo.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
