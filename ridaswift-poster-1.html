@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RidaSwift — Eldoret's #1 Boda Boda</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;min-height:100vh;background:#0A0A0A;font-family:Arial,sans-serif;overflow-x:hidden;}
+.poster{width:100%;min-height:100vh;position:relative;overflow:hidden;background:#0A0A0A;display:flex;flex-direction:column;padding:40px 5vw 48px;}
+.bg1{position:absolute;inset:0;background:radial-gradient(ellipse 80% 55% at 100% 0%,rgba(255,107,0,.22) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 0% 100%,rgba(255,107,0,.10) 0%,transparent 60%),#0A0A0A;z-index:0;}
+.grid-lines{position:absolute;inset:0;z-index:1;background-image:linear-gradient(rgba(255,107,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,0,.05) 1px,transparent 1px);background-size:48px 48px;}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(255,107,0,.1);z-index:1;}
+.ring1{width:700px;height:700px;top:-250px;right:-200px;}
+.ring2{width:500px;height:500px;top:-150px;right:-100px;}
+.content{position:relative;z-index:10;display:flex;flex-direction:column;flex:1;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(30px,6vw,70px);}
+.logo img{height:clamp(52px,8vw,90px);width:auto;}
+.badge{background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:8px 18px;border-radius:30px;font-size:clamp(11px,1.5vw,15px);font-weight:700;color:#FF6B00;letter-spacing:.1em;text-transform:uppercase;}
+.eyebrow{font-size:clamp(11px,1.8vw,16px);font-weight:700;color:#FF6B00;letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.eyebrow::before{content:'';display:block;width:32px;height:2px;background:#FF6B00;}
+h1{font-size:clamp(3.5rem,12vw,10rem);font-weight:900;line-height:.95;letter-spacing:-.03em;color:#fff;margin-bottom:clamp(16px,3vw,30px);}
+h1 em{font-style:normal;color:#FF6B00;display:block;}
+.tagline{font-size:clamp(14px,2.2vw,22px);color:rgba(255,255,255,.55);line-height:1.65;max-width:min(600px,80vw);margin-bottom:clamp(24px,4vw,50px);font-weight:500;}
+.stats{display:flex;gap:0;margin-bottom:clamp(28px,5vw,60px);flex-wrap:wrap;}
+.stat{padding:0 clamp(16px,3vw,44px);border-right:1px solid rgba(255,255,255,.08);margin-bottom:16px;}
+.stat:first-child{padding-left:0;}
+.stat:last-child{border:none;}
+.stat-num{font-size:clamp(24px,5vw,52px);font-weight:900;color:#FF6B00;line-height:1;}
+.stat-lbl{font-size:clamp(9px,1.2vw,13px);color:rgba(255,255,255,.4);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-top:5px;}
+.bottom{display:grid;grid-template-columns:1fr auto;gap:clamp(20px,4vw,50px);align-items:end;margin-top:auto;}
+.contacts-title{font-size:clamp(10px,1.3vw,13px);font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px;}
+.contact-list{display:flex;flex-direction:column;gap:clamp(10px,2vw,18px);}
+.contact-row{display:flex;align-items:center;gap:14px;text-decoration:none;cursor:pointer;transition:all .2s;}
+.contact-row:active{opacity:.8;}
+.c-icon{width:clamp(38px,5vw,52px);height:clamp(38px,5vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,22px);flex-shrink:0;transition:transform .2s;}
+.contact-row:hover .c-icon{transform:scale(1.1);}
+.c-call{background:rgba(255,107,0,.15);}
+.c-wa{background:rgba(37,211,102,.15);}
+.c-web{background:rgba(129,140,248,.15);}
+.c-val{font-size:clamp(14px,2.2vw,22px);font-weight:700;color:#fff;transition:color .2s;}
+.contact-row:hover .c-val{color:#FF6B00;}
+.c-lbl{font-size:clamp(9px,1.1vw,12px);color:rgba(255,255,255,.4);margin-top:2px;}
+.qr-wrap{text-align:center;flex-shrink:0;}
+.qr-box{background:#fff;border-radius:clamp(12px,2vw,22px);padding:clamp(10px,1.5vw,18px);display:inline-block;margin-bottom:10px;box-shadow:0 8px 32px rgba(255,107,0,.2);}
+#qrcode canvas,#qrcode img{width:clamp(110px,16vw,200px) !important;height:clamp(110px,16vw,200px) !important;display:block;}
+.qr-label{font-size:clamp(9px,1.2vw,12px);color:rgba(255,255,255,.4);font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1.5;}
+.strip{display:flex;align-items:center;justify-content:space-between;margin-top:clamp(24px,4vw,44px);padding-top:clamp(18px,3vw,28px);border-top:1px solid rgba(255,255,255,.07);flex-wrap:wrap;gap:10px;}
+.strip-left{font-size:clamp(10px,1.4vw,14px);color:rgba(255,255,255,.3);font-weight:500;}
+.strip-left span{color:rgba(255,107,0,.7);}
+.strip-right{display:flex;align-items:center;gap:8px;font-size:clamp(10px,1.4vw,14px);color:rgba(255,255,255,.3);font-weight:600;}
+.strip-dot{width:7px;height:7px;background:#22C55E;border-radius:50%;animation:blink 1.4s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div class="poster">
+  <div class="bg1"></div>
+  <div class="grid-lines"></div>
+  <div class="ring ring1"></div>
+  <div class="ring ring2"></div>
+  <div class="content">
+    <div class="top-bar">
+      <div class="logo"><img src="ridaswift-logo.png" alt="RidaSwift"/></div>
+      <div class="badge">🇰🇪 Eldoret, Kenya</div>
+    </div>
+    <div class="eyebrow">Eldoret's #1 Boda Boda Service</div>
+    <h1>Fast.<br>Safe.<br><em>Reliable.</em></h1>
+    <p class="tagline">Professional boda boda rides across Eldoret CBD, Elgonview, Huruma &amp; Langas. Book instantly — no waiting, no haggling.</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-lbl">Active Riders</div></div>
+      <div class="stat"><div class="stat-num">KES 80</div><div class="stat-lbl">Rides From</div></div>
+      <div class="stat"><div class="stat-num">4.8★</div><div class="stat-lbl">Avg Rating</div></div>
+      <div class="stat"><div class="stat-num">6AM–8PM</div><div class="stat-lbl">Daily Hours</div></div>
+    </div>
+    <div class="bottom">
+      <div class="contacts">
+        <div class="contacts-title">Book Your Ride</div>
+        <div class="contact-list">
+          <a href="tel:+254716651788" class="contact-row">
+            <div class="c-icon c-call">📞</div>
+            <div><div class="c-val">0716 651 788</div><div class="c-lbl">Tap to call or SMS</div></div>
+          </a>
+          <a href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%20need%20a%20boda%20boda%20ride." target="_blank" class="contact-row">
+            <div class="c-icon c-wa">💬</div>
+            <div><div class="c-val">WhatsApp Us</div><div class="c-lbl">wa.me/254716651788 — tap to chat instantly</div></div>
+          </a>
+          <a href="https://evansabok164-cloud.github.io/ridaswift/" target="_blank" class="contact-row">
+            <div class="c-icon c-web">🌐</div>
+            <div><div class="c-val" style="font-size:clamp(11px,1.8vw,18px);">evansabok164-cloud.github.io/ridaswift</div><div class="c-lbl">Tap to visit website or scan QR code →</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="qr-wrap">
+        <div class="qr-box"><div id="qrcode"></div></div>
+        <div class="qr-label">📸 SCAN TO<br>BOOK A RIDE</div>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="strip-left">📍 Serving <span>Eldoret CBD · Elgonview · Huruma · Langas</span></div>
+      <div class="strip-right"><div class="strip-dot"></div> Available Now · Open Daily</div>
+    </div>
+  </div>
+</div>
+<script>
+var size = Math.min(Math.round(window.innerWidth * 0.16), 200);
+size = Math.max(size, 110);
+new QRCode(document.getElementById('qrcode'), {
+  text: 'https://evansabok164-cloud.github.io/ridaswift/',
+  width: size, height: size,
+  colorDark: '#0A0A0A', colorLight: '#FFFFFF',
+  correctLevel: QRCode.CorrectLevel.H
+});
+</script>
+</body>
+</html>
