@@ -1,0 +1,2239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RidaSwift — Eldoret's #1 Boda Boda</title>
+<meta name="description" content="Book fast, safe and affordable boda boda rides in Eldoret. Serving Eldoret CBD, Elgonview, Huruma, Langas. Call or WhatsApp 0716651788."/>
+<meta name="theme-color" content="#0A0A0A"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="RidaSwift"/>
+<link rel="manifest" href="manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary: #FF6B00;
+  --primary-dark: #E55A00;
+  --primary-light: rgba(255,107,0,.12);
+  --bg: #0B0B0F;
+  --bg2: #131318;
+  --bg3: #1A1A22;
+  --card: #1E1E28;
+  --border: rgba(255,255,255,.08);
+  --text: #FFFFFF;
+  --text2: rgba(255,255,255,.6);
+  --text3: rgba(255,255,255,.35);
+  --green: #22C55E;
+  --green-bg: rgba(34,197,94,.12);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+/* LIGHT MODE */
+body.light {
+  --bg: #F8F8FC; --bg2: #FFFFFF; --bg3: #F0F0F5;
+  --card: #FFFFFF; --border: rgba(0,0,0,.08);
+  --text: #0B0B0F; --text2: rgba(11,11,15,.6); --text3: rgba(11,11,15,.35);
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow-x: hidden; transition: background .3s, color .3s;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: .8rem 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(11,11,15,.8);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: background .3s;
+}
+body.light nav { background: rgba(248,248,252,.9); }
+.nav-logo img { height: 44px; width: auto; display: block; }
+.nav-links {
+  display: flex; align-items: center; gap: 1.5rem;
+}
+.nav-links a {
+  font-size: .82rem; font-weight: 600; color: var(--text2);
+  text-decoration: none; transition: color .2s;
+  letter-spacing: .01em;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  background: var(--primary); color: #fff !important;
+  padding: .5rem 1.2rem; border-radius: 8px;
+  font-weight: 700 !important; font-size: .82rem !important;
+  transition: background .2s, transform .15s !important;
+}
+.nav-cta:hover { background: var(--primary-dark) !important; transform: translateY(-1px); }
+.nav-right { display: flex; align-items: center; gap: .8rem; }
+.theme-btn {
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text2); font-size: 1rem; width: 36px; height: 36px;
+  border-radius: 50%; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; transition: all .2s;
+}
+.theme-btn:hover { border-color: var(--primary); color: var(--primary); }
+.hamburger {
+  display: none; background: var(--card); border: 1px solid var(--border);
+  color: var(--text); width: 36px; height: 36px; border-radius: 8px;
+  cursor: pointer; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+.mobile-menu {
+  display: none; position: fixed; top: 65px; left: 0; right: 0;
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 1rem 5vw; flex-direction: column; gap: .2rem;
+  z-index: 199;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  padding: .8rem 0; font-size: .95rem; font-weight: 600;
+  color: var(--text2); text-decoration: none;
+  border-bottom: 1px solid var(--border); transition: color .2s;
+}
+.mobile-menu a:last-child { border: none; }
+.mobile-menu a:hover { color: var(--primary); }
+
+/* ── LIVE BAR ── */
+.live-bar {
+  position: fixed; top: 65px; left: 0; right: 0; z-index: 99;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: .55rem 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+}
+.live-pill {
+  display: flex; align-items: center; gap: .5rem;
+  background: var(--green-bg); border: 1px solid rgba(34,197,94,.2);
+  padding: .3rem .9rem; border-radius: 20px;
+}
+.live-dot {
+  width: 7px; height: 7px; background: var(--green);
+  border-radius: 50%; animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.3)} }
+.live-text { font-size: .75rem; font-weight: 600; color: var(--green); }
+.weather-chip {
+  display: flex; align-items: center; gap: .4rem;
+  background: var(--card); border: 1px solid var(--border);
+  padding: .3rem .9rem; border-radius: 20px;
+  font-size: .75rem; font-weight: 600; color: var(--text2);
+}
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh; padding: 4rem 5vw 5rem;
+  padding-top: calc(65px + 38px + 3rem);
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; gap: 4rem;
+  position: relative; overflow: hidden;
+  background: var(--bg);
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(255,107,0,.08) 0%, transparent 70%);
+}
+.hero-bg::before {
+  content: ''; position: absolute;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,0,.06) 0%, transparent 70%);
+  top: -100px; right: -100px;
+}
+.hero-left { position: relative; z-index: 2; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--primary-light); border: 1px solid rgba(255,107,0,.25);
+  padding: .35rem .9rem; border-radius: 20px;
+  font-size: .75rem; font-weight: 700; color: var(--primary);
+  letter-spacing: .04em; margin-bottom: 1.5rem;
+}
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+  font-weight: 800; line-height: 1.1;
+  letter-spacing: -.02em; margin-bottom: 1.2rem;
+}
+h1 em { font-style: normal; color: var(--primary); }
+.hero-desc {
+  font-size: 1rem; color: var(--text2); line-height: 1.7;
+  max-width: 440px; margin-bottom: 2rem;
+}
+.hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; margin-bottom: 3rem; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--primary); color: #fff;
+  font-size: .9rem; font-weight: 700; padding: .8rem 1.8rem;
+  border-radius: var(--radius-sm); text-decoration: none; border: none;
+  cursor: pointer; transition: background .2s, transform .15s, box-shadow .2s;
+  box-shadow: 0 4px 20px rgba(255,107,0,.3);
+}
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,107,0,.4); }
+.btn-wa {
+  background: #22C55E; box-shadow: 0 4px 20px rgba(34,197,94,.25);
+}
+.btn-wa:hover { background: #16a34a; box-shadow: 0 8px 28px rgba(34,197,94,.35); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--card); color: var(--text);
+  border: 1px solid var(--border);
+  font-size: .9rem; font-weight: 700; padding: .8rem 1.8rem;
+  border-radius: var(--radius-sm); text-decoration: none;
+  cursor: pointer; transition: all .2s;
+}
+.btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+.hero-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+.hstat { }
+.hstat-num {
+  font-family: 'Syne', sans-serif; font-size: 2rem;
+  font-weight: 800; color: var(--text); line-height: 1;
+}
+.hstat-num span { color: var(--primary); }
+.hstat-label { font-size: .72rem; font-weight: 600; color: var(--text3); margin-top: .2rem; letter-spacing: .04em; text-transform: uppercase; }
+
+.hero-right {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-card-wrap {
+  position: relative; width: 100%; max-width: 380px;
+}
+.hero-main-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 24px; padding: 2rem;
+  box-shadow: 0 24px 64px rgba(0,0,0,.4);
+}
+.hero-card-title {
+  font-size: .72rem; font-weight: 700; color: var(--text3);
+  letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1.2rem;
+}
+.route-input {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1rem;
+  margin-bottom: .6rem; cursor: pointer; transition: border-color .2s;
+}
+.route-input:hover { border-color: var(--primary); }
+.route-label { font-size: .7rem; font-weight: 700; color: var(--text3); letter-spacing: .06em; text-transform: uppercase; margin-bottom: .3rem; }
+.route-value { font-size: .95rem; font-weight: 600; color: var(--text2); }
+.route-divider {
+  display: flex; align-items: center; gap: .6rem; margin: .4rem 0;
+}
+.route-divider::before, .route-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.route-divider span { font-size: .8rem; color: var(--text3); }
+.fare-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin: 1rem 0;
+}
+.fare-est { font-size: .82rem; color: var(--text2); }
+.fare-amount { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+.hero-book-btn {
+  width: 100%; background: var(--primary); color: #fff;
+  border: none; border-radius: var(--radius-sm); padding: .9rem;
+  font-size: .95rem; font-weight: 700; cursor: pointer;
+  transition: background .2s; display: flex; align-items: center;
+  justify-content: center; gap: .5rem; text-decoration: none;
+}
+.hero-book-btn:hover { background: var(--primary-dark); }
+
+.float-card {
+  position: absolute; background: var(--card);
+  border: 1px solid var(--border); border-radius: 14px;
+  padding: .8rem 1rem; box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  animation: floatCard 3s ease-in-out infinite;
+}
+@keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.float-card-1 { top: -20px; right: -20px; font-size: .78rem; }
+.float-card-2 { bottom: -20px; left: -20px; font-size: .78rem; }
+.float-card .fc-label { font-size: .65rem; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.float-card .fc-val { font-weight: 700; color: var(--text); margin-top: .1rem; }
+
+/* ── SECTION BASE ── */
+section { padding: 5rem 5vw; }
+.section-tag {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: var(--primary-light); border: 1px solid rgba(255,107,0,.2);
+  padding: .3rem .9rem; border-radius: 20px;
+  font-size: .72rem; font-weight: 700; color: var(--primary);
+  letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1rem;
+}
+h2 {
+  font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800; letter-spacing: -.02em; line-height: 1.1;
+  margin-bottom: 1rem; color: var(--text);
+}
+h2 span { color: var(--primary); }
+.section-desc { font-size: .95rem; color: var(--text2); line-height: 1.7; max-width: 520px; margin-bottom: 3rem; }
+
+/* ── HOW IT WORKS ── */
+#how { background: var(--bg2); }
+.steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+.step-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.8rem;
+  transition: border-color .25s, transform .2s;
+  position: relative; overflow: hidden;
+}
+.step-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at top left, rgba(255,107,0,.05) 0%, transparent 60%);
+}
+.step-card:hover { border-color: rgba(255,107,0,.3); transform: translateY(-4px); }
+.step-num {
+  font-family: 'Syne', sans-serif; font-size: 3.5rem;
+  font-weight: 800; color: rgba(255,107,0,.12); line-height: 1;
+  margin-bottom: .8rem;
+}
+.step-icon { font-size: 2rem; margin-bottom: 1rem; }
+.step-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: .5rem; }
+.step-card p { font-size: .88rem; color: var(--text2); line-height: 1.6; }
+
+/* ── PRICING ── */
+#pricing { background: var(--bg); }
+.price-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+.price-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2rem;
+  transition: border-color .25s, transform .2s;
+  position: relative;
+}
+.price-card:hover { border-color: rgba(255,107,0,.3); transform: translateY(-4px); }
+.price-card.featured {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, rgba(255,107,0,.08) 0%, var(--card) 100%);
+}
+.featured-pill {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--primary); color: #fff;
+  font-size: .68rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; padding: .3rem .9rem; border-radius: 20px;
+  white-space: nowrap;
+}
+.price-zone { font-size: .72rem; font-weight: 700; color: var(--text3); letter-spacing: .08em; text-transform: uppercase; margin-bottom: .5rem; }
+.price-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
+.price-amount {
+  font-family: 'Syne', sans-serif; font-size: 2.8rem;
+  font-weight: 800; color: var(--primary); line-height: 1;
+}
+.price-unit { font-size: .8rem; color: var(--text3); margin-top: .3rem; margin-bottom: 1.5rem; }
+.price-features { list-style: none; }
+.price-features li {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .5rem 0; font-size: .88rem; color: var(--text2);
+  border-bottom: 1px solid var(--border);
+}
+.price-features li::before { content: '✓'; color: var(--primary); font-weight: 700; flex-shrink: 0; }
+.price-features li:last-child { border: none; }
+
+/* ── FARE ESTIMATOR ── */
+#fare-estimator { background: var(--bg2); }
+.estimator-wrap {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2.5rem;
+  max-width: 580px; margin: 0 auto;
+}
+.est-label {
+  font-size: .72rem; font-weight: 700; color: var(--text3);
+  letter-spacing: .08em; text-transform: uppercase; margin-bottom: .5rem;
+}
+.est-input {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: .95rem;
+  font-weight: 600; padding: .8rem 1rem; outline: none;
+  margin-bottom: 1.2rem; transition: border-color .2s;
+  appearance: none;
+}
+.est-input:focus { border-color: var(--primary); }
+.fare-result-box {
+  background: var(--primary-light); border: 1px solid rgba(255,107,0,.25);
+  border-radius: var(--radius-sm); padding: 1.5rem;
+  text-align: center; display: none; margin-top: 1rem;
+}
+.fare-big { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; color: var(--primary); line-height: 1; }
+.fare-breakdown { font-size: .8rem; color: var(--text2); margin-top: .4rem; }
+.fare-note { font-size: .72rem; color: var(--text3); margin-top: .5rem; font-style: italic; }
+
+/* ── BOOKING ── */
+#book { background: var(--bg); }
+.booking-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.booking-form-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2.5rem;
+}
+.booking-form-card h3 {
+  font-family: 'Syne', sans-serif; font-size: 1.5rem;
+  font-weight: 800; margin-bottom: 1.8rem;
+}
+.field-group { margin-bottom: 1.2rem; }
+.field-label {
+  font-size: .72rem; font-weight: 700; color: var(--text3);
+  letter-spacing: .08em; text-transform: uppercase; margin-bottom: .5rem; display: block;
+}
+.field-input {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: .9rem;
+  padding: .8rem 1rem; outline: none; transition: border-color .2s;
+  appearance: none;
+}
+.field-input:focus { border-color: var(--primary); }
+select.field-input option { background: var(--bg2); }
+.form-actions { display: flex; flex-direction: column; gap: .8rem; margin-top: 1.5rem; }
+.form-success-box {
+  display: none; background: var(--green-bg);
+  border: 1px solid rgba(34,197,94,.25); border-radius: var(--radius-sm);
+  padding: 1.2rem; margin-top: 1rem;
+}
+.booking-info-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2rem;
+}
+.info-item {
+  display: flex; gap: 1rem; padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.info-item:last-child { border: none; }
+.info-icon { font-size: 1.4rem; flex-shrink: 0; }
+.info-title { font-size: .82rem; font-weight: 700; margin-bottom: .2rem; }
+.info-desc { font-size: .8rem; color: var(--text2); line-height: 1.5; }
+
+/* ── REVIEWS ── */
+#reviews { background: var(--bg2); }
+.reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+.review-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.8rem;
+  transition: border-color .25s, transform .2s;
+}
+.review-card:hover { border-color: rgba(255,107,0,.3); transform: translateY(-4px); }
+.review-stars { color: #F59E0B; font-size: .9rem; margin-bottom: .8rem; letter-spacing: .05em; }
+.review-text { font-size: .88rem; color: var(--text2); line-height: 1.65; margin-bottom: 1.2rem; font-style: italic; }
+.reviewer { display: flex; align-items: center; gap: .8rem; }
+.reviewer-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), #FF9500);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .82rem; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.reviewer-name { font-size: .85rem; font-weight: 700; }
+.reviewer-meta { font-size: .72rem; color: var(--text3); }
+.reviews-overall {
+  display: flex; align-items: center; gap: 2rem;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.8rem; margin-top: 2rem;
+}
+.overall-score {
+  font-family: 'Syne', sans-serif; font-size: 4rem;
+  font-weight: 800; color: var(--primary); line-height: 1; flex-shrink: 0;
+}
+.overall-text { font-size: .88rem; color: var(--text2); line-height: 1.6; }
+
+/* ── MAP ── */
+#map-section { background: var(--bg); }
+.map-container {
+  border-radius: var(--radius); overflow: hidden;
+  border: 1px solid var(--border); margin-top: 2rem;
+  position: relative;
+}
+.map-container iframe { display: block; width: 100%; height: 400px; border: none; }
+.map-overlay { position: absolute; top: 1rem; left: 1rem; }
+.map-badge {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: .5rem 1rem;
+  font-size: .78rem; font-weight: 700; color: var(--primary);
+  backdrop-filter: blur(10px);
+}
+
+/* ── DELIVERY ── */
+#delivery { background: var(--bg2); }
+.delivery-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.2rem; }
+.delivery-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem;
+  display: flex; gap: 1rem; align-items: flex-start;
+  transition: border-color .25s, transform .2s;
+}
+.delivery-card:hover { border-color: rgba(255,107,0,.3); transform: translateY(-3px); }
+.del-icon {
+  font-size: 1.8rem; background: var(--primary-light);
+  border-radius: 10px; width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.del-title { font-size: .95rem; font-weight: 700; margin-bottom: .3rem; }
+.del-desc { font-size: .82rem; color: var(--text2); line-height: 1.5; }
+.delivery-cta {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2rem; margin-top: 1.5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+}
+.delivery-cta-left h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: .3rem; }
+.delivery-cta-left p { font-size: .85rem; color: var(--text2); }
+.delivery-price-tag {
+  font-family: 'Syne', sans-serif; font-size: 2rem;
+  font-weight: 800; color: var(--primary);
+}
+.delivery-cta-actions { display: flex; gap: .8rem; flex-wrap: wrap; }
+
+/* ── ABOUT ── */
+#about { background: var(--bg); }
+.about-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 5rem; align-items: center; }
+.about-photo-wrap { position: relative; }
+.about-photo {
+  width: 100%; max-width: 300px; border-radius: 20px;
+  display: block; filter: grayscale(10%);
+}
+.about-badge-wrap {
+  position: absolute; bottom: 1.5rem; right: -1.5rem;
+  background: var(--primary); color: #fff;
+  border-radius: 14px; padding: 1rem 1.2rem; text-align: center;
+  box-shadow: 0 8px 24px rgba(255,107,0,.4);
+}
+.about-badge-num {
+  font-family: 'Syne', sans-serif; font-size: 1.8rem;
+  font-weight: 800; line-height: 1;
+}
+.about-badge-label { font-size: .7rem; font-weight: 600; opacity: .85; margin-top: .1rem; }
+.about-name {
+  font-family: 'Syne', sans-serif; font-size: 2.2rem;
+  font-weight: 800; letter-spacing: -.02em; margin-bottom: .3rem;
+}
+.about-role {
+  font-size: .78rem; font-weight: 700; color: var(--primary);
+  letter-spacing: .1em; text-transform: uppercase; margin-bottom: 1.2rem;
+}
+.about-bio { font-size: .92rem; color: var(--text2); line-height: 1.75; margin-bottom: 1.5rem; }
+.about-chips { display: flex; gap: .6rem; flex-wrap: wrap; }
+.about-chip {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: .4rem .9rem;
+  font-size: .78rem; font-weight: 600; color: var(--text2);
+}
+
+/* ── REFERRAL ── */
+#referral { background: var(--bg2); }
+.referral-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.referral-steps { display: flex; flex-direction: column; gap: 1.5rem; }
+.ref-step { display: flex; gap: 1rem; align-items: flex-start; }
+.ref-num {
+  background: var(--primary-light); color: var(--primary);
+  border: 1px solid rgba(255,107,0,.25);
+  font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800;
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.ref-title { font-size: .92rem; font-weight: 700; margin-bottom: .25rem; }
+.ref-desc { font-size: .82rem; color: var(--text2); line-height: 1.5; }
+.referral-reward-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2.5rem; text-align: center;
+}
+.reward-icon { font-size: 3rem; margin-bottom: 1rem; }
+.reward-amount {
+  font-family: 'Syne', sans-serif; font-size: 4rem;
+  font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: .3rem;
+}
+.reward-label { font-size: .88rem; color: var(--text2); margin-bottom: 1.5rem; }
+.reward-tiers { border-top: 1px solid var(--border); padding-top: 1.2rem; }
+.reward-tier {
+  display: flex; justify-content: space-between;
+  padding: .5rem 0; font-size: .85rem; color: var(--text2);
+  border-bottom: 1px solid var(--border);
+}
+.reward-tier:last-child { border: none; }
+.reward-tier strong { color: var(--primary); font-weight: 700; }
+
+/* ── RIDERS SECTION ── */
+#riders { background: var(--bg); }
+.rider-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 5rem; align-items: start; }
+.rider-perks { list-style: none; }
+.rider-perk {
+  display: flex; gap: 1rem; padding: 1.2rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.perk-icon-wrap {
+  background: var(--primary-light); color: var(--primary);
+  border-radius: 10px; width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.perk-title { font-size: .88rem; font-weight: 700; margin-bottom: .2rem; }
+.perk-desc { font-size: .8rem; color: var(--text2); line-height: 1.5; }
+.rider-form-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2.5rem;
+  border-top: 3px solid var(--primary);
+}
+.rider-form-card h3 {
+  font-family: 'Syne', sans-serif; font-size: 1.5rem;
+  font-weight: 800; margin-bottom: 1.8rem;
+}
+.riders-group-box {
+  background: rgba(34,197,94,.06); border: 1px solid rgba(34,197,94,.2);
+  border-radius: var(--radius-sm); padding: 1rem; margin-top: 1rem;
+}
+.riders-group-box p { font-size: .8rem; color: var(--text2); line-height: 1.5; margin-bottom: .8rem; }
+
+/* ── LOST & FOUND ── */
+#lost-found { background: var(--bg2); }
+.lf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.lf-steps-list { list-style: none; margin-top: 1rem; }
+.lf-step-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+.lf-step-num {
+  background: var(--primary-light); color: var(--primary);
+  font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800;
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.lf-step-text { font-size: .85rem; color: var(--text2); line-height: 1.5; padding-top: .4rem; }
+.lf-form-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2rem;
+}
+.lf-form-card h3 {
+  font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; margin-bottom: 1.5rem;
+}
+textarea.field-input { resize: vertical; min-height: 80px; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* ── MPESA BANNER ── */
+.mpesa-strip {
+  background: var(--card); border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1.5rem;
+}
+.mpesa-left-text { font-size: .88rem; font-weight: 600; color: var(--text2); }
+.mpesa-left-text strong { color: var(--text); }
+.mpesa-number-box {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: .8rem 1.5rem; text-align: center;
+}
+.mpesa-type-label { font-size: .65rem; font-weight: 700; color: var(--text3); letter-spacing: .1em; text-transform: uppercase; }
+.mpesa-num {
+  font-family: 'Syne', sans-serif; font-size: 1.5rem;
+  font-weight: 800; color: var(--green); letter-spacing: .05em;
+}
+.mpesa-holder { font-size: .72rem; color: var(--text3); margin-top: .1rem; }
+.mpesa-accepted {
+  background: var(--green-bg); border: 1px solid rgba(34,197,94,.2);
+  color: var(--green); font-size: .78rem; font-weight: 700;
+  padding: .4rem 1rem; border-radius: 8px; letter-spacing: .06em;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg2); border-top: 1px solid var(--border);
+  padding: 4rem 5vw 2rem;
+}
+.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
+.footer-logo img { height: 48px; width: auto; margin-bottom: 1rem; }
+.footer-tagline { font-size: .85rem; color: var(--text2); line-height: 1.6; margin-bottom: 1rem; }
+.footer-social { display: flex; gap: .6rem; }
+.social-chip {
+  background: var(--card); border: 1px solid var(--border);
+  padding: .4rem .9rem; border-radius: 8px;
+  font-size: .78rem; font-weight: 700; color: var(--text2);
+  text-decoration: none; transition: all .2s; display: flex; align-items: center; gap: .4rem;
+}
+.social-chip:hover { border-color: var(--primary); color: var(--primary); }
+.footer-heading { font-size: .72rem; font-weight: 700; color: var(--text3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 1rem; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: .6rem; }
+.footer-links a { font-size: .85rem; color: var(--text2); text-decoration: none; transition: color .2s; }
+.footer-links a:hover { color: var(--primary); }
+.footer-bottom {
+  border-top: 1px solid var(--border); padding-top: 1.5rem;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+}
+.footer-copy { font-size: .78rem; color: var(--text3); }
+.footer-dev { font-size: .75rem; color: var(--text3); }
+.footer-dev strong { color: var(--primary); }
+.footer-flag { font-size: .78rem; color: var(--text3); }
+.admin-tap-zone { font-size: .65rem; color: transparent; cursor: pointer; user-select: none; }
+
+/* ── ADMIN ── */
+#adminLogin {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.85); z-index: 9999;
+  align-items: center; justify-content: center; padding: 1.5rem;
+  backdrop-filter: blur(8px);
+}
+#adminLogin.show { display: flex; }
+.admin-modal {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2.5rem;
+  width: 100%; max-width: 340px; text-align: center;
+}
+.admin-modal h3 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: .4rem; }
+.admin-modal p { font-size: .82rem; color: var(--text2); margin-bottom: 1.5rem; }
+.admin-pwd {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text);
+  font-size: 1rem; padding: .8rem 1rem; outline: none;
+  margin-bottom: 1rem; text-align: center; letter-spacing: .2em;
+  font-family: 'Plus Jakarta Sans', sans-serif; transition: border-color .2s;
+}
+.admin-pwd:focus { border-color: var(--primary); }
+.admin-err { color: #ef4444; font-size: .8rem; margin-top: .5rem; display: none; }
+.admin-close-x {
+  position: absolute; top: 1rem; right: 1rem;
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text2); width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: .9rem; transition: all .2s;
+}
+.admin-close-x:hover { border-color: var(--primary); color: var(--primary); }
+
+#adminPanel {
+  display: none; position: fixed; inset: 0;
+  background: var(--bg); z-index: 9999; overflow-y: auto;
+}
+#adminPanel.show { display: block; }
+.admin-nav {
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 1rem 5vw; display: flex; align-items: center;
+  justify-content: space-between; position: sticky; top: 0; z-index: 100;
+}
+.admin-nav-logo { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; }
+.admin-nav-logo span { color: var(--primary); }
+.admin-nav-actions { display: flex; gap: .6rem; }
+.admin-nav-btn {
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text2); font-size: .78rem; font-weight: 600;
+  padding: .4rem .9rem; border-radius: 8px; cursor: pointer;
+  transition: all .2s;
+}
+.admin-nav-btn:hover { border-color: var(--primary); color: var(--primary); }
+.admin-nav-btn.danger:hover { border-color: #ef4444; color: #ef4444; }
+.admin-body { padding: 2rem 5vw; }
+.admin-stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.admin-stat-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1.2rem; text-align: center;
+}
+.admin-stat-icon { font-size: 1.5rem; margin-bottom: .3rem; }
+.admin-stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--primary); line-height: 1; }
+.admin-stat-label { font-size: .65rem; color: var(--text3); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-top: .2rem; }
+.admin-tabs { display: flex; gap: .5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: .8rem; }
+.admin-tab {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text2); font-size: .78rem; font-weight: 700;
+  padding: .45rem 1rem; border-radius: 8px; cursor: pointer;
+  transition: all .2s;
+}
+.admin-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.admin-filters { display: flex; gap: .5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.a-filter {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text2); font-size: .72rem; font-weight: 700;
+  padding: .35rem .8rem; border-radius: 8px; cursor: pointer;
+  transition: all .2s;
+}
+.a-filter.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.a-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1.2rem; margin-bottom: .8rem;
+  transition: border-color .2s;
+}
+.a-card:hover { border-color: rgba(255,107,0,.3); }
+.a-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .6rem; }
+.a-tag { font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: .2rem .7rem; border-radius: 6px; }
+.tag-ride { background: rgba(34,197,94,.12); color: var(--green); }
+.tag-rider { background: var(--primary-light); color: var(--primary); }
+.tag-delivery { background: rgba(99,102,241,.12); color: #818cf8; }
+.a-card-date { font-size: .7rem; color: var(--text3); }
+.a-card-name { font-weight: 700; font-size: .95rem; margin-bottom: .4rem; }
+.a-card-detail { font-size: .8rem; color: var(--text2); margin-bottom: .15rem; }
+.a-card-detail span { color: var(--text); font-weight: 600; }
+.a-card-actions { display: flex; gap: .5rem; margin-top: .8rem; }
+.a-action {
+  flex: 1; padding: .5rem; font-size: .72rem; font-weight: 700;
+  letter-spacing: .04em; border: none; cursor: pointer;
+  text-decoration: none; text-align: center; border-radius: 8px;
+  transition: opacity .2s;
+}
+.a-action:hover { opacity: .8; }
+.a-wa { background: #22C55E; color: #fff; }
+.a-call { background: var(--primary); color: #fff; }
+.a-del { background: rgba(239,68,68,.12); color: #ef4444; border: 1px solid rgba(239,68,68,.2) !important; }
+.a-empty { text-align: center; padding: 3rem; color: var(--text3); }
+.a-empty-icon { font-size: 2.5rem; margin-bottom: .8rem; }
+.rider-add-form {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1.5rem; margin-bottom: 1.5rem;
+}
+.rider-add-title { font-size: .78rem; font-weight: 700; color: var(--primary); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1rem; }
+.rider-add-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin-bottom: .8rem; }
+.r-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1rem; margin-bottom: .7rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.r-card-info { flex: 1; }
+.r-card-name { font-weight: 700; font-size: .92rem; margin-bottom: .25rem; }
+.r-card-detail { font-size: .75rem; color: var(--text2); }
+.r-status { font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .2rem .6rem; border-radius: 6px; flex-shrink: 0; }
+.rs-active { background: rgba(34,197,94,.12); color: var(--green); }
+.rs-inactive { background: var(--primary-light); color: var(--primary); }
+.rs-suspended { background: rgba(239,68,68,.12); color: #ef4444; }
+.r-card-actions { display: flex; gap: .4rem; flex-shrink: 0; }
+.r-btn {
+  padding: .4rem .7rem; font-size: .7rem; font-weight: 700;
+  border: none; cursor: pointer; border-radius: 6px;
+  text-decoration: none; text-align: center; transition: opacity .2s; display: inline-block;
+}
+.r-btn:hover { opacity: .8; }
+.r-stat-row { display: flex; gap: .6rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.r-stat-chip {
+  padding: .4rem .9rem; border-radius: 8px; font-size: .75rem; font-weight: 700;
+}
+.r-search {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: .88rem;
+  padding: .7rem 1rem; outline: none; margin-bottom: 1rem; transition: border-color .2s;
+}
+.r-search:focus { border-color: var(--primary); }
+
+/* ── INSTALL MODAL ── */
+#installOverlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.8); z-index: 9998;
+  align-items: center; justify-content: center; padding: 1.5rem;
+  backdrop-filter: blur(8px);
+}
+#installOverlay.show { display: flex; }
+.install-modal {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2.5rem;
+  width: 100%; max-width: 360px; text-align: center;
+  position: relative; animation: popIn .3s ease;
+}
+@keyframes popIn { from{transform:scale(.88);opacity:0} to{transform:scale(1);opacity:1} }
+.install-modal img { width: 72px; height: 72px; object-fit: contain; margin: 0 auto 1rem; border-radius: 16px; }
+.install-modal h3 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: .4rem; }
+.install-modal h3 span { color: var(--primary); }
+.install-modal p { font-size: .85rem; color: var(--text2); line-height: 1.6; margin-bottom: 1.5rem; }
+.install-features-row { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.install-feat { font-size: .72rem; color: var(--text2); text-align: center; }
+.install-feat-icon { font-size: 1.3rem; display: block; margin-bottom: .2rem; }
+.install-steps-box {
+  background: var(--bg3); border-radius: var(--radius-sm);
+  padding: 1rem; margin-bottom: 1.2rem; text-align: left;
+}
+.install-step-item {
+  display: flex; align-items: center; gap: .8rem;
+  padding: .45rem 0; font-size: .82rem; color: var(--text2);
+  border-bottom: 1px solid var(--border);
+}
+.install-step-item:last-child { border: none; }
+.install-step-num {
+  background: var(--primary); color: #fff;
+  font-size: .72rem; font-weight: 800; width: 22px; height: 22px;
+  border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0;
+}
+.install-close-x {
+  position: absolute; top: 1rem; right: 1rem;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text2); width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: .85rem;
+}
+
+/* ── CONFETTI ── */
+.confetti-piece {
+  position: fixed; top: -10px; z-index: 99999; pointer-events: none;
+  border-radius: 2px; animation: cfFall linear forwards;
+}
+@keyframes cfFall { 0%{transform:translateY(0) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  #hero { grid-template-columns: 1fr; padding-top: 2rem; }
+  .hero-right { display: none; }
+  .steps-grid, .price-grid, .reviews-grid, .booking-grid,
+  .about-grid, .referral-grid, .rider-grid, .lf-grid,
+  .footer-grid, .delivery-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .admin-rider-add-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" id="adminTrigger" onclick="adminTap()" style="cursor:pointer;">
+    <img src="ridaswift-logo.png" alt="RidaSwift"/>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#pricing">Fares</a></li>
+    <li><a href="#delivery">Delivery</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#riders">Join Us</a></li>
+    <li><a href="#book" class="nav-cta">Book Now</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">🌙</button>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#how" onclick="toggleMenu()">How It Works</a>
+  <a href="#pricing" onclick="toggleMenu()">Fares</a>
+  <a href="#delivery" onclick="toggleMenu()">Delivery</a>
+  <a href="#reviews" onclick="toggleMenu()">Reviews</a>
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#riders" onclick="toggleMenu()">Join as Rider</a>
+  <a href="#book" onclick="toggleMenu()" style="color:var(--primary);">📍 Book a Ride</a>
+  <a href="https://www.facebook.com/evans.abok" target="_blank">📘 Facebook</a>
+  <a href="https://www.tiktok.com/@evansabok" target="_blank">🎵 TikTok</a>
+</div>
+
+<!-- LIVE BAR -->
+<div class="live-bar">
+  <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+    <div class="live-pill">
+      <div class="live-dot" id="availDot"></div>
+      <span class="live-text"><span id="availCount">12</span> riders online</span>
+    </div>
+    <span style="font-size:.75rem;color:var(--text2);">⏱ Avg wait: <strong id="availWait" style="color:var(--text);">4 mins</strong></span>
+    <span style="font-size:.75rem;color:var(--text2);">🕐 Open 7AM – 6PM</span>
+  </div>
+  <div class="weather-chip">
+    <span id="weatherIcon">🌤️</span>
+    <span id="weatherText">Eldoret...</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-left">
+    <div class="hero-badge">🏍️ Eldoret's #1 Boda Boda Service</div>
+    <h1>Ride Fast.<br>Ride <em>Safe.</em><br>Ride Smart.</h1>
+    <p class="hero-desc">RidaSwift connects you with trusted, professional boda boda riders across Eldoret City. Book in seconds — no waiting, no haggling.</p>
+    <div class="hero-actions">
+      <a href="#book" class="btn-primary">📍 Book a Ride</a>
+      <a href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%20need%20a%20boda%20boda%20ride." target="_blank" class="btn-primary btn-wa">💬 WhatsApp</a>
+      <a href="tel:+254716651788" class="btn-ghost">📞 Call Now</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">500<span>+</span></div><div class="hstat-label">Active Riders</div></div>
+      <div class="hstat"><div class="hstat-num">12K<span>+</span></div><div class="hstat-label">Rides Done</div></div>
+      <div class="hstat"><div class="hstat-num">4.8<span>★</span></div><div class="hstat-label">Avg Rating</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card-wrap">
+      <div class="hero-main-card">
+        <div class="hero-card-title">Quick Fare Estimate</div>
+        <div class="route-input">
+          <div class="route-label">From</div>
+          <div class="route-value" id="heroPickup">Your pickup location</div>
+        </div>
+        <div class="route-divider"><span>↓</span></div>
+        <div class="route-input">
+          <div class="route-label">To</div>
+          <div class="route-value" id="heroDropoff">Your destination</div>
+        </div>
+        <div style="margin:.8rem 0;">
+          <div class="route-label" style="margin-bottom:.4rem;">Distance (km)</div>
+          <input type="number" id="heroDistance" class="est-input" placeholder="e.g. 3" min="0" step="0.5" oninput="heroCalculateFare()" style="margin:0;padding:.6rem .8rem;font-size:.88rem;"/>
+        </div>
+        <div class="fare-row">
+          <span class="fare-est">Estimated fare</span>
+          <span class="fare-amount" id="heroFare">KES —</span>
+        </div>
+        <a id="heroBookBtn" href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%20need%20a%20ride." target="_blank" class="hero-book-btn">
+          💬 Book This Ride
+        </a>
+      </div>
+      <div class="float-card float-card-1">
+        <div class="fc-label">Next available</div>
+        <div class="fc-val">🏍️ 3 mins away</div>
+      </div>
+      <div class="float-card float-card-2">
+        <div class="fc-label">Today's rides</div>
+        <div class="fc-val" id="todayRides">🎯 Loading...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MPESA STRIP -->
+<div class="mpesa-strip">
+  <div class="mpesa-left-text"><strong>Pay with M-Pesa</strong> — Fast, secure and instant</div>
+  <div class="mpesa-number-box">
+    <div class="mpesa-type-label">Send Money To</div>
+    <div class="mpesa-num">0716 651 788</div>
+    <div class="mpesa-holder">RidaSwift — Evans Abok</div>
+  </div>
+  <div class="mpesa-accepted">✓ M-PESA ACCEPTED</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-tag">Simple Process</div>
+  <h2>How <span>RidaSwift</span> Works</h2>
+  <p class="section-desc">Book a professional boda boda ride in Eldoret in 3 simple steps. Fast, transparent and reliable every time.</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-icon">📍</div>
+      <h3>Tell Us Where</h3>
+      <p>Fill in your pickup and drop-off location. Takes less than 60 seconds.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-icon">🤝</div>
+      <h3>Get Matched</h3>
+      <p>We confirm via WhatsApp and connect you with the nearest available rider.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-icon">🚀</div>
+      <h3>Ride & Arrive</h3>
+      <p>Your rider arrives fast. Pay cash or M-Pesa — your choice.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-tag">Transparent Fares</div>
+  <h2>Simple <span>Pricing</span></h2>
+  <p class="section-desc">No hidden charges. No surprises. All fares are fixed by zone — what you see is what you pay.</p>
+  <div class="price-grid">
+    <div class="price-card">
+      <div class="price-zone">Within Town</div>
+      <h3>Short Hop</h3>
+      <div class="price-amount">KES 80</div>
+      <div class="price-unit">Up to 3 km</div>
+      <ul class="price-features">
+        <li>Town centre routes</li>
+        <li>Market & shopping runs</li>
+        <li>M-Pesa or cash</li>
+        <li>Helmet provided</li>
+      </ul>
+    </div>
+    <div class="price-card featured">
+      <div class="featured-pill">Most Popular</div>
+      <div class="price-zone">Mid Distance</div>
+      <h3>Standard Ride</h3>
+      <div class="price-amount">KES 150</div>
+      <div class="price-unit">3 – 10 km</div>
+      <ul class="price-features">
+        <li>Cross-estate trips</li>
+        <li>Office commutes</li>
+        <li>M-Pesa or cash</li>
+        <li>Helmet + luggage rack</li>
+      </ul>
+    </div>
+    <div class="price-card">
+      <div class="price-zone">Long Distance</div>
+      <h3>Express Run</h3>
+      <div class="price-amount">KES 300+</div>
+      <div class="price-unit">10+ km — quoted on request</div>
+      <ul class="price-features">
+        <li>Out-of-town deliveries</li>
+        <li>Airport transfers</li>
+        <li>M-Pesa or cash</li>
+        <li>Dedicated rider assigned</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FARE ESTIMATOR -->
+<section id="fare-estimator">
+  <div class="section-tag">Know Your Fare</div>
+  <h2>Estimate Your <span>Fare</span></h2>
+  <p class="section-desc">KES 50 base fare + KES 30 per km. Enter your distance for an instant estimate.</p>
+  <div class="estimator-wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+      <div>
+        <div class="est-label">Distance (km)</div>
+        <input type="number" id="fareDistance" class="est-input" placeholder="e.g. 3" min="0" step="0.1" oninput="calculateFare()"/>
+      </div>
+      <div>
+        <div class="est-label">Passengers</div>
+        <select id="farePassengers" class="est-input" onchange="calculateFare()">
+          <option value="1">1 Passenger</option>
+          <option value="2">2 Passengers (+KES 30)</option>
+        </select>
+      </div>
+    </div>
+    <div class="fare-result-box" id="fareResult">
+      <div class="fare-big" id="fareAmount">KES 0</div>
+      <div class="fare-breakdown" id="fareBreakdown"></div>
+      <div class="fare-note">* Final fare may vary slightly based on route and traffic</div>
+      <a id="fareWaBtn" href="#" target="_blank" class="btn-primary btn-wa" style="margin-top:1rem;display:inline-flex;">
+        💬 Book This Ride on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="book">
+  <div class="section-tag">Get Moving</div>
+  <h2>Book Your <span>Ride</span></h2>
+  <div class="booking-grid">
+    <div class="booking-form-card">
+      <h3>Request a Ride</h3>
+      <div class="field-group">
+        <label class="field-label">Your Name</label>
+        <input type="text" id="bName" class="field-input" placeholder="e.g. Amina Wanjiku" oninput="updateBookLinks()"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Phone Number</label>
+        <input type="tel" id="bPhone" class="field-input" placeholder="07XX XXX XXX" oninput="updateBookLinks()"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Pickup Location</label>
+        <input type="text" id="bPickup" class="field-input" placeholder="Street, estate or landmark" oninput="updateBookLinks()"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Drop-off Location</label>
+        <input type="text" id="bDropoff" class="field-input" placeholder="Where are you going?" oninput="updateBookLinks()"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">When</label>
+        <select id="bTiming" class="field-input" onchange="updateBookLinks()">
+          <option>Right now — ASAP</option>
+          <option>Within the hour</option>
+          <option>Schedule for later today</option>
+          <option>Schedule for tomorrow</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Payment</label>
+        <select id="bPayment" class="field-input" onchange="updateBookLinks()">
+          <option>M-Pesa</option>
+          <option>Cash</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <a id="bWaBtn" href="#" target="_blank" class="btn-primary btn-wa">💬 Book via WhatsApp</a>
+        <a href="tel:+254716651788" class="btn-primary">📞 Call to Book</a>
+      </div>
+      <p style="font-size:.75rem;color:var(--text3);margin-top:.8rem;line-height:1.5;">
+        Fill in your details above then tap WhatsApp or Call to confirm your booking.
+      </p>
+      <div class="form-success-box" id="bookSuccess"></div>
+    </div>
+    <div>
+      <div class="booking-info-card">
+        <div class="info-item">
+          <div class="info-icon">⏱️</div>
+          <div>
+            <div class="info-title">Average Wait Time</div>
+            <div class="info-desc">Most riders arrive within 3–5 minutes of booking. We confirm via WhatsApp.</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">💳</div>
+          <div>
+            <div class="info-title">Payment Options</div>
+            <div class="info-desc">Pay via M-Pesa (0716 651 788) or cash on arrival. No card needed.</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">🪖</div>
+          <div>
+            <div class="info-title">Safety Guaranteed</div>
+            <div class="info-desc">Every rider carries a passenger helmet. All riders are vetted and licensed.</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">🕐</div>
+          <div>
+            <div class="info-title">Operating Hours</div>
+            <div class="info-desc">Available Monday to Sunday, 7:00 AM – 6:00 PM daily.</div>
+          </div>
+        </div>
+        <div class="info-item" style="border:none;">
+          <div class="info-icon">📍</div>
+          <div>
+            <div class="info-title">Service Areas</div>
+            <div class="info-desc">Eldoret CBD · Elgonview · Huruma · Langas and surrounding areas.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-tag">Real Stories</div>
+  <h2>What Customers <span>Say</span></h2>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Ordered a ride at 6am and the boda was at my gate in under 5 minutes. Professional, helmet ready, no drama. This is how it should be done.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">AW</div>
+        <div>
+          <div class="reviewer-name">Amina Wanjiku</div>
+          <div class="reviewer-meta">Eldoret Town · Regular customer</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">I was late for a meeting in Eldoret Town. RidaSwift got me there faster than a taxi and cost me half the price. I use them every morning now.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">BK</div>
+        <div>
+          <div class="reviewer-name">Brian Kamau</div>
+          <div class="reviewer-meta">Pioneer · Daily commuter</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <p class="review-text">Needed a delivery across town urgently. RidaSwift sorted it within the hour. Reliable, honest pricing, M-Pesa works perfectly.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">FO</div>
+        <div>
+          <div class="reviewer-name">Faith Otieno</div>
+          <div class="reviewer-meta">Langas · Business owner</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reviews-overall">
+    <div class="overall-score">4.8</div>
+    <div class="overall-text">
+      <strong>Rated 4.8 out of 5</strong> based on 300+ verified ride reviews.<br>
+      96% of customers say they would recommend RidaSwift to a friend.<br>
+      <span style="color:#F59E0B;">★★★★★</span> — Eldoret's highest-rated boda boda service.
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map-section">
+  <div class="section-tag">Service Area</div>
+  <h2>Where We <span>Operate</span></h2>
+  <p class="section-desc">Currently serving Eldoret City, Elgonview, Huruma, Langas and surrounding areas. Expanding to Nakuru and Kisumu in 2026.</p>
+  <div class="map-container" id="mapContainer">
+    <div class="map-overlay"><div class="map-badge">📍 Eldoret Service Zone</div></div>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63822.93449850733!2d35.26080865!3d0.52035865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x17800c6e33af1bad%3A0x8fed5a2c7a3c3e7!2sEldoret%2C%20Kenya!5e0!3m2!1sen!2ske!4v1710000000000!5m2!1sen!2ske" allowfullscreen="" loading="lazy"></iframe>
+    <div id="mapFallback" style="display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;height:400px;background:var(--card);cursor:pointer;" onclick="window.open('https://www.google.com/maps/place/Eldoret,+Kenya','_blank')">
+      <div style="font-size:3rem;">🗺️</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--primary);">ELDORET, KENYA</div>
+      <div style="font-size:.88rem;color:var(--text2);">Serving Eldoret City · Elgonview · Huruma · Langas</div>
+      <div class="btn-primary" style="margin-top:.5rem;">📍 Open in Google Maps</div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERY -->
+<section id="delivery">
+  <div class="section-tag">More Than Rides</div>
+  <h2>Delivery <span>Service</span></h2>
+  <p class="section-desc">From packages to gas refills — we handle it all across Eldoret.</p>
+  <div class="delivery-grid">
+    <div class="delivery-card">
+      <div class="del-icon">📦</div>
+      <div>
+        <div class="del-title">Package Delivery</div>
+        <div class="del-desc">Send parcels, documents and small packages anywhere in Eldoret. Fast and trackable.</div>
+      </div>
+    </div>
+    <div class="delivery-card">
+      <div class="del-icon">🛒</div>
+      <div>
+        <div class="del-title">Shopping Errands</div>
+        <div class="del-desc">Need something from the market or supermarket? We pick it up and bring it to you.</div>
+      </div>
+    </div>
+    <div class="delivery-card">
+      <div class="del-icon">💊</div>
+      <div>
+        <div class="del-title">Pharmacy Errands</div>
+        <div class="del-desc">Medicines, documents, urgent items — handled fast, 7AM to 6PM daily.</div>
+      </div>
+    </div>
+    <div class="delivery-card">
+      <div class="del-icon">⛽</div>
+      <div>
+        <div class="del-title">Gas Refilling</div>
+        <div class="del-desc">Running low? We pick up your cylinder, refill it and bring it back to your door.</div>
+      </div>
+    </div>
+    <div class="delivery-card">
+      <div class="del-icon">🚚</div>
+      <div>
+        <div class="del-title">General Delivery</div>
+        <div class="del-desc">Anything that fits on a boda — we deliver it anywhere in Eldoret.</div>
+      </div>
+    </div>
+  </div>
+  <div class="delivery-cta">
+    <div class="delivery-cta-left">
+      <h3>Book a Delivery Now</h3>
+      <p>Tell us what, where from and where to. We'll handle the rest.</p>
+      <div class="delivery-price-tag" style="margin-top:.5rem;">KES 100+</div>
+    </div>
+    <div class="delivery-cta-actions">
+      <a href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%20need%20a%20delivery." target="_blank" onclick="sendSMS('NEW DELIVERY REQUEST - RidaSwift\nCheck WhatsApp for details.');" class="btn-primary btn-wa">💬 Book on WhatsApp</a>
+      <a href="tel:+254716651788" class="btn-ghost">📞 Call</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-tag">Meet the Founder</div>
+  <h2>The Man Behind <span>RidaSwift</span></h2>
+  <div class="about-grid">
+    <div class="about-photo-wrap">
+      <img src="evans-photo.jpg" alt="Evans Abok" class="about-photo"/>
+      <div class="about-badge-wrap">
+        <div class="about-badge-num">500+</div>
+        <div class="about-badge-label">Active Riders</div>
+      </div>
+    </div>
+    <div>
+      <div class="about-name">Evans Abok</div>
+      <div class="about-role">Founder & CEO — RidaSwift Eldoret</div>
+      <p class="about-bio">Evans Abok is a passionate entrepreneur from Eldoret who founded RidaSwift with one goal — to make boda boda rides in Eldoret safer, faster and more professional. With deep roots in the community, Evans built RidaSwift from the ground up to serve Eldoret CBD, Elgonview, Huruma, Langas and surrounding areas.</p>
+      <p class="about-bio">His vision is simple: give every rider a steady income and every customer a ride they can trust — every single time.</p>
+      <div class="about-chips">
+        <div class="about-chip">🏍️ 500+ Riders</div>
+        <div class="about-chip">📍 Eldoret Based</div>
+        <div class="about-chip">⭐ 4.8 Rating</div>
+        <div class="about-chip">🇰🇪 Proudly Kenyan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REFERRAL -->
+<section id="referral">
+  <div class="section-tag">Earn With Us</div>
+  <h2>Refer a Customer & <span>Earn</span></h2>
+  <div class="referral-grid">
+    <div>
+      <p style="color:var(--text2);line-height:1.7;margin-bottom:2rem;">Know someone who needs reliable rides in Eldoret? Refer them and earn cash every time they book their first ride.</p>
+      <div class="referral-steps">
+        <div class="ref-step">
+          <div class="ref-num">1</div>
+          <div>
+            <div class="ref-title">Share With a Friend</div>
+            <div class="ref-desc">Tell a friend about RidaSwift and ask them to mention your name when booking.</div>
+          </div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-num">2</div>
+          <div>
+            <div class="ref-title">They Book a Ride</div>
+            <div class="ref-desc">Your friend books their first ride and mentions your name.</div>
+          </div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-num">3</div>
+          <div>
+            <div class="ref-title">You Get Paid</div>
+            <div class="ref-desc">Your bonus is sent straight to your M-Pesa. No delays.</div>
+          </div>
+        </div>
+      </div>
+      <a href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%20want%20to%20refer%20a%20customer.%20My%20name%20is%3A" target="_blank" class="btn-primary" style="margin-top:1.5rem;display:inline-flex;">
+        💬 Refer a Customer Now →
+      </a>
+    </div>
+    <div class="referral-reward-card">
+      <div class="reward-icon">💰</div>
+      <div class="reward-amount">KES 100</div>
+      <div class="reward-label">Per customer you refer who books a ride<br><strong style="color:var(--text);">Paid via M-Pesa</strong></div>
+      <div class="reward-tiers">
+        <div class="reward-tier"><span>1 referral</span><strong>KES 100</strong></div>
+        <div class="reward-tier"><span>5 referrals</span><strong>KES 500</strong></div>
+        <div class="reward-tier"><span>10+ referrals</span><strong>KES 1,000</strong></div>
+      </div>
+      <p style="font-size:.78rem;color:var(--text3);margin-top:1rem;">No limit on referrals. The more customers you refer, the more you earn — every month.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LOST & FOUND -->
+<section id="lost-found">
+  <div class="section-tag">Left Something Behind?</div>
+  <h2>Lost & <span>Found</span></h2>
+  <div class="lf-grid">
+    <div>
+      <p style="color:var(--text2);line-height:1.7;margin-bottom:1.5rem;">Did you leave something on a RidaSwift boda? Report it here and we'll contact your rider immediately.</p>
+      <ul class="lf-steps-list">
+        <li class="lf-step-item">
+          <div class="lf-step-num">1</div>
+          <div class="lf-step-text">Fill in the form with your name, phone and a description of what you lost.</div>
+        </li>
+        <li class="lf-step-item">
+          <div class="lf-step-num">2</div>
+          <div class="lf-step-text">We contact the rider who took you and ask them to check their bike.</div>
+        </li>
+        <li class="lf-step-item">
+          <div class="lf-step-num">3</div>
+          <div class="lf-step-text">If found, we arrange same-day return to you if possible.</div>
+        </li>
+      </ul>
+    </div>
+    <div class="lf-form-card">
+      <h3>Report Lost Item</h3>
+      <div class="field-group">
+        <label class="field-label">Your Name</label>
+        <input type="text" id="lfName" class="field-input" placeholder="Your full name" oninput="submitLostFound()"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Your Phone</label>
+        <input type="tel" id="lfPhone" class="field-input" placeholder="07XX XXX XXX" oninput="submitLostFound()"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">When did you take the ride?</label>
+        <input type="text" id="lfWhen" class="field-input" placeholder="e.g. Today at 2PM, from Huruma" oninput="submitLostFound()"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">What did you lose?</label>
+        <textarea id="lfItem" class="field-input" placeholder="Describe the item..." oninput="submitLostFound()"></textarea>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.8rem;margin-top:1rem;">
+        <a id="lfWaBtn" href="#" target="_blank" class="btn-primary btn-wa">💬 Report via WhatsApp</a>
+        <a href="tel:+254716651788" class="btn-ghost">📞 Call Us Immediately</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RIDERS -->
+<section id="riders">
+  <div class="section-tag">Join the Team</div>
+  <h2>Ride With <span>Us</span></h2>
+  <div class="rider-grid">
+    <div>
+      <p style="color:var(--text2);line-height:1.7;margin-bottom:2rem;max-width:400px;">Turn your boda boda into a steady income. Join Eldoret's most professional rider network.</p>
+      <ul class="rider-perks">
+        <li class="rider-perk">
+          <div class="perk-icon-wrap">💰</div>
+          <div><div class="perk-title">Earn KES 1,500–3,000 / day</div><div class="perk-desc">Top riders earn above average thanks to our busy booking volume and fair commission.</div></div>
+        </li>
+        <li class="rider-perk">
+          <div class="perk-icon-wrap">🕐</div>
+          <div><div class="perk-title">Set Your Own Hours</div><div class="perk-desc">Work mornings, evenings, or full days. You're in control of your schedule.</div></div>
+        </li>
+        <li class="rider-perk">
+          <div class="perk-icon-wrap">🛡️</div>
+          <div><div class="perk-title">Accident Cover Included</div><div class="perk-desc">All active RidaSwift riders are covered under our group accident insurance.</div></div>
+        </li>
+        <li class="rider-perk">
+          <div class="perk-icon-wrap">📱</div>
+          <div><div class="perk-title">M-Pesa Daily Payouts</div><div class="perk-desc">Your earnings hit your M-Pesa every evening. No delays, no paperwork.</div></div>
+        </li>
+      </ul>
+    </div>
+    <div class="rider-form-card">
+      <h3>Apply to Ride →</h3>
+      <div class="field-group">
+        <label class="field-label">Full Name</label>
+        <input type="text" id="rName" class="field-input" placeholder="Your full name" oninput="updateRiderLinks()"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Phone Number</label>
+        <input type="tel" id="rPhone" class="field-input" placeholder="07XX XXX XXX" oninput="updateRiderLinks()"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Area You Ride In</label>
+        <input type="text" id="rArea" class="field-input" placeholder="e.g. Eldoret, Huruma, Langas, Elgonview" oninput="updateRiderLinks()"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Years of Experience</label>
+        <select id="rExp" class="field-input" onchange="updateRiderLinks()">
+          <option>Less than 1 year</option>
+          <option>1–3 years</option>
+          <option>3–5 years</option>
+          <option>5+ years</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Valid Licence?</label>
+        <select id="rLicence" class="field-input" onchange="updateRiderLinks()">
+          <option>Yes — valid PSV or Class A</option>
+          <option>Yes — standard licence</option>
+          <option>No — I'm working on it</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:.8rem;margin:.8rem 0;">
+        <input type="checkbox" id="rTerms" style="width:18px;height:18px;margin-top:2px;accent-color:var(--primary);flex-shrink:0;cursor:pointer;"/>
+        <span style="font-size:.82rem;color:var(--text2);line-height:1.5;">I confirm my bike is roadworthy and I agree to RidaSwift's rider code of conduct.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.8rem;margin-top:.5rem;">
+        <a id="rWaBtn" href="#" target="_blank" class="btn-primary btn-wa">💬 Apply via WhatsApp</a>
+        <a href="tel:+254716651788" class="btn-ghost">📞 Call Us Instead</a>
+      </div>
+      <p style="font-size:.75rem;color:var(--text3);margin-top:.8rem;line-height:1.5;">Fill in your details then tap WhatsApp to send your application. A copy is also emailed automatically.</p>
+      <div id="rEmailStatus" style="display:none;color:var(--green);font-size:.82rem;margin-top:.5rem;">✅ Email sent!</div>
+      <div class="riders-group-box" style="margin-top:1rem;">
+        <p>🏍️ Once approved, join our official riders group to receive bookings and updates:</p>
+        <a href="https://chat.whatsapp.com/IVKpKBAgqd71retBd1GQrH?mode=gi_t" target="_blank" class="btn-primary btn-wa" style="display:flex;justify-content:center;">
+          👥 Join RidaSwift Riders Group
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo"><img src="ridaswift-logo.png" alt="RidaSwift"/></div>
+      <p class="footer-tagline">Eldoret's bold, professional boda boda network. Fast rides. Trusted riders. Fair fares.</p>
+      <p style="font-size:.78rem;color:var(--text3);margin-bottom:1rem;">📍 Eldoret, Kenya &nbsp;|&nbsp; 🕐 7AM – 6PM Daily</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/evans.abok" target="_blank" class="social-chip">📘 Facebook</a>
+        <a href="https://www.tiktok.com/@evansabok" target="_blank" class="social-chip">🎵 TikTok</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Quick Links</div>
+      <ul class="footer-links">
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#pricing">Pricing & Fares</a></li>
+        <li><a href="#fare-estimator">Fare Estimator</a></li>
+        <li><a href="#book">Book a Ride</a></li>
+        <li><a href="#delivery">Delivery Service</a></li>
+        <li><a href="#referral">Refer & Earn</a></li>
+        <li><a href="#riders">Become a Rider</a></li>
+        <li><a href="#lost-found">Lost & Found</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Contact Us</div>
+      <ul class="footer-links">
+        <li><a href="tel:+254716651788" style="color:var(--primary);font-weight:700;">📞 Call: +254 716 651 788</a></li>
+        <li><a href="https://wa.me/254716651788">💬 WhatsApp Us</a></li>
+        <li><span style="color:var(--text2);font-size:.85rem;">✉️ evansabok164&#64;gmail&#46;com</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 RidaSwift. All rights reserved.</div>
+    <div class="footer-dev">Designed & Developed by <strong>Evans Abok</strong> | Powered by <strong>Claude AI</strong></div>
+    <div class="footer-flag">🇰🇪 Proudly Kenyan</div>
+  </div>
+  <div style="text-align:center;margin-top:.5rem;">
+    <span class="admin-tap-zone" id="adminTapZone" onclick="adminTap()">v1.0 ⚙️</span>
+  </div>
+</footer>
+
+<!-- ADMIN LOGIN -->
+<div id="adminLogin">
+  <div class="admin-modal" style="position:relative;">
+    <button class="admin-close-x" onclick="closeAdmin()">✕</button>
+    <h3>Admin <span style="color:var(--primary);">Access</span></h3>
+    <p>Owner only — enter your password</p>
+    <input type="password" id="adminPwd" class="admin-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter') adminLogin()"/>
+    <button class="btn-primary" onclick="adminLogin()" style="width:100%;">🔐 Enter Dashboard</button>
+    <div class="admin-err" id="adminError">Wrong password. Try again.</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+  <nav class="admin-nav">
+    <div class="admin-nav-logo">Rida<span>Swift</span> Admin</div>
+    <div class="admin-nav-actions">
+      <button class="admin-nav-btn danger" onclick="adminClearAll()">🗑️ Clear All</button>
+      <button class="admin-nav-btn" onclick="adminLogout()">Logout</button>
+    </div>
+  </nav>
+  <div class="admin-body">
+    <div class="admin-stats-row">
+      <div class="admin-stat-card"><div class="admin-stat-icon">🏍️</div><div class="admin-stat-num" id="aStatRides">0</div><div class="admin-stat-label">Rides</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-icon">👤</div><div class="admin-stat-num" id="aStatRiders">0</div><div class="admin-stat-label">Applications</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-icon">📦</div><div class="admin-stat-num" id="aStatDeliveries">0</div><div class="admin-stat-label">Deliveries</div></div>
+    </div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="showAdminTab('bookings',this)">📋 Bookings</button>
+      <button class="admin-tab" onclick="showAdminTab('riders',this)">🏍️ My Riders</button>
+    </div>
+    <!-- Bookings Tab -->
+    <div id="adminBookingsTab">
+      <div class="admin-filters">
+        <button class="a-filter active" onclick="aFilter('all',this)">All</button>
+        <button class="a-filter" onclick="aFilter('Ride Booking',this)">🏍️ Rides</button>
+        <button class="a-filter" onclick="aFilter('Rider Application',this)">👤 Applications</button>
+        <button class="a-filter" onclick="aFilter('Delivery Request',this)">📦 Deliveries</button>
+      </div>
+      <div id="adminCards"></div>
+    </div>
+    <!-- Riders Tab -->
+    <div id="adminRidersTab" style="display:none;">
+      <div class="rider-add-form">
+        <div class="rider-add-title">➕ Add New Rider</div>
+        <div class="rider-add-grid">
+          <input id="riderName" placeholder="Full Name" class="r-search" style="margin:0;"/>
+          <input id="riderPhone" placeholder="Phone Number" class="r-search" style="margin:0;"/>
+          <input id="riderPlate" placeholder="Number Plate e.g. KAA 123A" class="r-search" style="margin:0;text-transform:uppercase;"/>
+          <input id="riderArea" placeholder="Area e.g. Huruma" class="r-search" style="margin:0;"/>
+        </div>
+        <select id="riderStatus" class="r-search" style="margin-bottom:.8rem;">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="Suspended">Suspended</option>
+        </select>
+        <button onclick="addRider()" class="btn-primary" style="width:100%;">➕ Add Rider</button>
+      </div>
+      <input id="riderSearch" placeholder="🔍 Search by name, plate or phone..." class="r-search" onkeyup="searchRiders()"/>
+      <div class="r-stat-row">
+        <div class="r-stat-chip" style="background:rgba(34,197,94,.12);color:var(--green);">✅ Active: <span id="riderStatActive">0</span></div>
+        <div class="r-stat-chip" style="background:var(--primary-light);color:var(--primary);">💤 Inactive: <span id="riderStatInactive">0</span></div>
+        <div class="r-stat-chip" style="background:rgba(239,68,68,.12);color:#ef4444;">🚫 Suspended: <span id="riderStatSuspended">0</span></div>
+      </div>
+      <div id="ridersList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%27d%20like%20to%20book%20a%20ride." target="_blank"
+  style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:997;
+  width:56px;height:56px;background:#22C55E;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;box-shadow:0 4px 20px rgba(34,197,94,.4);
+  text-decoration:none;transition:transform .2s,box-shadow .2s;"
+  onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 8px 28px rgba(34,197,94,.5)'"
+  onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(34,197,94,.4)'">
+  💬
+  <div style="position:absolute;top:0;right:0;width:14px;height:14px;background:#ef4444;border-radius:50%;border:2px solid var(--bg);animation:blink 1.4s ease-in-out infinite;"></div>
+</a>
+
+<!-- INSTALL MODAL -->
+<div id="installOverlay">
+  <div class="install-modal">
+    <button class="install-close-x" onclick="closeInstall()">✕</button>
+    <img src="ridaswift-logo.png" alt="RidaSwift"/>
+    <h3>Rida<span>Swift</span></h3>
+    <p>Install the RidaSwift app for faster bookings, offline access and instant ride updates!</p>
+    <div class="install-features-row">
+      <div class="install-feat"><span class="install-feat-icon">⚡</span>Faster</div>
+      <div class="install-feat"><span class="install-feat-icon">📵</span>Offline</div>
+      <div class="install-feat"><span class="install-feat-icon">🔔</span>Alerts</div>
+      <div class="install-feat"><span class="install-feat-icon">🆓</span>Free</div>
+    </div>
+    <div class="install-steps-box">
+      <div class="install-step-item"><div class="install-step-num">1</div><span>Tap ⋮ three dots (top right of Chrome)</span></div>
+      <div class="install-step-item"><div class="install-step-num">2</div><span>Tap <strong>"Add to Home Screen"</strong> or <strong>"Install App"</strong></span></div>
+      <div class="install-step-item"><div class="install-step-num">3</div><span>Tap <strong>"Add"</strong> — RidaSwift on your home screen! 🎉</span></div>
+    </div>
+    <button class="btn-primary" id="mainInstallBtn" onclick="installApp()" style="width:100%;justify-content:center;">📲 Install RidaSwift Now</button>
+    <button onclick="closeInstall()" style="background:none;border:none;color:var(--text3);font-size:.8rem;cursor:pointer;margin-top:.8rem;text-decoration:underline;display:block;width:100%;">Maybe later</button>
+  </div>
+</div>
+
+<script>
+
+  // Scroll reveal
+  // SMS notification via Africa's Talking
+  var AT_KEY = 'atsk_3bdb8fcdc54fd288c582bfd5947d0d9cb45734bb8c80b87fc8f4f89c137eb5ebe69f20cd';
+  var AT_USER = 'ridaswift';
+  var MY_PHONE = '+254716651788';
+
+  function sendSMS(message) {
+    fetch('https://api.africastalking.com/version1/messaging', {
+      method: 'POST',
+      headers: {
+        'apiKey': AT_KEY,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      },
+      body: 'username=' + AT_USER + '&to=' + encodeURIComponent(MY_PHONE) + '&message=' + encodeURIComponent(message)
+    }).then(function(r) {
+      console.log('SMS sent');
+    }).catch(function(e) {
+      console.log('SMS error:', e);
+    });
+  }
+
+
+
+
+
+  // ── THEME TOGGLE ─────────────────────────────────
+  var isDark = localStorage.getItem('rs_theme') !== 'light';
+  function applyTheme() {
+    if (isDark) {
+      document.body.classList.remove('light-mode');
+      document.getElementById('themeBtn').innerHTML = '🌙 Dark';
+    } else {
+      document.body.classList.add('light-mode');
+      document.getElementById('themeBtn').innerHTML = '☀️ Light';
+    }
+    localStorage.setItem('rs_theme', isDark ? 'dark' : 'light');
+  }
+  function toggleTheme() { isDark = !isDark; applyTheme(); }
+  applyTheme();
+
+  // ── CONFETTI ──────────────────────────────────────
+  function launchConfetti() {
+    var colors = ['#E8A020','#25D366','#C43B1A','#ffffff','#1C2B3A','#F5F0E8'];
+    for (var i = 0; i < 80; i++) {
+      (function(i) {
+        setTimeout(function() {
+          var el = document.createElement('div');
+          el.className = 'confetti-piece';
+          el.style.left = Math.random() * 100 + 'vw';
+          el.style.background = colors[Math.floor(Math.random() * colors.length)];
+          el.style.width = (Math.random() * 8 + 6) + 'px';
+          el.style.height = (Math.random() * 8 + 6) + 'px';
+          el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+          el.style.animationDelay = (Math.random() * 0.5) + 's';
+          document.body.appendChild(el);
+          setTimeout(function() { el.remove(); }, 4000);
+        }, i * 30);
+      })(i);
+    }
+  }
+  // ─────────────────────────────────────────────────
+
+  // ── RIDERS MANAGEMENT ────────────────────────────
+  function showAdminTab(tab, btn) {
+    document.getElementById('adminBookingsTab').style.display = tab === 'bookings' ? 'block' : 'none';
+    document.getElementById('adminRidersTab').style.display = tab === 'riders' ? 'block' : 'none';
+    document.querySelectorAll('.admin-filter').forEach(function(t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    if (tab === 'riders') loadRiders();
+  }
+
+  function addRider() {
+    var name = document.getElementById('riderName').value.trim();
+    var phone = document.getElementById('riderPhone').value.trim();
+    var plate = document.getElementById('riderPlate').value.trim().toUpperCase();
+    var area = document.getElementById('riderArea').value.trim();
+    var status = document.getElementById('riderStatus').value;
+    if (!name || !phone || !plate) {
+      alert('Please fill in Name, Phone and Plate Number');
+      return;
+    }
+    var riders = JSON.parse(localStorage.getItem('rs_riders') || '[]');
+    riders.unshift({ id: Date.now(), name: name, phone: phone, plate: plate, area: area, status: status, joined: new Date().toLocaleDateString('en-KE') });
+    localStorage.setItem('rs_riders', JSON.stringify(riders));
+    document.getElementById('riderName').value = '';
+    document.getElementById('riderPhone').value = '';
+    document.getElementById('riderPlate').value = '';
+    document.getElementById('riderArea').value = '';
+    loadRiders();
+  }
+
+  function loadRiders(filter) {
+    var riders = JSON.parse(localStorage.getItem('rs_riders') || '[]');
+    var search = (document.getElementById('riderSearch') || {value:''}).value.toLowerCase();
+    if (search) {
+      riders = riders.filter(function(r) {
+        return r.name.toLowerCase().includes(search) ||
+               r.phone.includes(search) ||
+               r.plate.toLowerCase().includes(search);
+      });
+    }
+    // Stats
+    var all = JSON.parse(localStorage.getItem('rs_riders') || '[]');
+    document.getElementById('riderStatActive').textContent = all.filter(function(r){return r.status==='Active';}).length;
+    document.getElementById('riderStatInactive').textContent = all.filter(function(r){return r.status==='Inactive';}).length;
+    document.getElementById('riderStatSuspended').textContent = all.filter(function(r){return r.status==='Suspended';}).length;
+
+    var list = document.getElementById('ridersList');
+    if (riders.length === 0) {
+      list.innerHTML = '<div class="admin-empty"><div class="admin-empty-icon">🏍️</div><div>No riders added yet</div></div>';
+      return;
+    }
+    list.innerHTML = riders.map(function(r) {
+      var statusClass = r.status === 'Active' ? 'rs-active' : r.status === 'Inactive' ? 'rs-inactive' : 'rs-suspended';
+      var rawPhone = (r.phone || '').replace(/\D/g, '');
+      if (rawPhone.startsWith('0')) rawPhone = '254' + rawPhone.slice(1);
+      if (rawPhone.startsWith('7') || rawPhone.startsWith('1')) rawPhone = '254' + rawPhone;
+      var waLink = 'https://wa.me/' + rawPhone + '?text=' + encodeURIComponent('Hi ' + r.name + ', this is RidaSwift.');
+      var callLink = 'tel:+' + rawPhone;
+      return '<div class="rider-admin-card">'+
+        '<div class="rider-admin-info">'+
+          '<div class="rider-admin-name">'+r.name+'</div>'+
+          '<div class="rider-admin-detail">📞 <span>'+r.phone+'</span></div>'+
+          '<div class="rider-admin-detail">🚘 Plate: <span>'+r.plate+'</span></div>'+
+          '<div class="rider-admin-detail">📍 Area: <span>'+(r.area||'-')+'</span> &nbsp;|&nbsp; Joined: <span>'+r.joined+'</span></div>'+
+        '</div>'+
+        '<span class="rider-status-tag '+statusClass+'">'+r.status+'</span>'+
+        '<div class="rider-admin-actions">'+
+          '<a class="rider-admin-btn" style="background:#25D366;color:#fff;display:inline-block;" href="'+waLink+'" target="_blank">💬 Chat</a>'+
+          '<a class="rider-admin-btn" style="background:var(--saffron);color:var(--ink);display:inline-block;" href="'+callLink+'">📞 Call</a>'+
+          '<button class="rider-admin-btn" style="background:rgba(239,68,68,.15);color:#ef4444;border:1px solid #ef4444;" onclick="deleteRider('+r.id+')">🗑️ Remove</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  function searchRiders() { loadRiders(); }
+
+  function deleteRider(id) {
+    if (confirm('Remove this rider?')) {
+      var riders = JSON.parse(localStorage.getItem('rs_riders') || '[]');
+      riders = riders.filter(function(r) { return r.id !== id; });
+      localStorage.setItem('rs_riders', JSON.stringify(riders));
+      loadRiders();
+    }
+  }
+  // ─────────────────────────────────────────────────
+
+  // ── WEATHER WIDGET ───────────────────────────────
+  function loadWeather() {
+    fetch('https://wttr.in/Eldoret?format=j1')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var temp = data.current_condition[0].temp_C;
+        var desc = data.current_condition[0].weatherDesc[0].value;
+        var icon = '🌤️';
+        var d = desc.toLowerCase();
+        if (d.includes('rain') || d.includes('drizzle')) icon = '🌧️';
+        else if (d.includes('thunder')) icon = '⛈️';
+        else if (d.includes('cloud')) icon = '☁️';
+        else if (d.includes('sun') || d.includes('clear')) icon = '☀️';
+        else if (d.includes('mist') || d.includes('fog')) icon = '🌫️';
+        document.getElementById('weatherIcon').textContent = icon;
+        document.getElementById('weatherText').textContent = temp + '°C · ' + desc;
+
+        // Show ride encouragement based on weather
+        if (d.includes('rain')) {
+          document.getElementById('weatherText').textContent = temp + '°C · Raining — Book a Boda!';
+        }
+      })
+      .catch(function() {
+        document.getElementById('weatherText').textContent = 'Eldoret · Book a Ride!';
+      });
+  }
+  loadWeather();
+
+  // ── LIVE AVAILABILITY SIMULATOR ──────────────────
+  function updateAvailability() {
+    var hour = new Date().getHours();
+    var isOpen = hour >= 6 && hour < 20;
+    var dot = document.getElementById('availDot');
+    var count = document.getElementById('availCount');
+    var wait = document.getElementById('availWait');
+
+    if (!isOpen) {
+      dot.className = 'avail-dot offline';
+      count.textContent = '0';
+      count.style.color = '#ef4444';
+      wait.textContent = 'Closed';
+      wait.style.color = '#ef4444';
+      return;
+    }
+
+    // Simulate realistic rider counts based on time of day
+    var base = 8;
+    if (hour >= 7 && hour <= 9) base = 18;   // morning rush
+    else if (hour >= 12 && hour <= 14) base = 15; // lunch
+    else if (hour >= 16 && hour <= 19) base = 20; // evening rush
+    else if (hour >= 6 && hour < 7) base = 5;
+    else if (hour >= 19 && hour < 20) base = 6;
+
+    var riders = base + Math.floor(Math.random() * 5) - 2;
+    var waitMins = riders > 10 ? Math.floor(Math.random() * 3) + 2 : Math.floor(Math.random() * 5) + 4;
+
+    count.textContent = riders;
+    wait.textContent = waitMins + ' mins';
+    dot.className = riders > 10 ? 'avail-dot' : 'avail-dot busy';
+  }
+  updateAvailability();
+  setInterval(updateAvailability, 60000); // Update every minute
+
+  // ── LOST & FOUND ─────────────────────────────────
+  function submitLostFound() {
+    var name = document.getElementById('lfName').value || '(no name)';
+    var phone = document.getElementById('lfPhone').value || '(no phone)';
+    var when = document.getElementById('lfWhen').value || '(no time given)';
+    var item = document.getElementById('lfItem').value || '(no description)';
+    var msg = 'LOST ITEM REPORT - RidaSwift' +
+      '%0A%0AName: ' + encodeURIComponent(name) +
+      '%0APhone: ' + encodeURIComponent(phone) +
+      '%0ARide time: ' + encodeURIComponent(when) +
+      '%0AItem lost: ' + encodeURIComponent(item);
+    document.getElementById('lfWaBtn').href = 'https://wa.me/254716651788?text=' + msg;
+  }
+  // Update lost & found link on input
+  ['lfName','lfPhone','lfWhen','lfItem'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', submitLostFound);
+  });
+  submitLostFound();
+  // ─────────────────────────────────────────────────
+
+  // ── ADMIN DASHBOARD ──────────────────────────────
+  var ADMIN_PASS = 'rahmahjihdin164';
+  var adminTapCount = 0;
+  var adminTapTimer;
+  var aCurrentFilter = 'all';
+
+  function adminTap() {
+    adminTapCount++;
+    clearTimeout(adminTapTimer);
+    adminTapTimer = setTimeout(function() { adminTapCount = 0; }, 3000);
+    if (adminTapCount >= 5) {
+      adminTapCount = 0;
+      document.getElementById('adminLogin').classList.add('show');
+      setTimeout(function() {
+        document.getElementById('adminPwd').focus();
+      }, 300);
+    }
+  }
+
+  function adminLogin() {
+    var pwd = document.getElementById('adminPwd').value;
+    if (pwd === ADMIN_PASS) {
+      document.getElementById('adminLogin').classList.remove('show');
+      document.getElementById('adminPanel').classList.add('show');
+      document.getElementById('adminPwd').value = '';
+      sessionStorage.setItem('rs_admin', '1');
+      loadAdminDashboard();
+    } else {
+      document.getElementById('adminError').style.display = 'block';
+      document.getElementById('adminPwd').value = '';
+    }
+  }
+
+  function closeAdmin() {
+    document.getElementById('adminLogin').classList.remove('show');
+    document.getElementById('adminPwd').value = '';
+    document.getElementById('adminError').style.display = 'none';
+  }
+
+  function adminLogout() {
+    sessionStorage.removeItem('rs_admin');
+    document.getElementById('adminPanel').classList.remove('show');
+  }
+
+  function loadAdminDashboard() {
+    var bookings = JSON.parse(localStorage.getItem('rs_bookings') || '[]');
+    document.getElementById('aStatRides').textContent =
+      bookings.filter(function(b){return b.type==='Ride Booking';}).length;
+    document.getElementById('aStatRiders').textContent =
+      bookings.filter(function(b){return b.type==='Rider Application';}).length;
+    document.getElementById('aStatDeliveries').textContent =
+      bookings.filter(function(b){return b.type==='Delivery Request';}).length;
+    renderAdminCards(bookings, aCurrentFilter);
+  }
+
+  function renderAdminCards(bookings, filter) {
+    var cards = document.getElementById('adminCards');
+    var filtered = filter === 'all' ? bookings :
+      bookings.filter(function(b){return b.type===filter;});
+    if (filtered.length === 0) {
+      cards.innerHTML = '<div class="admin-empty"><div class="admin-empty-icon">📭</div><div>No submissions yet</div></div>';
+      return;
+    }
+    cards.innerHTML = filtered.map(function(b) {
+      var tagClass = b.type==='Ride Booking'?'tag-ride':b.type==='Rider Application'?'tag-rider':'tag-delivery';
+      var details = '';
+      if (b.type==='Ride Booking') {
+        details = '<div class="admin-card-detail">📍 Pickup: <span>'+(b.pickup||'-')+'</span></div>'+
+                  '<div class="admin-card-detail">🏁 Drop-off: <span>'+(b.dropoff||'-')+'</span></div>'+
+                  '<div class="admin-card-detail">🕐 When: <span>'+(b.when||'-')+'</span></div>'+
+                  '<div class="admin-card-detail">💳 Payment: <span>'+(b.payment||'-')+'</span></div>';
+      } else if (b.type==='Rider Application') {
+        details = '<div class="admin-card-detail">📍 Area: <span>'+(b.area||'-')+'</span></div>'+
+                  '<div class="admin-card-detail">⏱️ Experience: <span>'+(b.experience||'-')+'</span></div>'+
+                  '<div class="admin-card-detail">📋 Licence: <span>'+(b.licence||'-')+'</span></div>';
+      } else {
+        details = '<div class="admin-card-detail">📦 <span>'+(b.details||'Check WhatsApp')+'</span></div>';
+      }
+      var phone = (b.phone||'').replace(/\D/g,'');
+      if (phone.startsWith('0')) phone = '254'+phone.slice(1);
+      return '<div class="admin-card">'+
+        '<div class="admin-card-header">'+
+          '<span class="admin-tag '+tagClass+'">'+b.type+'</span>'+
+          '<span class="admin-card-date">'+(b.date||'')+'</span>'+
+        '</div>'+
+        '<div class="admin-card-name">'+(b.name||'Unknown')+'</div>'+
+        '<div class="admin-card-detail">📞 <span>'+(b.phone||'-')+'</span></div>'+
+        details+
+        '<div class="admin-card-actions">'+
+          '<a class="admin-action a-wa" href="https://wa.me/'+phone+'" target="_blank">💬 WhatsApp</a>'+
+          '<a class="admin-action a-call" href="tel:+'+phone+'">📞 Call</a>'+
+          '<button class="admin-action a-del" onclick="aDelete('+b.id+')">🗑️</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  function aFilter(type, btn) {
+    aCurrentFilter = type;
+    document.querySelectorAll('.admin-filter').forEach(function(t){t.classList.remove('active');});
+    btn.classList.add('active');
+    var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+    renderAdminCards(bookings, type);
+  }
+
+  function aDelete(id) {
+    var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+    bookings = bookings.filter(function(b){return b.id!==id;});
+    localStorage.setItem('rs_bookings', JSON.stringify(bookings));
+    loadAdminDashboard();
+  }
+
+  function adminClearAll() {
+    if (confirm('Delete ALL bookings?')) {
+      localStorage.removeItem('rs_bookings');
+      loadAdminDashboard();
+    }
+  }
+
+  // Auto-open if session active
+  if (sessionStorage.getItem('rs_admin')) {
+    document.getElementById('adminPanel').classList.add('show');
+    loadAdminDashboard();
+  }
+
+  // Refresh every 30 seconds
+  setInterval(function(){
+    if (sessionStorage.getItem('rs_admin')) loadAdminDashboard();
+  }, 30000);
+  // ─────────────────────────────────────────────────
+
+  function saveBooking(data) {
+    var bookings = JSON.parse(localStorage.getItem('rs_bookings') || '[]');
+    data.id = Date.now();
+    data.date = new Date().toLocaleString('en-KE', {timeZone:'Africa/Nairobi'});
+    data.status = 'New';
+    bookings.unshift(data);
+    localStorage.setItem('rs_bookings', JSON.stringify(bookings));
+  }
+
+  function calculateFare() {
+    var dist = parseFloat(document.getElementById('fareDistance').value) || 0;
+    var pass = parseInt(document.getElementById('farePassengers').value) || 1;
+    if (dist <= 0) {
+      document.getElementById('fareResult').style.display = 'none';
+      return;
+    }
+    var base = 50;
+    var perKm = 30;
+    var fare = base + (dist * perKm);
+    if (pass === 2) fare += 30;
+    fare = Math.round(fare);
+    document.getElementById('fareResult').style.display = 'block';
+    document.getElementById('fareAmount').textContent = 'KES ' + fare;
+    var breakdown = 'Base fare: KES ' + base + ' + ' + dist + 'km × KES ' + perKm + '/km';
+    if (pass === 2) breakdown += ' + KES 30 (extra passenger)';
+    document.getElementById('fareBreakdown').textContent = breakdown;
+    var waMsg = encodeURIComponent('Hi RidaSwift! I need a ride.\nEstimated distance: ' + dist + 'km\nEstimated fare: KES ' + fare + '\nPassengers: ' + pass);
+    document.getElementById('fareWaBtn').href = 'https://wa.me/254716651788?text=' + waMsg;
+  }
+
+  function toggleMenu() {
+    var menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('open');
+  }
+  // Close menu when a link is clicked
+  document.addEventListener('DOMContentLoaded', function() {
+    var links = document.querySelectorAll('.mobile-menu a');
+    links.forEach(function(link) {
+      link.addEventListener('click', function() {
+        document.getElementById('mobileMenu').classList.remove('open');
+      });
+    });
+  });
+
+  function revealAll() {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.reveal').forEach(function(r) { obs.observe(r); });
+  } else { revealAll(); }
+  window.addEventListener('scroll', revealAll, { once: true });
+
+  var WA = '254716651788';
+  // Formspree endpoint — sends email to evansabok164@gmail.com
+  var WEB3KEY = 'b5fb72ee-c9dc-4bb3-9a5f-d0dbffb59afb';
+
+  function sendEmail(data, statusId) {
+    data['access_key'] = WEB3KEY;
+    data['from_name'] = 'RidaSwift Website';
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function(r) { return r.json(); }).then(function(res) {
+      var el = document.getElementById(statusId);
+      if (el) {
+        el.style.display = 'block';
+        if (res.success) {
+          el.style.color = '#4CAF50';
+          el.innerHTML = '\u2705 Email sent to evansabok164@gmail.com!';
+        } else {
+          el.style.color = '#E8A020';
+          el.innerHTML = '\u26A0\uFE0F WhatsApp sent! Email failed: ' + (res.message || 'unknown error');
+        }
+      }
+    }).catch(function(err) {
+      var el = document.getElementById(statusId);
+      if (el) {
+        el.style.display = 'block';
+        el.style.color = '#E8A020';
+        el.innerHTML = '\u26A0\uFE0F WhatsApp sent but email failed. Check your internet.';
+      }
+    });
+  }
+
+  function updateBookLinks() {
+    var name    = (document.getElementById('bName')||{value:''}).value || '(no name)';
+    var phone   = (document.getElementById('bPhone')||{value:''}).value || '(no phone)';
+    var pickup  = (document.getElementById('bPickup')||{value:''}).value || '(no pickup)';
+    var dropoff = (document.getElementById('bDropoff')||{value:''}).value || '(no dropoff)';
+    var timing  = (document.getElementById('bTiming')||{value:''}).value || 'ASAP';
+    var payment = (document.getElementById('bPayment')||{value:''}).value || 'M-Pesa';
+    var msg = 'New Ride Booking - RidaSwift' +
+      '%0A%0AName: ' + encodeURIComponent(name) +
+      '%0APhone: ' + encodeURIComponent(phone) +
+      '%0APickup: ' + encodeURIComponent(pickup) +
+      '%0ADrop-off: ' + encodeURIComponent(dropoff) +
+      '%0AWhen: ' + encodeURIComponent(timing) +
+      '%0APayment: ' + encodeURIComponent(payment);
+    var waBtn = document.getElementById('bWaBtn');
+    if (waBtn) {
+      waBtn.href = 'https://wa.me/' + WA + '?text=' + msg;
+      waBtn.onclick = function() {
+        sendEmail({
+          _subject: 'New Ride Booking - ' + name,
+          email: 'evansabok164@gmail.com',
+          Name: name, Phone: phone, Pickup: pickup,
+          Dropoff: dropoff, When: timing, Payment: payment
+        }, 'bEmailStatus');
+      };
+    }
+  }
+
+  function updateRiderLinks() {
+    var name    = (document.getElementById('rName')||{value:''}).value || '(no name)';
+    var phone   = (document.getElementById('rPhone')||{value:''}).value || '(no phone)';
+    var area    = (document.getElementById('rArea')||{value:''}).value || '(no area)';
+    var exp     = (document.getElementById('rExp')||{value:''}).value || 'Not specified';
+    var licence = (document.getElementById('rLicence')||{value:''}).value || 'Not specified';
+    var msg = 'New Rider Application - RidaSwift' +
+      '%0A%0AName: ' + encodeURIComponent(name) +
+      '%0APhone: ' + encodeURIComponent(phone) +
+      '%0AArea: ' + encodeURIComponent(area) +
+      '%0AExperience: ' + encodeURIComponent(exp) +
+      '%0ALicence: ' + encodeURIComponent(licence);
+    var waBtn = document.getElementById('rWaBtn');
+    if (waBtn) {
+      waBtn.href = 'https://wa.me/' + WA + '?text=' + msg;
+      waBtn.onclick = function() {
+        sendEmail({
+          _subject: 'New Rider Application - ' + name,
+          email: 'evansabok164@gmail.com',
+          Name: name, Phone: phone, Area: area,
+          Experience: exp, Licence: licence
+        }, 'rEmailStatus');
+      };
+    }
+  }
+
+  window.addEventListener('load', function() {
+    updateBookLinks();
+    updateRiderLinks();
+  });
+
+</script>
+
+<script>
+  // ── EXTRA JS ──
+  function heroCalculateFare() {
+    var dist = parseFloat(document.getElementById('heroDistance').value) || 0;
+    if (dist <= 0) { document.getElementById('heroFare').textContent = 'KES —'; return; }
+    var fare = Math.round(50 + dist * 30);
+    document.getElementById('heroFare').textContent = 'KES ' + fare;
+    var waMsg = encodeURIComponent('Hi RidaSwift! I need a ride.\nEstimated distance: ' + dist + 'km\nEstimated fare: KES ' + fare);
+    document.getElementById('heroBookBtn').href = 'https://wa.me/254716651788?text=' + waMsg;
+  }
+
+  // Today's rides counter
+  var base = 47 + new Date().getDate();
+  document.getElementById('todayRides').textContent = '🎯 ' + base + ' rides today';
+
+  // Map fallback
+  setTimeout(function() {
+    var iframe = document.querySelector('#mapContainer iframe');
+    if (iframe) {
+      try { var t = iframe.contentWindow.location.href; }
+      catch(e) { return; }
+      document.getElementById('mapFallback').style.display = 'flex';
+      iframe.style.display = 'none';
+    }
+  }, 5000);
+
+  // Admin trigger - tap logo 5 times
+  var adminTapCount = 0, adminTapTimer;
+  function adminTap() {
+    adminTapCount++;
+    clearTimeout(adminTapTimer);
+    adminTapTimer = setTimeout(function() { adminTapCount = 0; }, 3000);
+    if (adminTapCount >= 5) {
+      adminTapCount = 0;
+      document.getElementById('adminLogin').classList.add('show');
+      setTimeout(function() { document.getElementById('adminPwd').focus(); }, 300);
+    }
+  }
+  // Also trigger from footer
+  document.getElementById('adminTapZone').addEventListener('click', adminTap);
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Reveal on scroll
+  function revealAll() {
+    document.querySelectorAll('.step-card,.price-card,.review-card,.delivery-card,.ref-step,.rider-perk,.lf-step-item').forEach(function(el) {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+  }
+  revealAll();
+
+  // Service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+</script>
+</body>
+</html>
