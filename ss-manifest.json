@@ -1,0 +1,20 @@
+{
+  "name": "Swift Shopper — Eldoret Personal Shopper",
+  "short_name": "SwiftShopper",
+  "description": "Eldoret's personal shopping & delivery service. Order anything, we shop and deliver fast.",
+  "start_url": "./swift_shopper.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#09090B",
+  "theme_color": "#F59E0B",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src": "ridaswift-logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "ridaswift-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "shortcuts": [
+    {"name": "Place Order", "url": "./swift_shopper.html#order", "description": "Order now"},
+    {"name": "Become a Shopper", "url": "./swift_shopper.html#shoppers", "description": "Apply to join"}
+  ]
+}
