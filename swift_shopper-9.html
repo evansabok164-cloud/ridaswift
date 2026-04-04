@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#0A0A0A"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="description" content="Swift Shopper — Eldoret's #1 personal shopping & delivery service. Order anything, we shop and deliver fast."/>
+<title>Swift Shopper — Eldoret's Personal Shopper</title>
+<link rel="manifest" href="ss-manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --gold:#F59E0B;--gold-dark:#D97706;--gold-light:rgba(245,158,11,.12);
+  --red:#EF4444;--green:#22C55E;--green-bg:rgba(34,197,94,.1);
+  --bg:#09090B;--bg2:#111113;--bg3:#18181B;--card:#1C1C1F;
+  --border:rgba(255,255,255,.07);--text:#FFFFFF;--text2:rgba(255,255,255,.55);--text3:rgba(255,255,255,.3);
+  --radius:16px;--radius-sm:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;overflow-x:hidden;-webkit-tap-highlight-color:transparent;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:.55rem 5vw;display:flex;align-items:center;justify-content:space-between;background:rgba(9,9,11,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.5rem;letter-spacing:.04em;color:var(--text);}
+.nav-logo span{color:var(--gold);}
+.nav-right{display:flex;align-items:center;gap:.6rem;}
+.nav-social{display:flex;gap:.5rem;}
+.nav-soc-btn{display:flex;align-items:center;gap:.35rem;padding:.38rem .85rem;border-radius:7px;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-decoration:none;color:#fff;transition:opacity .2s;}
+.nav-soc-btn:hover{opacity:.8;}
+.nav-fb{background:#1877F2;}.nav-tk{background:#ff0050;}
+.hamburger{background:var(--card);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+
+/* MOBILE MENU */
+.mob-menu{display:none;position:fixed;top:62px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 5vw;flex-direction:column;gap:.1rem;z-index:199;}
+.mob-menu.open{display:flex;}
+.mob-menu a{padding:.75rem 0;font-size:.95rem;font-weight:600;color:var(--text2);text-decoration:none;border-bottom:1px solid var(--border);transition:color .2s;}
+.mob-menu a:hover{color:var(--gold);}
+
+/* LIVE BAR */
+.live-bar{position:fixed;top:56px;left:0;right:0;z-index:99;background:var(--bg2);border-bottom:1px solid var(--border);padding:.35rem 5vw;display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:nowrap;overflow:hidden;}
+.live-pill{display:flex;align-items:center;gap:.5rem;background:var(--green-bg);border:1px solid rgba(34,197,94,.2);padding:.28rem .85rem;border-radius:20px;}
+.live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:liveblink 1.4s ease-in-out infinite;}
+@keyframes liveblink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.4)}}
+.live-txt{font-size:.72rem;font-weight:700;color:var(--green);}
+.weather-chip{display:flex;align-items:center;gap:.4rem;background:var(--card);border:1px solid var(--border);padding:.28rem .85rem;border-radius:20px;font-size:.72rem;font-weight:600;color:var(--text2);}
+
+/* HERO */
+#hero{min-height:100vh;padding:calc(56px + 36px + 2rem) 5vw 4rem;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 90% 10%,rgba(245,158,11,.14) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 5% 90%,rgba(245,158,11,.07) 0%,transparent 60%);z-index:0;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(245,158,11,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,.04) 1px,transparent 1px);background-size:44px 44px;z-index:0;}
+.hero-content{position:relative;z-index:2;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold-light);border:1px solid rgba(245,158,11,.25);padding:.35rem .9rem;border-radius:20px;font-size:.72rem;font-weight:700;color:var(--gold);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.4rem;}
+h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(3.2rem,13vw,7rem);font-weight:900;line-height:.95;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1.2rem;}
+h1 .w1{color:#fff;}h1 .w2{color:var(--gold);}h1 .w3{color:var(--red);}
+.hero-desc{font-size:clamp(14px,3.5vw,17px);color:var(--text2);line-height:1.7;max-width:480px;margin-bottom:2rem;}
+.hero-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+.btn-gold{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.75rem 1.6rem;border-radius:var(--radius-sm);text-decoration:none;border:none;cursor:pointer;transition:background .2s,transform .15s;box-shadow:0 4px 20px rgba(245,158,11,.35);}
+.btn-gold:hover{background:var(--gold-dark);transform:translateY(-2px);}
+.btn-gold:active{transform:scale(.97);}
+.btn-wa{background:#22C55E;color:#fff;box-shadow:0 4px 20px rgba(34,197,94,.3);}
+.btn-wa:hover{background:#16a34a;}
+.btn-ghost{display:inline-flex;align-items:center;gap:.5rem;background:var(--card);color:var(--text);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.75rem 1.6rem;border-radius:var(--radius-sm);text-decoration:none;cursor:pointer;transition:all .2s;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.hero-stats{display:flex;gap:0;flex-wrap:wrap;}
+.hstat{padding:0 1.8rem;border-right:1px solid var(--border);}
+.hstat:first-child{padding-left:0;}.hstat:last-child{border:none;}
+.hstat-num{font-family:'Barlow Condensed',sans-serif;font-size:1.9rem;font-weight:900;color:var(--gold);line-height:1;}
+.hstat-lbl{font-size:.65rem;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-top:3px;}
+
+/* MPESA */
+.mpesa-bar{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.2rem 5vw;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.2rem;}
+.mpesa-label{font-size:.82rem;font-weight:600;color:var(--text2);}
+.mpesa-label strong{color:var(--text);}
+.mpesa-num-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.7rem 1.2rem;text-align:center;}
+.mpesa-type{font-size:.62rem;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;}
+.mpesa-num{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;color:var(--green);letter-spacing:.04em;}
+.mpesa-name{font-size:.68rem;color:var(--text3);margin-top:2px;}
+.mpesa-badge{background:var(--green-bg);border:1px solid rgba(34,197,94,.2);color:var(--green);font-size:.72rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;letter-spacing:.06em;}
+
+/* SECTIONS */
+section{padding:4.5rem 5vw;}
+.section-tag{display:inline-flex;align-items:center;gap:.4rem;background:var(--gold-light);border:1px solid rgba(245,158,11,.2);padding:.28rem .85rem;border-radius:20px;font-size:.68rem;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.9rem;}
+h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,6vw,3rem);font-weight:900;letter-spacing:.05em;text-transform:uppercase;line-height:1.0;margin-bottom:.8rem;}
+h2 span{color:var(--gold);}
+.section-desc{font-size:.92rem;color:var(--text2);line-height:1.7;max-width:520px;margin-bottom:2.5rem;}
+
+/* HOW IT WORKS */
+#how{background:var(--bg2);}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.6rem;position:relative;overflow:hidden;transition:border-color .25s,transform .2s;}
+.step-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(245,158,11,.05) 0%,transparent 60%);}
+.step-card:hover{border-color:rgba(245,158,11,.3);transform:translateY(-3px);}
+.step-num{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:900;color:rgba(245,158,11,.12);line-height:1;margin-bottom:.6rem;}
+.step-icon{font-size:1.8rem;margin-bottom:.8rem;}
+.step-card h3{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.4rem;}
+.step-card p{font-size:.85rem;color:var(--text2);line-height:1.6;}
+
+/* SERVICES */
+#services{background:var(--bg);}
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem;display:flex;gap:1rem;align-items:flex-start;transition:border-color .25s,transform .2s;cursor:pointer;}
+.service-card:hover{border-color:rgba(245,158,11,.3);transform:translateY(-3px);}
+.service-icon{font-size:1.8rem;background:var(--gold-light);border-radius:10px;width:46px;height:46px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.service-title{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.25rem;}
+.service-desc{font-size:.8rem;color:var(--text2);line-height:1.5;}
+
+/* ORDER FORM */
+#order{background:var(--bg2);}
+.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+.order-form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.2rem;border-top:3px solid var(--gold);}
+.order-form-card h3{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.6rem;}
+.field-group{margin-bottom:1.1rem;}
+.field-label{display:block;font-size:.68rem;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;}
+.field-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Barlow',sans-serif;font-size:.9rem;padding:.75rem 1rem;outline:none;transition:border-color .2s;-webkit-appearance:none;}
+.field-input:focus{border-color:var(--gold);}
+.field-input::placeholder{color:var(--text3);}
+select.field-input option{background:var(--bg2);}
+textarea.field-input{resize:vertical;min-height:80px;}
+.fare-box{background:var(--gold-light);border:1px solid rgba(245,158,11,.25);border-radius:var(--radius-sm);padding:1.1rem;display:flex;justify-content:space-between;align-items:center;margin:.8rem 0 1.2rem;}
+.fare-lbl{font-size:.8rem;color:var(--text2);}
+.fare-val{font-family:'Barlow Condensed',sans-serif;font-size:1.8rem;font-weight:900;color:var(--gold);}
+.form-actions{display:flex;flex-direction:column;gap:.7rem;}
+.order-info-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem;}
+.info-row{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border);}
+.info-row:last-child{border:none;}
+.info-icon{font-size:1.3rem;flex-shrink:0;}
+.info-title{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.2rem;}
+.info-desc{font-size:.8rem;color:var(--text2);line-height:1.5;}
+
+/* PRICING */
+#pricing{background:var(--bg);}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem;position:relative;transition:border-color .25s,transform .2s;}
+.price-card:hover{border-color:rgba(245,158,11,.3);transform:translateY(-4px);}
+.price-card.featured{border-color:var(--gold);background:linear-gradient(135deg,rgba(245,158,11,.08) 0%,var(--card) 100%);}
+.price-pill{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .85rem;border-radius:20px;white-space:nowrap;}
+.price-zone{font-size:.68rem;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;}
+.price-card h3{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.8rem;}
+.price-amount{font-family:'Barlow Condensed',sans-serif;font-size:2.6rem;font-weight:900;color:var(--gold);line-height:1;}
+.price-unit{font-size:.78rem;color:var(--text3);margin:.3rem 0 1.2rem;}
+.price-features{list-style:none;}
+.price-features li{display:flex;align-items:center;gap:.5rem;padding:.4rem 0;font-size:.85rem;color:var(--text2);border-bottom:1px solid var(--border);}
+.price-features li::before{content:'✓';color:var(--gold);font-weight:700;flex-shrink:0;}
+.price-features li:last-child{border:none;}
+
+/* SHOPPER SIGNUP */
+#shoppers{background:var(--bg2);}
+.shopper-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:start;}
+.perks-list{list-style:none;}
+.perk-item{display:flex;gap:1rem;padding:1.1rem 0;border-bottom:1px solid var(--border);}
+.perk-icon{background:var(--gold-light);color:var(--gold);border-radius:10px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.perk-title{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.2rem;}
+.perk-desc{font-size:.8rem;color:var(--text2);line-height:1.5;}
+.shopper-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.2rem;border-top:3px solid var(--gold);}
+.shopper-form h3{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.6rem;}
+
+/* REVIEWS */
+#reviews{background:var(--bg);}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.review-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.6rem;transition:border-color .25s,transform .2s;}
+.review-card:hover{border-color:rgba(245,158,11,.3);transform:translateY(-3px);}
+.review-stars{color:#F59E0B;font-size:.9rem;margin-bottom:.7rem;}
+.review-text{font-size:.87rem;color:var(--text2);line-height:1.65;margin-bottom:1.1rem;font-style:italic;}
+.reviewer{display:flex;align-items:center;gap:.8rem;}
+.rev-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#f97316);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;color:#000;flex-shrink:0;}
+.rev-name{font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;}
+.rev-meta{font-size:.7rem;color:var(--text3);}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:3.5rem 5vw 2rem;}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:3rem;margin-bottom:2.5rem;}
+.footer-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.8rem;letter-spacing:.04em;margin-bottom:.6rem;}
+.footer-logo span{color:var(--gold);}
+.footer-tagline{font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:1rem;}
+.footer-socials{display:flex;gap:.5rem;}
+.footer-soc{display:flex;align-items:center;gap:.35rem;padding:.35rem .85rem;border-radius:7px;font-size:.72rem;font-weight:700;text-decoration:none;color:#fff;transition:opacity .2s;}
+.footer-soc:hover{opacity:.8;}
+.footer-heading{font-size:.68rem;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.9rem;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:.5rem;}
+.footer-links a{font-size:.85rem;color:var(--text2);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:1.4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
+.footer-copy{font-size:.75rem;color:var(--text3);}
+.footer-dev{font-size:.72rem;color:var(--text3);}
+.footer-dev strong{color:var(--gold);}
+.admin-tap{font-size:.6rem;color:transparent;cursor:pointer;user-select:none;margin-top:.3rem;display:block;text-align:center;}
+
+/* ADMIN */
+#adminLogin{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;padding:1.5rem;}
+#adminLogin.show{display:flex;}
+.admin-modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.2rem;width:100%;max-width:320px;text-align:center;position:relative;}
+.admin-modal h3{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.3rem;}
+.admin-modal p{font-size:.82rem;color:var(--text2);margin-bottom:1.4rem;}
+.admin-pwd{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:1rem;padding:.75rem 1rem;outline:none;margin-bottom:.9rem;text-align:center;letter-spacing:.2em;font-family:'Barlow',sans-serif;transition:border-color .2s;}
+.admin-pwd:focus{border-color:var(--gold);}
+.admin-err{color:var(--red);font-size:.78rem;margin-top:.4rem;display:none;}
+.admin-close-x{position:absolute;top:.9rem;right:.9rem;background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.8rem;}
+
+#adminPanel{display:none;position:fixed;inset:0;background:var(--bg);z-index:9999;overflow-y:auto;}
+#adminPanel.show{display:block;}
+.admin-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 5vw;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.admin-nav-logo{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.admin-nav-logo span{color:var(--gold);}
+.admin-actions{display:flex;gap:.5rem;}
+.admin-btn{background:var(--card);border:1px solid var(--border);color:var(--text2);font-size:.75rem;font-weight:600;padding:.38rem .85rem;border-radius:8px;cursor:pointer;transition:all .2s;}
+.admin-btn:hover{border-color:var(--gold);color:var(--gold);}
+.admin-btn.danger:hover{border-color:var(--red);color:var(--red);}
+.admin-body{padding:1.8rem 5vw;}
+.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-bottom:1.4rem;}
+.admin-stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem;text-align:center;}
+.admin-stat-icon{font-size:1.4rem;margin-bottom:.25rem;}
+.admin-stat-num{font-family:'Barlow Condensed',sans-serif;font-size:1.9rem;font-weight:900;color:var(--gold);line-height:1;}
+.admin-stat-lbl{font-size:.62rem;color:var(--text3);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-top:.15rem;}
+.admin-tabs{display:flex;gap:.5rem;margin-bottom:1.2rem;border-bottom:1px solid var(--border);padding-bottom:.7rem;}
+.admin-tab{background:transparent;border:1px solid var(--border);color:var(--text2);font-size:.75rem;font-weight:700;padding:.4rem .9rem;border-radius:8px;cursor:pointer;transition:all .2s;}
+.admin-tab.active{background:var(--gold);border-color:var(--gold);color:#000;}
+.admin-filters{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap;}
+.a-filter{background:transparent;border:1px solid var(--border);color:var(--text2);font-size:.7rem;font-weight:700;padding:.35rem .8rem;border-radius:8px;cursor:pointer;transition:all .2s;}
+.a-filter.active{background:var(--gold);border-color:var(--gold);color:#000;}
+.a-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem;margin-bottom:.7rem;transition:border-color .2s;}
+.a-card:hover{border-color:rgba(245,158,11,.3);}
+.a-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;}
+.a-tag{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .65rem;border-radius:6px;}
+.tag-order{background:rgba(245,158,11,.12);color:var(--gold);}
+.tag-shopper{background:var(--green-bg);color:var(--green);}
+.a-card-date{font-size:.68rem;color:var(--text3);}
+.a-card-name{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.35rem;}
+.a-card-detail{font-size:.78rem;color:var(--text2);margin-bottom:.12rem;}
+.a-card-detail span{color:var(--text);font-weight:600;}
+.a-card-actions{display:flex;gap:.5rem;margin-top:.7rem;}
+.a-action{flex:1;padding:.45rem;font-size:.7rem;font-weight:700;letter-spacing:.04em;border:none;cursor:pointer;text-decoration:none;text-align:center;border-radius:8px;transition:opacity .2s;}
+.a-action:hover{opacity:.8;}
+.a-wa{background:#22C55E;color:#fff;}.a-call{background:var(--gold);color:#000;}.a-del{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.2)!important;}
+.a-empty{text-align:center;padding:3rem;color:var(--text3);}
+.shopper-add-form{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.4rem;margin-bottom:1.4rem;}
+.shopper-add-title{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:900;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.9rem;}
+.shopper-add-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.7rem;}
+.r-input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow',sans-serif;font-size:.85rem;padding:.65rem .9rem;outline:none;transition:border-color .2s;}
+.r-input:focus{border-color:var(--gold);}
+.r-input::placeholder{color:var(--text3);}
+.r-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;margin-bottom:.6rem;display:flex;align-items:center;gap:.9rem;}
+.r-info{flex:1;}
+.r-name{font-family:'Barlow Condensed',sans-serif;font-size:.92rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.2rem;}
+.r-detail{font-size:.75rem;color:var(--text2);}
+.r-status{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .6rem;border-radius:6px;flex-shrink:0;}
+.rs-active{background:var(--green-bg);color:var(--green);}
+.rs-inactive{background:var(--gold-light);color:var(--gold);}
+.rs-suspended{background:rgba(239,68,68,.12);color:var(--red);}
+.r-actions{display:flex;gap:.4rem;flex-shrink:0;}
+.r-btn{padding:.38rem .65rem;font-size:.68rem;font-weight:700;border:none;cursor:pointer;border-radius:6px;text-decoration:none;text-align:center;transition:opacity .2s;display:inline-block;}
+.r-btn:hover{opacity:.8;}
+.r-search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Barlow',sans-serif;font-size:.85rem;padding:.65rem .9rem;outline:none;margin-bottom:.9rem;transition:border-color .2s;}
+.r-search:focus{border-color:var(--gold);}
+.r-search::placeholder{color:var(--text3);}
+.r-stat-row{display:flex;gap:.5rem;margin-bottom:.9rem;flex-wrap:wrap;}
+.r-stat-chip{padding:.35rem .85rem;border-radius:8px;font-size:.72rem;font-weight:700;}
+
+/* INSTALL */
+#installOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:9998;align-items:center;justify-content:center;padding:1.5rem;}
+#installOverlay.show{display:flex;}
+.install-modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.2rem;width:100%;max-width:340px;text-align:center;position:relative;animation:popIn .3s ease;}
+@keyframes popIn{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+.install-modal h3{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.3rem;}
+.install-modal h3 span{color:var(--gold);}
+.install-modal p{font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:1.3rem;}
+.install-feats{display:flex;justify-content:center;gap:1.4rem;margin-bottom:1.3rem;flex-wrap:wrap;}
+.install-feat{font-size:.7rem;color:var(--text2);text-align:center;}
+.install-feat-icon{font-size:1.3rem;display:block;margin-bottom:.2rem;}
+.install-steps{background:var(--bg3);border-radius:var(--radius-sm);padding:.9rem;margin-bottom:1.1rem;text-align:left;}
+.install-step{display:flex;align-items:center;gap:.7rem;padding:.4rem 0;font-size:.8rem;color:var(--text2);border-bottom:1px solid var(--border);}
+.install-step:last-child{border:none;}
+.install-step-n{background:var(--gold);color:#000;font-size:.68rem;font-weight:900;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.install-close{position:absolute;top:.9rem;right:.9rem;background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.8rem;}
+
+/* CONFETTI */
+.cf{position:fixed;top:-10px;z-index:99999;pointer-events:none;border-radius:2px;animation:cfFall linear forwards;}
+@keyframes cfFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .steps,.price-grid,.reviews-grid,.order-grid,.shopper-grid,.footer-grid{grid-template-columns:1fr;gap:1.5rem;}
+  .services-grid{grid-template-columns:1fr 1fr;}
+  nav .nav-links{display:none;}
+  .shopper-add-grid{grid-template-columns:1fr;}
+}
+@media(max-width:500px){.services-grid{grid-template-columns:1fr;}}
+
+  /* ── CROSS PROMO BANNER ── */
+  .cross-promo {
+    background: linear-gradient(135deg, #111113 0%, #0f0f14 100%);
+    border-top: 1px solid rgba(255,107,0,.2);
+    border-bottom: 1px solid rgba(255,107,0,.2);
+    padding: 1.2rem 5vw;
+    display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  }
+  .cross-promo-left { display: flex; align-items: center; gap: 1rem; }
+  .cross-promo-icon {
+    font-size: 1.8rem; background: rgba(255,107,0,.1);
+    border: 1px solid rgba(255,107,0,.2);
+    border-radius: 12px; width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .cross-promo-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem; font-weight: 900;
+    letter-spacing: .06em; text-transform: uppercase; color: var(--text);
+    margin-bottom: .1rem;
+  }
+  .cross-promo-desc { font-size: .78rem; color: var(--text2); line-height: 1.4; }
+  .cross-promo-btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: #FF6B00; color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .88rem; font-weight: 900;
+    letter-spacing: .08em; text-transform: uppercase;
+    padding: .65rem 1.4rem; border-radius: 8px;
+    text-decoration: none; flex-shrink: 0;
+    transition: background .2s, transform .15s;
+    box-shadow: 0 4px 16px rgba(255,107,0,.3);
+  }
+  .cross-promo-btn:hover { background: #E55A00; transform: translateY(-2px); }
+
+  /* ── DARK/LIGHT MODE ── */
+  body.light {
+    --bg:#F5F5F0; --bg2:#FFFFFF; --bg3:#EBEBEB;
+    --card:#FFFFFF; --border:rgba(0,0,0,.1);
+    --text:#09090B; --text2:rgba(9,9,11,.6); --text3:rgba(9,9,11,.35);
+    background: #F5F5F0; color: #09090B;
+  }
+  body.light nav { background: rgba(255,255,255,.95) !important; }
+  body.light .live-bar { background: #EBEBEB !important; }
+  body.light section { background: var(--bg) !important; }
+  body.light #how, body.light #reviews, body.light #map-section,
+  body.light #lost-found, body.light #shoppers { background: var(--bg2) !important; }
+  body.light .order-form-card, body.light .shopper-form,
+  body.light .order-info-card, body.light .price-card,
+  body.light .step-card, body.light .service-card,
+  body.light .review-card, body.light .mpesa-bar,
+  body.light .cross-promo { background: #FFFFFF !important; border-color: rgba(0,0,0,.1) !important; }
+  body.light .field-input { background: #F0F0EB !important; color: #09090B !important; border-color: rgba(0,0,0,.15) !important; }
+  body.light .field-input::placeholder { color: rgba(9,9,11,.35) !important; }
+  body.light footer { background: #FFFFFF !important; }
+  .theme-btn {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text2); font-size: .95rem;
+    width: 34px; height: 34px; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center;
+    justify-content: center; transition: all .2s; flex-shrink: 0;
+  }
+  .theme-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── FARE ESTIMATOR ── */
+  #fare-estimator { background: var(--bg); }
+  .estimator-wrap {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2.2rem;
+    max-width: 560px; margin: 0 auto;
+  }
+  .est-result {
+    background: var(--gold-light); border: 1px solid rgba(245,158,11,.25);
+    border-radius: var(--radius-sm); padding: 1.4rem;
+    text-align: center; display: none; margin-top: 1rem;
+  }
+  .est-big { font-family: 'Barlow Condensed', sans-serif; font-size: 2.8rem; font-weight: 900; color: var(--gold); line-height: 1; }
+  .est-break { font-size: .8rem; color: var(--text2); margin-top: .3rem; }
+  .est-note { font-size: .7rem; color: var(--text3); margin-top: .4rem; font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div id="adminTrigger" onclick="adminTap()" style="cursor:pointer;display:flex;align-items:center;gap:8px;">
+      <img src="ridaswift-logo.png" alt="Swift Shopper" style="height:42px;width:auto;display:block;"/>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.2rem;letter-spacing:.04em;color:#fff;">
+        Swift<span style="color:#F59E0B;">Shopper</span>
+      </div>
+    </div>
+  <div class="nav-right">
+    <div class="nav-social">
+      <a href="https://www.facebook.com/evans.abok" target="_blank" class="nav-soc-btn nav-fb">📘 Facebook</a>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">🌙</button>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <a href="#how" onclick="toggleMenu()">How It Works</a>
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#order" onclick="toggleMenu()">Place Order</a>
+  <a href="#pricing" onclick="toggleMenu()">Pricing</a>
+  <a href="#shoppers" onclick="toggleMenu()">Become a Shopper</a>
+  <a href="#referral" onclick="toggleMenu()">Refer &amp; Earn</a>
+  <a href="#lost-found" onclick="toggleMenu()">Lost &amp; Found</a>
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#reviews" onclick="toggleMenu()">Reviews</a>
+  <a href="#order" onclick="toggleMenu()" style="color:var(--gold);">🛒 Order Now</a>
+</div>
+
+<!-- LIVE BAR -->
+<div class="live-bar">
+  <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+    <div class="live-pill">
+      <div class="live-dot"></div>
+      <span class="live-txt" id="ssLiveCount">8 shoppers active</span>
+    </div>
+    <span style="font-size:.72rem;color:var(--text2);">⏱ Avg delivery: <strong id="ssWait" style="color:var(--text);">45 mins</strong></span>
+    <span style="font-size:.72rem;color:var(--text2);" id="ssHoursLabel">🕐 Mon–Sat: 7AM – 6PM</span>
+  </div>
+  </div>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🛒 Eldoret's #1 Personal Shopping Service</div>
+    <h1><span class="w1">Shop.</span><br><span class="w2">Deliver.</span><br><span class="w3">Done.</span></h1>
+    <p class="hero-desc">Swift Shopper sends a personal shopper to any store in Eldoret, buys exactly what you need, and delivers it straight to your door. No stress, no delays.</p>
+    <div class="hero-actions">
+      <a href="#order" class="btn-gold">🛒 Order Now</a>
+      <a href="https://wa.me/254716651788?text=Hi%20Swift%20Shopper!%20I%20need%20something%20delivered." target="_blank" class="btn-gold btn-wa">💬 WhatsApp</a>
+      <a href="tel:+254716651788" class="btn-ghost">📞 Call</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">200+</div><div class="hstat-lbl">Orders Done</div></div>
+      <div class="hstat"><div class="hstat-num">45min</div><div class="hstat-lbl">Avg Delivery</div></div>
+      <div class="hstat"><div class="hstat-num">4.9★</div><div class="hstat-lbl">Rating</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MPESA -->
+<div class="mpesa-bar">
+  <div class="mpesa-label"><strong>Pay with M-Pesa</strong> — Fast & secure</div>
+  <div class="mpesa-num-box">
+    <div class="mpesa-type">Send Money To</div>
+    <div class="mpesa-num">0716 651 788</div>
+    <div class="mpesa-name">Swift Shopper — Evans</div>
+  </div>
+  <div class="mpesa-badge">✓ M-PESA ACCEPTED</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-tag">Simple Process</div>
+  <h2>How <span>It Works</span></h2>
+  <p class="section-desc">Order anything from any shop in Eldoret in 3 simple steps.</p>
+  <div class="steps">
+    <div class="step-card"><div class="step-num">01</div><div class="step-icon">📝</div><h3>Place Your Order</h3><p>Tell us what you need, which shop, and where to deliver. Takes less than 2 minutes.</p></div>
+    <div class="step-card"><div class="step-num">02</div><div class="step-icon">🛒</div><h3>We Shop For You</h3><p>A verified Swift Shopper goes to the store, buys exactly what you requested and confirms via WhatsApp.</p></div>
+    <div class="step-card"><div class="step-num">03</div><div class="step-icon">🚀</div><h3>Fast Delivery</h3><p>Your order is delivered to your door. Pay via M-Pesa or cash on delivery.</p></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-tag">What We Shop</div>
+  <h2>Our <span>Services</span></h2>
+  <p class="section-desc">From groceries to electronics — if it's in Eldoret, we'll get it for you.</p>
+  <div class="services-grid">
+    <div class="service-card"><div class="service-icon">🛒</div><div><div class="service-title">Groceries & Supermarket</div><div class="service-desc">Naivas, Chandarana, local markets — we shop your full list and deliver fresh.</div></div></div>
+    <div class="service-card"><div class="service-icon">💊</div><div><div class="service-title">Pharmacy & Medicine</div><div class="service-desc">Urgent medicines, prescriptions and health products delivered fast.</div></div></div>
+    <div class="service-card"><div class="service-icon">📱</div><div><div class="service-title">Electronics & Gadgets</div><div class="service-desc">Phones, accessories, chargers and electronics from any shop in Eldoret.</div></div></div>
+    <div class="service-card"><div class="service-icon">📄</div><div><div class="service-title">Documents & Errands</div><div class="service-desc">Bank runs, utility payments, form submissions — we handle any errand for you.</div></div></div>
+    <div class="service-card"><div class="service-icon">👗</div><div><div class="service-title">Clothing & Fashion</div><div class="service-desc">Shopping for clothes, shoes and accessories from your favourite shops in town.</div></div></div>
+    <div class="service-card"><div class="service-icon">🔧</div><div><div class="service-title">Hardware & Tools</div><div class="service-desc">Building materials, tools and hardware from any supplier in Eldoret.</div></div></div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section id="order">
+  <div class="section-tag">Get Started</div>
+  <h2>Place Your <span>Order</span></h2>
+  <div class="order-grid">
+    <div class="order-form-card">
+      <h3>What Do You Need?</h3>
+      <div class="field-group"><label class="field-label">Your Name</label><input type="text" id="oName" class="field-input" placeholder="e.g. James Kiprotich" oninput="updateOrderLinks()"/></div>
+      <div class="field-group"><label class="field-label">Phone Number</label><input type="tel" id="oPhone" class="field-input" placeholder="07XX XXX XXX" oninput="updateOrderLinks()"/></div>
+      <div class="field-group"><label class="field-label">Shop / Store Name</label><input type="text" id="oShop" class="field-input" placeholder="e.g. Naivas Eldoret, Chandarana" oninput="updateOrderLinks()"/></div>
+      <div class="field-group"><label class="field-label">Items Needed</label><textarea id="oItems" class="field-input" placeholder="List all items e.g. 2kg Sugar, 1L Cooking Oil..." oninput="updateOrderLinks()"></textarea></div>
+      <div class="field-group"><label class="field-label">Delivery Location</label><input type="text" id="oDelivery" class="field-input" placeholder="Your address or landmark" oninput="updateOrderLinks()"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;">
+        <div><label class="field-label">Distance (km)</label><input type="number" id="oDist" class="field-input" placeholder="e.g. 3" min="0" step="0.5" oninput="calcOrderFare()"/></div>
+        <div><label class="field-label">Payment</label><select id="oPayment" class="field-input" onchange="updateOrderLinks()"><option>M-Pesa</option><option>Cash on Delivery</option></select></div>
+      </div>
+      <div class="fare-box"><span class="fare-lbl">Estimated Delivery Fee</span><span class="fare-val" id="oFare">KES —</span></div>
+      <div class="form-actions">
+        <a id="oWaBtn" href="https://wa.me/254716651788" target="_blank" class="btn-gold btn-wa" onclick="launchConfetti()" style="display:flex;justify-content:center;">💬 Send Order via WhatsApp</a>
+        <a href="tel:+254716651788" class="btn-ghost" style="justify-content:center;">📞 Call to Order</a>
+      </div>
+      <p style="font-size:.72rem;color:var(--text3);margin-top:.7rem;line-height:1.5;">Fill in your details above then tap <strong style="color:var(--gold);">WhatsApp</strong> to send your order.</p>
+    </div>
+    <div class="order-info-card">
+      <div class="info-row"><div class="info-icon">⏱️</div><div><div class="info-title">Delivery Time</div><div class="info-desc">Most orders delivered within 45–90 minutes depending on distance and shop queue.</div></div></div>
+      <div class="info-row"><div class="info-icon">💳</div><div><div class="info-title">Payment</div><div class="info-desc">Pay via M-Pesa (0716 651 788) or cash on delivery. Shopping cost + delivery fee.</div></div></div>
+      <div class="info-row"><div class="info-icon">📸</div><div><div class="info-title">Photo Confirmation</div><div class="info-desc">We send you a WhatsApp photo of items before buying so you can confirm.</div></div></div>
+      <div class="info-row"><div class="info-icon">🔄</div><div><div class="info-title">Wrong Item Policy</div><div class="info-desc">If we buy the wrong item, we go back and exchange it — no extra charge.</div></div></div>
+      <div class="info-row" style="border:none;"><div class="info-icon">📍</div><div><div class="info-title">Delivery Areas</div><div class="info-desc">Eldoret City · Elgonview · Pioneer · Kipkaren · Huruma · Kamukunji · Kimumu & all areas around Eldoret.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-tag">Transparent Fees</div>
+  <h2>Simple <span>Pricing</span></h2>
+  <p class="section-desc">Delivery fee only. You pay the actual shop price for items — no markup, no hidden charges.</p>
+  <div class="price-grid">
+    <div class="price-card"><div class="price-zone">Short Distance</div><h3>Quick Errand</h3><div class="price-amount">KES 80</div><div class="price-unit">Up to 3 km</div><ul class="price-features"><li>Single shop</li><li>Up to 5 items</li><li>M-Pesa or cash</li><li>45 min delivery</li></ul></div>
+    <div class="price-card featured"><div class="price-pill">Most Popular</div><div class="price-zone">Mid Distance</div><h3>Full Shop</h3><div class="price-amount">KES 150</div><div class="price-unit">3–10 km</div><ul class="price-features"><li>Multiple shops</li><li>Unlimited items</li><li>M-Pesa or cash</li><li>Photo confirmation</li></ul></div>
+    <div class="price-card"><div class="price-zone">Long Distance</div><h3>Big Order</h3><div class="price-amount">KES 300+</div><div class="price-unit">10+ km · quoted on request</div><ul class="price-features"><li>Any location</li><li>Bulk orders</li><li>M-Pesa or cash</li><li>Dedicated shopper</li></ul></div>
+  </div>
+</section>
+
+<!-- SHOPPER SIGNUP -->
+<section id="shoppers">
+  <div class="section-tag">Join the Team</div>
+  <h2>Become a <span>Shopper</span></h2>
+  <div class="shopper-grid">
+    <div>
+      <p style="color:var(--text2);line-height:1.7;margin-bottom:1.8rem;max-width:400px;">Turn your free time into income. Join Swift Shopper and earn by running errands and deliveries across Eldoret.</p>
+      <ul class="perks-list">
+        <li class="perk-item"><div class="perk-icon">💰</div><div><div class="perk-title">Earn KES 800–2,000/day</div><div class="perk-desc">Get paid per order completed. More orders, more money — no cap on earnings.</div></div></li>
+        <li class="perk-item"><div class="perk-icon">🕐</div><div><div class="perk-title">Flexible Hours</div><div class="perk-desc">Work when you want. Morning, evening or full day — you choose your schedule.</div></div></li>
+        <li class="perk-item"><div class="perk-icon">📱</div><div><div class="perk-title">M-Pesa Daily Payouts</div><div class="perk-desc">Earnings sent to your M-Pesa every evening. No waiting, no paperwork.</div></div></li>
+        <li class="perk-item"><div class="perk-icon">🚀</div><div><div class="perk-title">No Experience Needed</div><div class="perk-desc">If you can shop and deliver, you qualify. Training provided on joining.</div></div></li>
+      </ul>
+    </div>
+    <div class="shopper-form">
+      <h3>Apply to Join →</h3>
+      <div class="field-group"><label class="field-label">Full Name</label><input type="text" id="sName" class="field-input" placeholder="Your full name" oninput="updateShopperLinks()"/></div>
+      <div class="field-group"><label class="field-label">Phone Number</label><input type="tel" id="sPhone" class="field-input" placeholder="07XX XXX XXX" oninput="updateShopperLinks()"/></div>
+      <div class="field-group"><label class="field-label">Area You Can Cover</label><input type="text" id="sArea" class="field-input" placeholder="e.g. Eldoret CBD, Huruma, Pioneer" oninput="updateShopperLinks()"/></div>
+      <div class="field-group"><label class="field-label">Transport</label><select id="sTransport" class="field-input" onchange="updateShopperLinks()"><option>Boda Boda</option><option>Bicycle</option><option>Walking (short distances)</option><option>Personal car</option></select></div>
+      <div style="display:flex;align-items:flex-start;gap:.7rem;margin:.8rem 0;">
+        <input type="checkbox" id="sTerms" style="width:16px;height:16px;margin-top:2px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;"/>
+        <span style="font-size:.8rem;color:var(--text2);line-height:1.5;">I am honest, reliable and agree to Swift Shopper's code of conduct.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.7rem;margin-top:.5rem;">
+        <a id="sWaBtn" href="https://wa.me/254716651788" target="_blank" class="btn-gold btn-wa" style="display:flex;justify-content:center;">💬 Apply via WhatsApp</a>
+        <a href="tel:+254716651788" class="btn-ghost" style="justify-content:center;">📞 Call Instead</a>
+      </div>
+      <p style="font-size:.72rem;color:var(--text3);margin-top:.7rem;line-height:1.5;">Fill in your details then tap WhatsApp to send your application.</p>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-tag">Happy Customers</div>
+  <h2>What People <span>Say</span></h2>
+  <div class="reviews-grid">
+    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">I sent my shopping list to Swift Shopper and everything was delivered in under an hour. Even the specific brands I wanted. Incredible service!</p><div class="reviewer"><div class="rev-avatar">NK</div><div><div class="rev-name">Naomi Kipchoge</div><div class="rev-meta">Elgonview · Regular customer</div></div></div></div>
+    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">I was at work and needed medicine urgently. Swift Shopper got it from the pharmacy and delivered to my office within 30 minutes. Life saver!</p><div class="reviewer"><div class="rev-avatar">BM</div><div><div class="rev-name">Brian Mutai</div><div class="rev-meta">Huruma · Office worker</div></div></div></div>
+    <div class="review-card"><div class="review-stars">★★★★☆</div><p class="review-text">Ordered groceries for the week. They sent photos before buying to confirm everything. Very professional and all items were correct. Will use again.</p><div class="reviewer"><div class="rev-avatar">FR</div><div><div class="rev-name">Faith Rutto</div><div class="rev-meta">Pioneer · Homemaker</div></div></div></div>
+  </div>
+</section>
+
+
+
+<!-- FARE ESTIMATOR -->
+<section id="fare-estimator">
+  <div class="section-tag">Know Your Cost</div>
+  <h2>Estimate Your <span>Delivery Fee</span></h2>
+  <p class="section-desc">KES 50 base + KES 30 per km. Enter your distance for an instant estimate.</p>
+  <div class="estimator-wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+      <div>
+        <label class="field-label">Distance (km)</label>
+        <input type="number" id="estDist" class="field-input" placeholder="e.g. 3" min="0" step="0.1" oninput="calcEst()"/>
+      </div>
+      <div>
+        <label class="field-label">Order Size</label>
+        <select id="estSize" class="field-input" onchange="calcEst()">
+          <option value="0">Small (1–5 items)</option>
+          <option value="30">Medium (6–15 items, +KES 30)</option>
+          <option value="60">Large (15+ items, +KES 60)</option>
+        </select>
+      </div>
+    </div>
+    <div class="est-result" id="estResult">
+      <div class="est-big" id="estAmount">KES 0</div>
+      <div class="est-break" id="estBreak"></div>
+      <div class="est-note">* Delivery fee only. You pay the actual shop price separately.</div>
+      <a id="estWaBtn" href="#" target="_blank" class="btn-gold btn-wa" style="margin-top:1rem;display:inline-flex;">
+        💬 Order Now on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- LOST & FOUND -->
+<section id="lost-found" style="background:var(--bg2);">
+  <div class="section-tag">Left Something Behind?</div>
+  <h2>Lost & <span>Found</span></h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;">
+    <div>
+      <p style="color:var(--text2);line-height:1.7;margin-bottom:1.5rem;">Did a Swift Shopper collect the wrong item or leave something behind? Report it here and we'll sort it immediately.</p>
+      <ul style="list-style:none;">
+        <li style="display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border);">
+          <div style="background:var(--gold-light);color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div style="font-size:.85rem;color:var(--text2);line-height:1.5;padding-top:.3rem;">Fill in the form with your name, phone and details of the issue.</div>
+        </li>
+        <li style="display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border);">
+          <div style="background:var(--gold-light);color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="font-size:.85rem;color:var(--text2);line-height:1.5;padding-top:.3rem;">We contact the shopper who handled your order immediately.</div>
+        </li>
+        <li style="display:flex;gap:1rem;padding:1rem 0;">
+          <div style="background:var(--gold-light);color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div style="font-size:.85rem;color:var(--text2);line-height:1.5;padding-top:.3rem;">We resolve it same day — return, exchange or refund.</div>
+        </li>
+      </ul>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;">
+      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.4rem;">Report an Issue</h3>
+      <div class="field-group"><label class="field-label">Your Name</label><input type="text" id="lfName" class="field-input" placeholder="Your full name" oninput="updateLFLink()"/></div>
+      <div class="field-group"><label class="field-label">Your Phone</label><input type="tel" id="lfPhone" class="field-input" placeholder="07XX XXX XXX" oninput="updateLFLink()"/></div>
+      <div class="field-group"><label class="field-label">When was your order?</label><input type="text" id="lfWhen" class="field-input" placeholder="e.g. Today at 2PM" oninput="updateLFLink()"/></div>
+      <div class="field-group"><label class="field-label">What happened?</label><textarea id="lfIssue" class="field-input" placeholder="Describe the issue e.g. wrong item, missing item..." oninput="updateLFLink()"></textarea></div>
+      <div style="display:flex;flex-direction:column;gap:.7rem;margin-top:1rem;">
+        <a id="lfWaBtn" href="#" target="_blank" class="btn-gold btn-wa">💬 Report via WhatsApp</a>
+        <a href="tel:+254716651788" class="btn-ghost" style="justify-content:center;">📞 Call Immediately</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- REFERRAL -->
+<section id="referral" style="background:var(--bg);">
+  <div class="section-tag">Earn With Us</div>
+  <h2>Refer a Customer & <span>Earn</span></h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
+    <div>
+      <p style="color:var(--text2);line-height:1.7;margin-bottom:2rem;">Know someone who needs shopping done in Eldoret? Refer them to Swift Shopper and earn cash every time they place their first order.</p>
+      <div style="display:flex;flex-direction:column;gap:1.4rem;margin-bottom:2rem;">
+        <div style="display:flex;gap:1rem;">
+          <div style="background:var(--gold-light);color:var(--gold);border:1px solid rgba(245,158,11,.25);font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.2rem;">Share With a Friend</div><div style="font-size:.82rem;color:var(--text2);line-height:1.5;">Tell a friend about Swift Shopper and ask them to mention your name when ordering.</div></div>
+        </div>
+        <div style="display:flex;gap:1rem;">
+          <div style="background:var(--gold-light);color:var(--gold);border:1px solid rgba(245,158,11,.25);font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.2rem;">They Place an Order</div><div style="font-size:.82rem;color:var(--text2);line-height:1.5;">Your friend orders and mentions your name. That's all they need to do.</div></div>
+        </div>
+        <div style="display:flex;gap:1rem;">
+          <div style="background:var(--gold-light);color:var(--gold);border:1px solid rgba(245,158,11,.25);font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.2rem;">You Get Paid</div><div style="font-size:.82rem;color:var(--text2);line-height:1.5;">Your bonus lands on your M-Pesa instantly. No delays, no paperwork.</div></div>
+        </div>
+      </div>
+      <a href="https://wa.me/254716651788?text=Hi%20Swift%20Shopper!%20I%20want%20to%20refer%20a%20customer.%20My%20name%20is%3A" target="_blank" class="btn-gold">💬 Refer Someone Now →</a>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem;text-align:center;">
+      <div style="font-size:3rem;margin-bottom:.8rem;">💰</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:3.8rem;font-weight:900;color:var(--gold);line-height:1;margin-bottom:.3rem;">KES 30</div>
+      <div style="font-size:.88rem;color:var(--text2);margin-bottom:1.5rem;">Per customer you refer who places an order<br><strong style="color:var(--text);">Paid via M-Pesa</strong></div>
+      <div style="border-top:1px solid var(--border);padding-top:1.2rem;">
+        <div style="display:flex;justify-content:space-between;padding:.5rem 0;font-size:.85rem;color:var(--text2);border-bottom:1px solid var(--border);"><span>1 referral</span><strong style="color:var(--gold);">KES 30</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:.5rem 0;font-size:.85rem;color:var(--text2);border-bottom:1px solid var(--border);"><span>5 referrals</span><strong style="color:var(--gold);">KES 150</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:.5rem 0;font-size:.85rem;color:var(--text2);"><span>10+ referrals</span><strong style="color:var(--gold);">KES 300</strong></div>
+      </div>
+      <p style="font-size:.75rem;color:var(--text3);margin-top:1rem;">No limit. The more you refer, the more you earn every month.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- MAP -->
+<section id="map-section" style="background:var(--bg2);">
+  <div class="section-tag">Delivery Coverage</div>
+  <h2>Where We <span>Deliver</span></h2>
+  <p class="section-desc">Serving Eldoret City, Elgonview, Pioneer, Kipkaren, Huruma, Kamukunji, Kimumu and all areas around Eldoret.</p>
+  <div style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);margin-top:1.5rem;position:relative;">
+    <div style="position:absolute;top:1rem;left:1rem;z-index:10;background:var(--card);border:1px solid var(--border);padding:.4rem .9rem;border-radius:8px;font-size:.75rem;font-weight:700;color:var(--gold);backdrop-filter:blur(10px);">📍 Eldoret Delivery Zone</div>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63822.93449850733!2d35.26080865!3d0.52035865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x17800c6e33af1bad%3A0x8fed5a2c7a3c3e7!2sEldoret%2C%20Kenya!5e0!3m2!1sen!2ske!4v1710000000000!5m2!1sen!2ske" width="100%" height="380" style="display:block;border:none;" allowfullscreen="" loading="lazy"></iframe>
+  </div>
+</section>
+
+
+<!-- ABOUT -->
+<section id="about" style="background:var(--bg);">
+  <div class="section-tag">Meet the Founder</div>
+  <h2>The Man Behind <span>Swift Shopper</span></h2>
+  <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;align-items:center;">
+    <div>
+      <img src="evans-photo.jpg" alt="Evans Abok" style="width:100%;max-width:280px;border-radius:20px;display:block;margin-bottom:1rem;"/>
+
+    </div>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;letter-spacing:-.01em;margin-bottom:.25rem;">Evans Abok</div>
+      <div style="font-size:.75rem;font-weight:700;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.2rem;">Founder — Swift Shopper & RidaSwift</div>
+      <p style="font-size:.92rem;color:var(--text2);line-height:1.75;margin-bottom:1rem;">Evans Abok is a passionate entrepreneur from Eldoret who also founded RidaSwift. He built Swift Shopper to solve a simple problem — people are too busy to shop. Now, anyone in Eldoret can get anything delivered to their door without leaving home.</p>
+      <p style="font-size:.92rem;color:var(--text2);line-height:1.75;margin-bottom:1.5rem;">His mission: make everyday life easier for people in Eldoret, one delivery at a time.</p>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.35rem .85rem;font-size:.75rem;font-weight:600;color:var(--text2);">🛒 200+ Orders</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.35rem .85rem;font-size:.75rem;font-weight:600;color:var(--text2);">📍 Eldoret Based</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.35rem .85rem;font-size:.75rem;font-weight:600;color:var(--text2);">⭐ 4.9 Rating</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.35rem .85mm;font-size:.75rem;font-weight:600;color:var(--text2);">🇰🇪 Proudly Kenyan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RIDASWIFT CROSS PROMO -->
+<div class="cross-promo">
+  <div class="cross-promo-left">
+    <div class="cross-promo-icon">🏍️</div>
+    <div>
+      <div class="cross-promo-title">Also Try RidaSwift</div>
+      <div class="cross-promo-desc">Need a fast boda boda ride across Eldoret? Book in seconds — KES 80 from.</div>
+    </div>
+  </div>
+  <a href="index.html" class="cross-promo-btn">🏍️ Visit RidaSwift →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.8rem;">
+      <img src="ridaswift-logo.png" alt="Swift Shopper" style="height:52px;width:auto;"/>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.5rem;letter-spacing:.04em;color:#fff;">
+        Swift<span style="color:#F59E0B;">Shopper</span>
+      </div>
+    </div>
+      <p class="footer-tagline">Eldoret's personal shopping & delivery service. Order anything, we shop and deliver fast.</p>
+      <p style="font-size:.78rem;color:var(--text3);margin-bottom:.9rem;">📍 Eldoret, Kenya &nbsp;|&nbsp; 🕐 Mon–Sat 7AM–6PM · Sun 8AM–5PM</p>
+      <div class="footer-socials">
+        <a href="https://www.facebook.com/evans.abok" target="_blank" class="footer-soc nav-fb">📘 Facebook</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Quick Links</div>
+      <ul class="footer-links">
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#services">Our Services</a></li>
+        <li><a href="#order">Place an Order</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#shoppers">Become a Shopper</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Contact Us</div>
+      <ul class="footer-links">
+        <li><a href="tel:+254716651788" style="color:var(--gold);font-weight:700;">📞 Call: +254 716 651 788</a></li>
+        <li><a href="https://wa.me/254716651788">💬 WhatsApp Us</a></li>
+        <li><span style="color:var(--text2);font-size:.85rem;">✉️ evansabok164&#64;gmail&#46;com</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Swift Shopper. All rights reserved.</div>
+    <div class="footer-dev">Designed & Developed by <strong>Evans Abok</strong></div>
+    <div style="font-size:.72rem;color:var(--text3);">🇰🇪 Proudly Kenyan</div>
+  </div>
+  <span class="admin-tap" id="ssAdminTap" onclick="adminTap()">v1.0</span>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/254716651788?text=Hi%20Swift%20Shopper!%20I%20need%20something%20delivered." target="_blank" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:997;width:54px;height:54px;background:#22C55E;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 20px rgba(34,197,94,.4);text-decoration:none;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">💬<div style="position:absolute;top:0;right:0;width:13px;height:13px;background:#ef4444;border-radius:50%;border:2px solid var(--bg);animation:liveblink 1.4s ease-in-out infinite;"></div></a>
+
+<!-- ADMIN LOGIN -->
+<div id="adminLogin">
+  <div class="admin-modal">
+    <div class="admin-close-x" onclick="closeAdmin()">✕</div>
+    <h3>Admin <span style="color:var(--gold);">Access</span></h3>
+    <p>Owner only — enter your password</p>
+    <input type="password" id="adminPwd" class="admin-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter') adminLogin()"/>
+    <button class="btn-gold" onclick="adminLogin()" style="width:100%;justify-content:center;">🔐 Enter Dashboard</button>
+    <div class="admin-err" id="adminError">Wrong password. Try again.</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+  <nav class="admin-nav">
+    <div class="admin-nav-logo">Swift<span>Shopper</span> Admin</div>
+    <div class="admin-actions">
+      <button class="admin-btn danger" onclick="adminClearAll()">🗑️ Clear All</button>
+      <button class="admin-btn" onclick="adminLogout()">Logout</button>
+    </div>
+  </nav>
+  <div class="admin-body">
+    <div class="admin-stats">
+      <div class="admin-stat-card"><div class="admin-stat-icon">🛒</div><div class="admin-stat-num" id="aStatOrders">0</div><div class="admin-stat-lbl">Orders</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-icon">👤</div><div class="admin-stat-num" id="aStatShoppers">0</div><div class="admin-stat-lbl">Applications</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-icon">💰</div><div class="admin-stat-num" id="aStatRevenue">0</div><div class="admin-stat-lbl">Est. Fees</div></div>
+    </div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="showAdminTab('orders',this)">🛒 Orders</button>
+      <button class="admin-tab" onclick="showAdminTab('shoppers',this)">👤 My Shoppers</button>
+    </div>
+    <div id="adminOrdersTab">
+      <div class="admin-filters">
+        <button class="a-filter active" onclick="aFilter('all',this)">All</button>
+        <button class="a-filter" onclick="aFilter('Order',this)">🛒 Orders</button>
+        <button class="a-filter" onclick="aFilter('Shopper',this)">👤 Applications</button>
+      </div>
+      <div id="adminCards"></div>
+    </div>
+    <div id="adminShoppersTab" style="display:none;">
+      <div class="shopper-add-form">
+        <div class="shopper-add-title">➕ Add New Shopper</div>
+        <div class="shopper-add-grid">
+          <input id="shopperName" placeholder="Full Name" class="r-input"/>
+          <input id="shopperPhone" placeholder="Phone Number" class="r-input"/>
+          <input id="shopperArea" placeholder="Area" class="r-input"/>
+          <input id="shopperIdNumber" placeholder="ID Number" class="r-input"/>
+          <select id="shopperStatus" class="r-input"><option value="Active">Active</option><option value="Inactive">Inactive</option><option value="Suspended">Suspended</option></select>
+        </div>
+        <button onclick="addShopper()" class="btn-gold" style="width:100%;">➕ Add Shopper</button>
+      </div>
+      <input id="shopperSearch" placeholder="🔍 Search by name or phone..." class="r-search" onkeyup="searchShoppers()"/>
+      <div class="r-stat-row">
+        <div class="r-stat-chip" style="background:var(--green-bg);color:var(--green);">✅ Active: <span id="ssStatActive">0</span></div>
+        <div class="r-stat-chip" style="background:var(--gold-light);color:var(--gold);">💤 Inactive: <span id="ssStatInactive">0</span></div>
+        <div class="r-stat-chip" style="background:rgba(239,68,68,.12);color:var(--red);">🚫 Suspended: <span id="ssStatSuspended">0</span></div>
+      </div>
+      <div id="shoppersList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- INSTALL MODAL -->
+<div id="installOverlay">
+  <div class="install-modal">
+    <div class="install-close" onclick="closeInstall()">✕</div>
+    <h3>Swift<span>Shopper</span></h3>
+    <p>Install the app for faster ordering, offline access and instant delivery updates!</p>
+    <div class="install-feats">
+      <div class="install-feat"><span class="install-feat-icon">⚡</span>Faster</div>
+      <div class="install-feat"><span class="install-feat-icon">📵</span>Offline</div>
+      <div class="install-feat"><span class="install-feat-icon">🔔</span>Alerts</div>
+      <div class="install-feat"><span class="install-feat-icon">🆓</span>Free</div>
+    </div>
+    <div class="install-steps">
+      <div class="install-step"><div class="install-step-n">1</div><span>Tap ⋮ three dots (top right of Chrome)</span></div>
+      <div class="install-step"><div class="install-step-n">2</div><span>Tap <strong>"Add to Home Screen"</strong></span></div>
+      <div class="install-step"><div class="install-step-n">3</div><span>Tap <strong>"Add"</strong> — done! 🎉</span></div>
+    </div>
+    <button class="btn-gold" id="ssInstallBtn" onclick="installApp()" style="width:100%;justify-content:center;display:flex;">📲 Install App Now</button>
+    <button onclick="closeInstall()" style="background:none;border:none;color:var(--text3);font-size:.78rem;cursor:pointer;margin-top:.7rem;text-decoration:underline;display:block;width:100%;">Maybe later</button>
+  </div>
+</div>
+
+<script>
+var WA = '254716651788';
+var WEB3KEY = 'b5fb72ee-c9dc-4bb3-9a5f-d0dbffb59afb';
+var ADMIN_PASS = 'rahmahjihdin164';
+var adminTapCount = 0, adminTapTimer, aCurrentFilter = 'all';
+var deferredPrompt;
+
+// ── LIVE BAR ──
+function updateLive() {
+  var now = new Date();
+  var h = now.getHours();
+  var day = now.getDay();
+  var openHour = day === 0 ? 8 : 7;
+  var closeHour = day === 0 ? 17 : 18;
+  var isOpen = h >= openHour && h < closeHour;
+  var el = document.getElementById('ssLiveCount');
+  var wEl = document.getElementById('ssWait');
+  // Update hours label
+  var hoursEl = document.getElementById('ssHoursLabel');
+  if (hoursEl) hoursEl.textContent = day === 0 ? '🕐 Sun: 8AM – 5PM' : '🕐 Mon–Sat: 7AM – 6PM';
+  if (!isOpen) { el.textContent = day === 0 ? 'Opens at 8AM' : 'Opens at 7AM'; el.style.color = '#F59E0B'; return; }
+  var n = 4 + Math.floor(Math.random()*8);
+  el.textContent = n + ' shoppers active';
+  wEl.textContent = (30 + Math.floor(Math.random()*30)) + ' mins';
+}
+updateLive(); setInterval(updateLive, 60000);
+
+// ── WEATHER ──
+
+
+// ── MOBILE MENU ──
+function toggleMenu(){document.getElementById('mobMenu').classList.toggle('open');}
+
+// ── FARE CALC ──
+function calcOrderFare(){
+  var d=parseFloat(document.getElementById('oDist').value)||0;
+  var fare=d>0?Math.round(50+d*30):null;
+  document.getElementById('oFare').textContent=fare?'KES '+fare:'KES —';
+  updateOrderLinks();
+}
+
+// ── ORDER LINKS ──
+function updateOrderLinks(){
+  var name=document.getElementById('oName').value||'(no name)';
+  var phone=document.getElementById('oPhone').value||'(no phone)';
+  var shop=document.getElementById('oShop').value||'(no shop)';
+  var items=document.getElementById('oItems').value||'(no items)';
+  var delivery=document.getElementById('oDelivery').value||'(no address)';
+  var dist=document.getElementById('oDist').value||'0';
+  var payment=document.getElementById('oPayment').value||'M-Pesa';
+  var fare=dist>0?'KES '+Math.round(50+dist*30):'TBD';
+  var msg='Swift Shopper Order%0A%0AName: '+encodeURIComponent(name)+'%0APhone: '+encodeURIComponent(phone)+'%0AShop: '+encodeURIComponent(shop)+'%0AItems: '+encodeURIComponent(items)+'%0ADeliver to: '+encodeURIComponent(delivery)+'%0AEst. fee: '+fare+'%0APayment: '+encodeURIComponent(payment);
+  var btn=document.getElementById('oWaBtn');
+  if(btn){
+    btn.href='https://wa.me/'+WA+'?text='+msg;
+    btn.onclick=function(){
+      launchConfetti();
+      saveOrder({type:'Order',name:name,phone:phone,shop:shop,items:items,delivery:delivery,payment:payment,fare:fare});
+      sendEmail({_subject:'New Swift Shopper Order - '+name,access_key:WEB3KEY,from_name:'Swift Shopper Website',Name:name,Phone:phone,Shop:shop,Items:items,DeliveryAddress:delivery,EstFee:fare,Payment:payment});
+    };
+  }
+}
+
+// ── SHOPPER LINKS ──
+function updateShopperLinks(){
+  var name=document.getElementById('sName').value||'(no name)';
+  var phone=document.getElementById('sPhone').value||'(no phone)';
+  var area=document.getElementById('sArea').value||'(no area)';
+  var transport=document.getElementById('sTransport').value||'Boda Boda';
+  var msg='Swift Shopper Application%0A%0AName: '+encodeURIComponent(name)+'%0APhone: '+encodeURIComponent(phone)+'%0AArea: '+encodeURIComponent(area)+'%0ATransport: '+encodeURIComponent(transport);
+  var btn=document.getElementById('sWaBtn');
+  if(btn){
+    btn.href='https://wa.me/'+WA+'?text='+msg;
+    btn.onclick=function(){
+      saveOrder({type:'Shopper',name:name,phone:phone,area:area,transport:transport});
+      sendEmail({_subject:'New Shopper Application - '+name,access_key:WEB3KEY,from_name:'Swift Shopper Website',Name:name,Phone:phone,Area:area,Transport:transport});
+    };
+  }
+}
+
+// ── EMAIL ──
+function sendEmail(data){
+  fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)}).catch(function(){});
+}
+
+// ── SAVE ORDER ──
+function saveOrder(data){
+  var orders=JSON.parse(localStorage.getItem('ss_orders')||'[]');
+  data.id=Date.now();
+  data.date=new Date().toLocaleString('en-KE',{timeZone:'Africa/Nairobi'});
+  data.status='New';
+  orders.unshift(data);
+  localStorage.setItem('ss_orders',JSON.stringify(orders));
+}
+
+// ── CONFETTI ──
+function launchConfetti(){
+  var colors=['#F59E0B','#22C55E','#ffffff','#EF4444','#818cf8'];
+  for(var i=0;i<70;i++){(function(i){setTimeout(function(){var el=document.createElement('div');el.className='cf';el.style.left=Math.random()*100+'vw';el.style.background=colors[Math.floor(Math.random()*colors.length)];el.style.width=(Math.random()*8+5)+'px';el.style.height=(Math.random()*8+5)+'px';el.style.animationDuration=(Math.random()*2+1.5)+'s';document.body.appendChild(el);setTimeout(function(){el.remove();},3500);},i*25);})(i);}
+}
+
+// ── ADMIN ──
+function adminTap(){
+  adminTapCount++;clearTimeout(adminTapTimer);
+  adminTapTimer=setTimeout(function(){adminTapCount=0;},3000);
+  if(adminTapCount>=5){adminTapCount=0;document.getElementById('adminLogin').classList.add('show');setTimeout(function(){document.getElementById('adminPwd').focus();},300);}
+}
+document.getElementById('ssAdminTap').addEventListener('click',adminTap);
+function adminLogin(){
+  if(document.getElementById('adminPwd').value===ADMIN_PASS){
+    document.getElementById('adminLogin').classList.remove('show');
+    document.getElementById('adminPanel').classList.add('show');
+    document.getElementById('adminPwd').value='';
+    sessionStorage.setItem('ss_admin','1');
+    loadAdminDashboard();
+  } else {document.getElementById('adminError').style.display='block';document.getElementById('adminPwd').value='';}
+}
+function closeAdmin(){document.getElementById('adminLogin').classList.remove('show');document.getElementById('adminPwd').value='';document.getElementById('adminError').style.display='none';}
+function adminLogout(){sessionStorage.removeItem('ss_admin');document.getElementById('adminPanel').classList.remove('show');}
+function loadAdminDashboard(){
+  var orders=JSON.parse(localStorage.getItem('ss_orders')||'[]');
+  document.getElementById('aStatOrders').textContent=orders.filter(function(o){return o.type==='Order';}).length;
+  document.getElementById('aStatShoppers').textContent=orders.filter(function(o){return o.type==='Shopper';}).length;
+  var fees=orders.filter(function(o){return o.fare&&o.fare!=='TBD';}).reduce(function(sum,o){return sum+(parseInt(o.fare.replace('KES ',''))||0);},0);
+  document.getElementById('aStatRevenue').textContent='KES '+fees;
+  renderAdminCards(orders,aCurrentFilter);
+}
+function renderAdminCards(orders,filter){
+  var cards=document.getElementById('adminCards');
+  var filtered=filter==='all'?orders:orders.filter(function(o){return o.type===filter;});
+  if(filtered.length===0){cards.innerHTML='<div class="a-empty">📭 No submissions yet</div>';return;}
+  cards.innerHTML=filtered.map(function(o){
+    var tagClass=o.type==='Order'?'tag-order':'tag-shopper';
+    var details=o.type==='Order'?
+      '<div class="a-card-detail">🏪 Shop: <span>'+(o.shop||'-')+'</span></div><div class="a-card-detail">📦 Items: <span>'+(o.items||'-')+'</span></div><div class="a-card-detail">📍 Deliver to: <span>'+(o.delivery||'-')+'</span></div><div class="a-card-detail">💰 Fee: <span>'+(o.fare||'-')+'</span></div><div class="a-card-detail">💳 Payment: <span>'+(o.payment||'-')+'</span></div>':
+      '<div class="a-card-detail">📍 Area: <span>'+(o.area||'-')+'</span></div><div class="a-card-detail">🚗 Transport: <span>'+(o.transport||'-')+'</span></div>';
+    var phone=(o.phone||'').replace(/\D/g,'');if(phone.startsWith('0'))phone='254'+phone.slice(1);
+    return '<div class="a-card"><div class="a-card-header"><span class="a-tag '+tagClass+'">'+o.type+'</span><span class="a-card-date">'+(o.date||'')+'</span></div><div class="a-card-name">'+(o.name||'Unknown')+'</div><div class="a-card-detail">📞 <span>'+(o.phone||'-')+'</span></div>'+details+'<div class="a-card-actions"><a class="a-action a-wa" href="https://wa.me/'+phone+'" target="_blank">💬 Chat</a><a class="a-action a-call" href="tel:+'+phone+'">📞 Call</a><button class="a-action a-del" onclick="deleteOrder('+o.id+')">🗑️</button></div></div>';
+  }).join('');
+}
+function aFilter(type,btn){aCurrentFilter=type;document.querySelectorAll('.a-filter').forEach(function(t){t.classList.remove('active');});btn.classList.add('active');var orders=JSON.parse(localStorage.getItem('ss_orders')||'[]');renderAdminCards(orders,type);}
+function deleteOrder(id){var orders=JSON.parse(localStorage.getItem('ss_orders')||'[]');localStorage.setItem('ss_orders',JSON.stringify(orders.filter(function(o){return o.id!==id;})));loadAdminDashboard();}
+function adminClearAll(){if(confirm('Delete all orders?')){localStorage.removeItem('ss_orders');loadAdminDashboard();}}
+function showAdminTab(tab,btn){document.getElementById('adminOrdersTab').style.display=tab==='orders'?'block':'none';document.getElementById('adminShoppersTab').style.display=tab==='shoppers'?'block':'none';document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('active');});btn.classList.add('active');if(tab==='shoppers')loadShoppers();}
+function addShopper(){var n=document.getElementById('shopperName').value.trim(),p=document.getElementById('shopperPhone').value.trim(),a=document.getElementById('shopperArea').value.trim(),idn=document.getElementById('shopperIdNumber')?document.getElementById('shopperIdNumber').value.trim():'',s=document.getElementById('shopperStatus').value;if(!n||!p){alert('Name and phone required');return;}var shoppers=JSON.parse(localStorage.getItem('ss_shoppers')||'[]');shoppers.unshift({id:Date.now(),name:n,phone:p,area:a,idnum:idn,status:s,joined:new Date().toLocaleDateString('en-KE')});localStorage.setItem('ss_shoppers',JSON.stringify(shoppers));document.getElementById('shopperName').value='';document.getElementById('shopperPhone').value='';document.getElementById('shopperArea').value='';var sId=document.getElementById('shopperIdNumber');if(sId)sId.value='';loadShoppers();}
+function loadShoppers(){var shoppers=JSON.parse(localStorage.getItem('ss_shoppers')||'[]');var q=(document.getElementById('shopperSearch')||{value:''}).value.toLowerCase();if(q)shoppers=shoppers.filter(function(s){return s.name.toLowerCase().includes(q)||s.phone.includes(q);});var all=JSON.parse(localStorage.getItem('ss_shoppers')||'[]');document.getElementById('ssStatActive').textContent=all.filter(function(s){return s.status==='Active';}).length;document.getElementById('ssStatInactive').textContent=all.filter(function(s){return s.status==='Inactive';}).length;document.getElementById('ssStatSuspended').textContent=all.filter(function(s){return s.status==='Suspended';}).length;var list=document.getElementById('shoppersList');if(shoppers.length===0){list.innerHTML='<div class="a-empty">🛒 No shoppers added yet</div>';return;}list.innerHTML=shoppers.map(function(s){var sc=s.status==='Active'?'rs-active':s.status==='Inactive'?'rs-inactive':'rs-suspended';var p=(s.phone||'').replace(/\D/g,'');if(p.startsWith('0'))p='254'+p.slice(1);return '<div class="r-card"><div class="r-info"><div class="r-name">'+s.name+'</div><div class="r-detail">📞 '+s.phone+' · 📍 '+(s.area||'-')+'</div></div><span class="r-status '+sc+'">'+s.status+'</span><div class="r-actions"><a class="r-btn" style="background:#22C55E;color:#fff;" href="https://wa.me/'+p+'" target="_blank">💬</a><a class="r-btn" style="background:var(--gold);color:#000;" href="tel:+'+p+'">📞</a><button class="r-btn" style="background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.2);" onclick="deleteShopper('+s.id+')">🗑️</button></div></div>';}).join('');}
+function searchShoppers(){loadShoppers();}
+function deleteShopper(id){if(confirm('Remove this shopper?')){var s=JSON.parse(localStorage.getItem('ss_shoppers')||'[]');localStorage.setItem('ss_shoppers',JSON.stringify(s.filter(function(x){return x.id!==id;})));loadShoppers();}}
+if(sessionStorage.getItem('ss_admin')){document.getElementById('adminPanel').classList.add('show');loadAdminDashboard();}
+setInterval(function(){if(sessionStorage.getItem('ss_admin'))loadAdminDashboard();},30000);
+
+// ── PWA INSTALL ──
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredPrompt=e;if(!sessionStorage.getItem('ss_install_shown')){setTimeout(function(){document.getElementById('installOverlay').classList.add('show');sessionStorage.setItem('ss_install_shown','1');},2000);}});
+setTimeout(function(){if(!sessionStorage.getItem('ss_install_shown')){document.getElementById('installOverlay').classList.add('show');sessionStorage.setItem('ss_install_shown','1');}},2500);
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(function(){closeInstall();deferredPrompt=null;});}else{closeInstall();}}
+function closeInstall(){document.getElementById('installOverlay').classList.remove('show');}
+window.addEventListener('appinstalled',function(){closeInstall();});
+
+// Init links
+updateOrderLinks(); updateShopperLinks();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('ss-sw.js').catch(function(){});
+</script>
+</body>
+</html>
