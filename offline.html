@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>RidaSwift — You're Offline</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0B0B0F;color:#F5F5F7;font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;}
+  .logo{font-size:3rem;margin-bottom:1rem;animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+  h1{font-size:1.6rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.5rem;}
+  h1 span{color:#FF6B00;}
+  p{font-size:.9rem;color:rgba(255,255,255,.6);line-height:1.7;max-width:300px;margin-bottom:2rem;}
+  .offline-icon{font-size:4rem;margin-bottom:1.5rem;opacity:.5;}
+  .actions{display:flex;flex-direction:column;gap:.8rem;width:100%;max-width:280px;}
+  .btn{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.9rem 1.5rem;border-radius:12px;font-size:.9rem;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:transform .15s;}
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:#FF6B00;color:#fff;}
+  .btn-wa{background:#22C55E;color:#fff;}
+  .btn-call{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);}
+  .status{margin-top:2rem;font-size:.75rem;color:rgba(255,255,255,.35);}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:.4rem;animation:blink 1.4s ease-in-out infinite;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  .tip-box{background:rgba(255,107,0,.08);border:1px solid rgba(255,107,0,.2);border-radius:12px;padding:1rem;margin-bottom:1.5rem;max-width:300px;}
+  .tip-box h3{font-size:.8rem;font-weight:700;color:#FF6B00;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;}
+  .tip-box p{font-size:.78rem;color:rgba(255,255,255,.5);margin:0;}
+</style>
+</head>
+<body>
+
+<div class="offline-icon">📵</div>
+<div class="logo">🏍️</div>
+<h1>Rida<span>Swift</span></h1>
+<p>You're currently offline. Don't worry — you can still reach us directly!</p>
+
+<div class="tip-box">
+  <h3>💡 Tip</h3>
+  <p>Connect to Wi-Fi or mobile data to access the full app. Your last booked pages are saved for offline viewing.</p>
+</div>
+
+<div class="actions">
+  <button class="btn btn-primary" onclick="tryReload()">🔄 Try Again</button>
+  <a class="btn btn-wa" href="https://wa.me/254716651788?text=Hi%20RidaSwift!%20I%20need%20a%20ride.">💬 WhatsApp Us</a>
+  <a class="btn btn-call" href="tel:+254716651788">📞 Call 0716651788</a>
+</div>
+
+<div class="status">
+  <span class="dot"></span> No internet connection detected
+</div>
+
+<script>
+  function tryReload() {
+    if (navigator.onLine) {
+      window.location.href = 'index.html';
+    } else {
+      var btn = document.querySelector('.btn-primary');
+      btn.textContent = '❌ Still offline — try WhatsApp';
+      setTimeout(function(){ btn.textContent = '🔄 Try Again'; }, 3000);
+    }
+  }
+  // Auto-redirect when back online
+  window.addEventListener('online', function() {
+    window.location.href = 'index.html';
+  });
+</script>
+</body>
+</html>
