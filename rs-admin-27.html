@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RidaSwift Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary:#FF6B00; --bg:#0B0B0F; --bg3:#1A1A22;
+  --card:#16161E; --border:rgba(255,255,255,.08);
+  --text:#F5F5F7; --text2:rgba(245,245,247,.65); --text3:rgba(245,245,247,.35);
+  --green:#22C55E; --red:#ef4444; --yellow:#F59E0B;
+  --radius:16px; --radius-sm:10px;
+}
+body.light {
+  --bg:#F0F0F5; --bg3:#E4E4EC; --card:#fff; --border:rgba(0,0,0,.1);
+  --text:#0B0B0F; --text2:rgba(11,11,15,.6); --text3:rgba(11,11,15,.35);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Barlow',sans-serif; min-height:100vh; transition:background .3s,color .3s; }
+
+/* ── PIN / LOGIN ── */
+#loginScreen { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem; }
+.login-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:2rem; width:100%; max-width:340px; text-align:center; }
+.login-icon { font-size:3rem; margin-bottom:1rem; }
+.login-title { font-family:'Barlow Condensed',sans-serif; font-size:1.8rem; font-weight:900; letter-spacing:.06em; margin-bottom:.3rem; }
+.login-title span { color:var(--primary); }
+.login-sub { font-size:.8rem; color:var(--text3); margin-bottom:1.5rem; }
+.pin-dots { display:flex; justify-content:center; gap:.7rem; margin-bottom:1.4rem; }
+.pin-dot { width:14px; height:14px; border-radius:50%; border:2px solid var(--border); background:transparent; transition:all .15s; }
+.pin-dot.filled { background:var(--primary); border-color:var(--primary); }
+.pin-dot.error { background:var(--red); border-color:var(--red); }
+.pin-pad { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin-bottom:.8rem; }
+.pin-key { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1rem; font-size:1.3rem; font-weight:700; cursor:pointer; color:var(--text); transition:background .15s; user-select:none; }
+.pin-key:active { background:var(--primary); color:#fff; }
+.pin-key.del { font-size:1rem; }
+.pin-key.empty { background:transparent; border:none; cursor:default; }
+.pin-error { color:var(--red); font-size:.8rem; margin-top:.4rem; display:none; }
+.login-alt { font-size:.75rem; color:var(--text3); margin-top:1rem; cursor:pointer; text-decoration:underline; }
+
+/* ── NAV ── */
+#dashboard { display:none; }
+nav { position:sticky; top:0; z-index:100; background:rgba(11,11,15,.97); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:.7rem 1rem; gap:.5rem; }
+body.light nav { background:rgba(240,240,245,.97); }
+.nav-logo { font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:900; letter-spacing:.06em; color:var(--primary); white-space:nowrap; }
+.nav-right { display:flex; gap:.4rem; align-items:center; }
+.nav-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:8px; padding:.38rem .7rem; font-size:.72rem; font-weight:700; cursor:pointer; white-space:nowrap; }
+.nav-btn.danger { background:rgba(239,68,68,.1); color:var(--red); border-color:rgba(239,68,68,.3); }
+
+/* ── SECTION TABS ── */
+.section-tabs { display:flex; gap:.5rem; padding:.7rem 1rem; border-bottom:1px solid var(--border); background:var(--bg); overflow-x:auto; }
+.section-tab { background:transparent; border:1px solid var(--border); color:var(--text2); border-radius:20px; padding:.42rem .95rem; font-size:.8rem; font-weight:700; cursor:pointer; white-space:nowrap; transition:all .2s; }
+.section-tab.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+
+/* ── SHARED ── */
+.section { display:none; padding:1rem; max-width:720px; margin:0 auto; }
+.section.active { display:block; }
+.section-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+.section-hdr h2 { font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--primary); }
+
+/* ── STATS ── */
+.stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin-bottom:1.1rem; }
+.stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:.8rem .4rem; text-align:center; }
+.stat-icon { font-size:1.5rem; margin-bottom:.25rem; }
+.stat-num { font-family:'Barlow Condensed',sans-serif; font-size:1.7rem; font-weight:900; color:var(--primary); line-height:1; }
+.stat-label { font-size:.58rem; letter-spacing:.08em; color:var(--text3); margin-top:.2rem; text-transform:uppercase; }
+
+/* ── SEARCH BAR ── */
+.search-bar { position:relative; margin-bottom:1rem; }
+.search-bar input { width:100%; background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text); padding:.7rem 1rem .7rem 2.4rem; font-size:.88rem; outline:none; font-family:'Barlow',sans-serif; }
+.search-bar input:focus { border-color:var(--primary); }
+.search-bar .search-icon { position:absolute; left:.8rem; top:50%; transform:translateY(-50%); color:var(--text3); font-size:.9rem; }
+
+/* ── FILTER TABS ── */
+.filter-tabs { display:flex; gap:.4rem; margin-bottom:1rem; flex-wrap:wrap; }
+.filter-tab { background:transparent; border:1px solid var(--border); color:var(--text2); font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:.38rem .85rem; cursor:pointer; border-radius:6px; transition:all .2s; }
+.filter-tab.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+/* ── BOOKING CARDS ── */
+.bookings-list { display:flex; flex-direction:column; gap:.8rem; }
+.booking-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.1rem; transition:border-color .2s; }
+.booking-card.status-assigned { border-left:3px solid var(--yellow); }
+.booking-card.status-completed { border-left:3px solid var(--green); opacity:.75; }
+.booking-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; flex-wrap:wrap; gap:.4rem; }
+.booking-type { font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:.2rem .6rem; border-radius:100px; }
+.type-ride { background:rgba(34,197,94,.15); color:var(--green); }
+.type-rider { background:rgba(255,107,0,.15); color:var(--primary); }
+.type-delivery { background:rgba(239,68,68,.15); color:var(--red); }
+.booking-date { font-size:.68rem; color:var(--text3); }
+.booking-name { font-weight:700; font-size:1rem; margin-bottom:.35rem; display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+.booking-detail { font-size:.8rem; color:var(--text2); margin-bottom:.16rem; }
+.booking-detail span { color:var(--text); font-weight:600; }
+.status-pill { font-size:.6rem; font-weight:900; padding:.18rem .55rem; border-radius:100px; letter-spacing:.08em; text-transform:uppercase; }
+.pill-new { background:rgba(34,197,94,.15); color:var(--green); }
+.pill-assigned { background:rgba(245,158,11,.15); color:var(--yellow); }
+.pill-completed { background:rgba(255,107,0,.15); color:var(--primary); }
+.booking-assign { margin-top:.7rem; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
+.assign-select { flex:1; min-width:140px; background:var(--bg3); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:.42rem .7rem; font-size:.78rem; outline:none; font-family:'Barlow',sans-serif; }
+.assign-btn { background:var(--yellow); color:#000; border:none; border-radius:8px; padding:.42rem .9rem; font-size:.75rem; font-weight:700; cursor:pointer; white-space:nowrap; }
+.booking-actions { display:flex; gap:.45rem; margin-top:.7rem; }
+.action-btn { flex:1; padding:.48rem; font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; border:none; cursor:pointer; text-decoration:none; text-align:center; border-radius:8px; display:flex; align-items:center; justify-content:center; gap:.25rem; }
+.btn-wa { background:var(--green); color:#fff; }
+.btn-call { background:var(--primary); color:#fff; }
+.btn-done { background:rgba(34,197,94,.15); color:var(--green); border:1px solid rgba(34,197,94,.3) !important; }
+.btn-delete { background:rgba(239,68,68,.1); color:var(--red); border:1px solid rgba(239,68,68,.25) !important; }
+.empty-state { text-align:center; padding:3rem 1rem; color:var(--text3); }
+.empty-icon { font-size:3rem; margin-bottom:.8rem; }
+
+/* ── RIDERS SECTION ── */
+.stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin-bottom:1.1rem; }
+.stat-chip { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:.7rem; text-align:center; }
+.add-form { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.3rem; margin-bottom:1.1rem; }
+.add-form-title { font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--primary); margin-bottom:.9rem; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; margin-bottom:.7rem; }
+.field-input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text); padding:.65rem .85rem; font-size:.86rem; outline:none; transition:border-color .2s; font-family:'Barlow',sans-serif; }
+.field-input:focus { border-color:var(--primary); }
+.field-label { font-size:.65rem; font-weight:700; color:var(--text3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.28rem; display:block; }
+.photo-section { margin-bottom:.8rem; }
+.photo-section-title { font-size:.65rem; font-weight:700; color:var(--text3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.5rem; }
+.photo-row { display:flex; gap:.6rem; align-items:center; }
+.photo-circle-wrap { width:62px; height:62px; border-radius:50%; border:2px dashed var(--border); background:var(--bg3); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; position:relative; }
+.photo-circle-wrap img { width:100%; height:100%; object-fit:cover; border-radius:50%; display:none; }
+.photo-circle-wrap .photo-placeholder { font-size:1.3rem; }
+.photo-upload-label { flex:1; background:var(--bg3); border:1px dashed var(--border); border-radius:var(--radius-sm); padding:.55rem .75rem; font-size:.76rem; color:var(--text3); cursor:pointer; text-align:center; font-weight:600; transition:all .2s; position:relative; }
+.photo-upload-label.done { border-color:var(--green); color:var(--green); }
+.id-photos-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem; margin-bottom:.7rem; }
+.id-photo-box { background:var(--bg3); border:1px dashed var(--border); border-radius:var(--radius-sm); padding:.5rem; text-align:center; cursor:pointer; min-height:68px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
+.id-photo-box.done { border-color:var(--green); }
+.id-photo-box img { width:100%; height:52px; object-fit:cover; border-radius:6px; display:none; }
+.id-photo-box .id-icon { font-size:1.2rem; margin-bottom:.2rem; }
+.id-photo-box .id-lbl { font-size:.58rem; font-weight:700; color:var(--text3); letter-spacing:.08em; text-transform:uppercase; }
+.add-btn { width:100%; background:var(--primary); color:#fff; border:none; border-radius:var(--radius-sm); padding:.82rem; font-family:'Barlow Condensed',sans-serif; font-size:1.05rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; margin-top:.3rem; }
+.rider-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.1rem; margin-bottom:.8rem; }
+.rider-top { display:flex; gap:.85rem; align-items:flex-start; margin-bottom:.7rem; }
+.rider-photo { width:64px; height:64px; border-radius:50%; border:3px solid var(--primary); flex-shrink:0; background:var(--bg3); overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:1.7rem; }
+.rider-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+.rider-info { flex:1; }
+.rider-name { font-family:'Barlow Condensed',sans-serif; font-size:1.2rem; font-weight:900; color:var(--text); line-height:1; margin-bottom:.28rem; }
+.rider-meta { font-size:.73rem; color:var(--text2); margin-bottom:.14rem; }
+.status-badge { font-size:.62rem; font-weight:900; padding:.2rem .6rem; border-radius:100px; letter-spacing:.08em; text-transform:uppercase; }
+.status-active { background:rgba(34,197,94,.15); color:var(--green); }
+.status-inactive { background:rgba(245,158,11,.15); color:var(--yellow); }
+.status-suspended { background:rgba(239,68,68,.15); color:var(--red); }
+.rider-stats-row { display:flex; gap:.5rem; margin-bottom:.7rem; }
+.rider-stat { flex:1; background:var(--bg3); border-radius:8px; padding:.45rem; text-align:center; }
+.rider-stat-num { font-family:'Barlow Condensed',sans-serif; font-size:1.2rem; font-weight:900; color:var(--primary); line-height:1; }
+.rider-stat-lbl { font-size:.55rem; color:var(--text3); letter-spacing:.06em; text-transform:uppercase; margin-top:.1rem; }
+.rider-docs { display:grid; grid-template-columns:repeat(3,1fr); gap:.4rem; margin-bottom:.7rem; }
+.doc-box { background:var(--bg3); border-radius:6px; overflow:hidden; text-align:center; }
+.doc-box img { width:100%; height:50px; object-fit:cover; display:block; }
+.doc-box .doc-lbl { font-size:.52rem; font-weight:700; color:var(--text3); letter-spacing:.06em; text-transform:uppercase; padding:.18rem 0; }
+.doc-none { font-size:.65rem; color:var(--text3); display:flex; align-items:center; justify-content:center; height:50px; }
+.rider-actions { display:flex; gap:.45rem; }
+.r-action { flex:1; padding:.48rem .4rem; border-radius:8px; font-size:.72rem; font-weight:700; cursor:pointer; border:none; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:.25rem; }
+
+/* ── PERFORMANCE SECTION ── */
+.perf-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin-bottom:.8rem; display:flex; gap:.9rem; align-items:center; }
+.perf-photo { width:50px; height:50px; border-radius:50%; border:2px solid var(--primary); flex-shrink:0; background:var(--bg3); overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+.perf-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+.perf-info { flex:1; }
+.perf-name { font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:900; margin-bottom:.3rem; }
+.perf-stats { display:flex; gap:.5rem; flex-wrap:wrap; }
+.perf-badge { background:var(--bg3); border-radius:6px; padding:.25rem .55rem; font-size:.65rem; font-weight:700; color:var(--text2); }
+.perf-badge.gold { color:var(--yellow); }
+.perf-badge.green { color:var(--green); }
+.log-trip-btn { background:var(--primary); color:#fff; border:none; border-radius:8px; padding:.4rem .8rem; font-size:.72rem; font-weight:700; cursor:pointer; white-space:nowrap; }
+
+/* ── BLACKLIST SECTION ── */
+.blacklist-card { background:var(--card); border:1px solid rgba(239,68,68,.25); border-radius:var(--radius); padding:1rem; margin-bottom:.7rem; }
+.blacklist-name { font-weight:700; font-size:.95rem; margin-bottom:.25rem; display:flex; align-items:center; gap:.5rem; }
+.blacklist-detail { font-size:.78rem; color:var(--text2); margin-bottom:.18rem; }
+.blacklist-reason { font-size:.75rem; color:var(--red); margin-top:.3rem; font-style:italic; }
+.blacklist-actions { display:flex; gap:.45rem; margin-top:.7rem; }
+
+/* ── MODALS ── */
+.modal { display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,.85); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:1rem; }
+.modal.show { display:flex; }
+.modal-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); width:100%; max-width:360px; padding:1.6rem; animation:popIn .25s ease; }
+.modal-box.red-border { border-color:rgba(239,68,68,.4); }
+@keyframes popIn { from{transform:scale(.92);opacity:0} to{transform:scale(1);opacity:1} }
+.modal-title { font-family:'Barlow Condensed',sans-serif; font-size:1.2rem; font-weight:900; text-transform:uppercase; margin-bottom:.5rem; }
+.modal-desc { font-size:.82rem; color:var(--text2); margin-bottom:1rem; line-height:1.5; }
+.modal-input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text); padding:.72rem 1rem; font-size:.9rem; outline:none; margin-bottom:.7rem; font-family:'Barlow',sans-serif; }
+.modal-input:focus { border-color:var(--primary); }
+.modal-err { color:var(--red); font-size:.74rem; margin-bottom:.5rem; display:none; }
+.modal-btn { width:100%; border:none; border-radius:var(--radius-sm); padding:.78rem; font-family:'Barlow Condensed',sans-serif; font-size:.98rem; font-weight:900; text-transform:uppercase; cursor:pointer; margin-bottom:.45rem; }
+.modal-btn.primary { background:var(--primary); color:#fff; }
+.modal-btn.red { background:var(--red); color:#fff; }
+.modal-btn.ghost { background:transparent; color:var(--text3); border:1px solid var(--border); font-size:.84rem; }
+
+/* ── REPORT MODAL ── */
+.report-box { background:var(--bg3); border-radius:var(--radius-sm); padding:1rem; margin-bottom:.8rem; font-size:.8rem; line-height:1.8; color:var(--text2); white-space:pre-wrap; word-break:break-word; max-height:300px; overflow-y:auto; }
+.report-box strong { color:var(--text); }
+</style>
+</head>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+  import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDvRorSsFZzS9nQaTGQisz7HCHmU-g9uHY",
+    authDomain: "kapseret-sacco.firebaseapp.com",
+    projectId: "kapseret-sacco",
+    storageBucket: "kapseret-sacco.firebasestorage.app",
+    messagingSenderId: "1098351984161",
+    appId: "1:1098351984161:web:ab91d408fa4150ae486d60"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  // Separate document path from Kapseret Sacco — same project, isolated data.
+  const mainDocRef = doc(db, 'ridaswift', 'main');
+
+  window.RS_FB = { db, doc, getDoc, setDoc, onSnapshot, mainDocRef, auth, ready: false };
+
+  signInAnonymously(auth).then(()=>{
+    window.RS_FB.ready = true;
+    window.dispatchEvent(new Event('rsfb-ready'));
+  }).catch((err)=>{
+    console.error('Firebase auth failed', err);
+    window.dispatchEvent(new Event('rsfb-error'));
+  });
+</script>
+<body>
+
+<!-- ── LOGIN (PIN) ── -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-icon">🏍️</div>
+    <div class="login-title">Rida<span>Swift</span></div>
+    <div class="login-sub">Admin — Owner Access Only</div>
+    <div class="pin-dots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="pin-pad">
+      <button class="pin-key" onclick="pinPress('1')">1</button>
+      <button class="pin-key" onclick="pinPress('2')">2</button>
+      <button class="pin-key" onclick="pinPress('3')">3</button>
+      <button class="pin-key" onclick="pinPress('4')">4</button>
+      <button class="pin-key" onclick="pinPress('5')">5</button>
+      <button class="pin-key" onclick="pinPress('6')">6</button>
+      <button class="pin-key" onclick="pinPress('7')">7</button>
+      <button class="pin-key" onclick="pinPress('8')">8</button>
+      <button class="pin-key" onclick="pinPress('9')">9</button>
+      <button class="pin-key empty"></button>
+      <button class="pin-key" onclick="pinPress('0')">0</button>
+      <button class="pin-key del" onclick="pinDel()">⌫</button>
+    </div>
+    <div class="pin-error" id="pinError">❌ Wrong PIN. Try again.</div>
+    <div class="login-alt" onclick="showPasswordLogin()">Use password instead</div>
+    <div id="pwdLoginArea" style="display:none;margin-top:1rem;">
+      <input type="password" id="loginPwd" class="modal-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') doPwdLogin()"/>
+      <button class="modal-btn primary" onclick="doPwdLogin()">🔐 LOGIN</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div id="dashboard">
+  <nav>
+    <div class="nav-logo">🏍️ RIDASWIFT</div>
+    <div class="nav-right">
+      <span id="rsSyncBadge" style="font-size:.65rem;font-weight:700;padding:.3rem .6rem;border-radius:20px;border:1px solid var(--border);color:var(--text2);white-space:nowrap;">↻ Syncing</span>
+      <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+      <button class="nav-btn" onclick="openReport()">📊 Report</button>
+      <button class="nav-btn danger" onclick="clearAllBookings()">🗑️</button>
+      <button class="nav-btn" onclick="doLogout()">🚪</button>
+    </div>
+  </nav>
+
+  <div class="section-tabs">
+    <button class="section-tab active" onclick="showSection('bookings',this)">📋 Bookings</button>
+    <button class="section-tab" onclick="showSection('riders',this)">🏍️ My Riders</button>
+    <button class="section-tab" onclick="showSection('perf',this)">📈 Performance</button>
+    <button class="section-tab" onclick="showSection('blacklist',this)">🚫 Blacklist</button>
+    <button class="section-tab" onclick="showSection('earnings',this)">💰 Earnings</button>
+    <button class="section-tab" onclick="showSection('loyalty',this)">⭐ Loyalty</button>
+    <button class="section-tab" onclick="showSection('trash',this)">🗑️ Trash</button>
+  </div>
+
+  <!-- ══ BOOKINGS ══ -->
+  <div class="section active" id="secBookings">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">🏍️</div><div class="stat-num" id="statRides">0</div><div class="stat-label">Rides</div></div>
+      <div class="stat-card"><div class="stat-icon">👤</div><div class="stat-num" id="statApps">0</div><div class="stat-label">Applications</div></div>
+      <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-num" id="statDeliveries">0</div><div class="stat-label">Deliveries</div></div>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input id="bookingSearch" placeholder="Search name, phone, area..." oninput="renderBookings()"/>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterBookings('all',this)">All</button>
+      <button class="filter-tab" onclick="filterBookings('Ride Booking',this)">🏍️ Rides</button>
+      <button class="filter-tab" onclick="filterBookings('Rider Application',this)">👤 Applications</button>
+      <button class="filter-tab" onclick="filterBookings('Delivery Request',this)">📦 Deliveries</button>
+      <button class="filter-tab" onclick="filterBookings('__new',this)">🟢 New</button>
+      <button class="filter-tab" onclick="filterBookings('__assigned',this)">🟡 Assigned</button>
+      <button class="filter-tab" onclick="filterBookings('__completed',this)">✅ Done</button>
+    </div>
+    <div class="bookings-list" id="bookingsList"></div>
+  </div>
+
+  <!-- ══ MY RIDERS ══ -->
+  <div class="section" id="secRiders">
+    <div class="stat-row">
+      <div class="stat-chip"><div class="stat-num" id="stActive" style="color:var(--green);">0</div><div style="font-size:.6rem;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:.2rem;">Active</div></div>
+      <div class="stat-chip"><div class="stat-num" id="stTotal" style="color:var(--primary);">0</div><div style="font-size:.6rem;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:.2rem;">Total</div></div>
+      <div class="stat-chip"><div class="stat-num" id="stSuspended" style="color:var(--red);">0</div><div style="font-size:.6rem;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:.2rem;">Suspended</div></div>
+    </div>
+    <div class="add-form">
+      <div class="add-form-title">➕ Add New Rider</div>
+      <div class="photo-section">
+        <div class="photo-section-title">Profile Photo</div>
+        <div class="photo-row">
+          <div class="photo-circle-wrap">
+            <img id="previewRiderPhoto" src="" alt="" style="display:none;"/>
+            <span class="photo-placeholder" id="photoPlaceholder">📷</span>
+            <input type="file" accept="image/*" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;" onchange="handlePhoto(this,'previewRiderPhoto','photoPlaceholder','riderPhotoLbl','riderPhoto')"/>
+          </div>
+          <div class="photo-upload-label" id="riderPhotoLbl">
+            <span id="riderPhotoLblText">📷 Tap to upload rider photo</span>
+            <input type="file" accept="image/*" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;" onchange="handlePhoto(this,'previewRiderPhoto','photoPlaceholder','riderPhotoLbl','riderPhoto')"/>
+          </div>
+        </div>
+      </div>
+      <div class="photo-section">
+        <div class="photo-section-title">Documents & Bike Photo</div>
+        <div class="id-photos-row">
+          <div class="id-photo-box" id="boxIdFront">
+            <img id="previewIdFront" src="" alt="" style="display:none;"/>
+            <div class="id-icon">🪪</div><div class="id-lbl">ID Front</div>
+            <input type="file" accept="image/*" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;" onchange="handleIdPhoto(this,'previewIdFront','boxIdFront','idFront')"/>
+          </div>
+          <div class="id-photo-box" id="boxIdBack">
+            <img id="previewIdBack" src="" alt="" style="display:none;"/>
+            <div class="id-icon">🪪</div><div class="id-lbl">ID Back</div>
+            <input type="file" accept="image/*" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;" onchange="handleIdPhoto(this,'previewIdBack','boxIdBack','idBack')"/>
+          </div>
+          <div class="id-photo-box" id="boxBike">
+            <img id="previewBike" src="" alt="" style="display:none;"/>
+            <div class="id-icon">🏍️</div><div class="id-lbl">Bike/Plate</div>
+            <input type="file" accept="image/*" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;" onchange="handleIdPhoto(this,'previewBike','boxBike','bikePic')"/>
+          </div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div><label class="field-label">Full Name *</label><input id="fName" class="field-input" placeholder="e.g. John Kipkorir"/></div>
+        <div><label class="field-label">Phone *</label><input id="fPhone" class="field-input" type="tel" placeholder="07XX XXX XXX"/></div>
+        <div><label class="field-label">Number Plate *</label><input id="fPlate" class="field-input" placeholder="e.g. KAA 123A" style="text-transform:uppercase;"/></div>
+        <div><label class="field-label">National ID</label><input id="fIdNum" class="field-input" placeholder="e.g. 12345678"/></div>
+        <div><label class="field-label">Area / Stage</label><input id="fArea" class="field-input" placeholder="e.g. Quick Mart Stage"/></div>
+        <div><label class="field-label">Status</label>
+          <select id="fStatus" class="field-input">
+            <option value="Active">✅ Active</option>
+            <option value="Inactive">💤 Inactive</option>
+            <option value="Suspended">🚫 Suspended</option>
+          </select>
+        </div>
+      </div>
+      <button class="add-btn" onclick="addRider()">➕ ADD RIDER TO LIST</button>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input id="riderSearch" placeholder="Search name, phone, plate, area..." oninput="renderRiders()"/>
+    </div>
+    <div id="ridersList"></div>
+  </div>
+
+  <!-- ══ PERFORMANCE ══ -->
+  <div class="section" id="secPerf">
+    <div class="section-hdr">
+      <h2>📈 Rider Performance</h2>
+    </div>
+    <div id="perfList"><div class="empty-state"><div class="empty-icon">📈</div><div>Add riders first to track performance.</div></div></div>
+  </div>
+
+  <!-- ══ BLACKLIST ══ -->
+  <div class="section" id="secBlacklist">
+    <div class="section-hdr">
+      <h2>🚫 Blacklisted Customers</h2>
+      <button class="add-btn" style="width:auto;padding:.45rem 1rem;font-size:.8rem;margin:0;" onclick="openAddBlacklist()">+ Add</button>
+    </div>
+    <div id="blacklistItems"><div class="empty-state"><div class="empty-icon">🚫</div><div>No blacklisted customers yet.</div></div></div>
+  </div>
+
+
+  <!-- ══ EARNINGS ══ -->
+  <div class="section" id="secEarnings">
+    <div class="section-hdr"><h2>💰 Earnings Summary</h2></div>
+    <div id="earningsContent"></div>
+  </div>
+
+  <!-- ══ LOYALTY ══ -->
+  <div class="section" id="secLoyalty">
+    <div class="empty-state"><div class="empty-icon">⭐</div><div>Loyalty programme coming soon.<br/>Reward frequent customers with discounts.</div></div>
+  </div>
+
+  <!-- ══ TRASH ══ -->
+  <div class="section" id="secTrash">
+    <div class="section-hdr">
+      <h2>🗑️ Trash <span id="trashCount" style="font-size:.7rem;opacity:.6;font-weight:600;"></span></h2>
+      <button class="add-btn" style="width:auto;padding:.45rem 1rem;font-size:.8rem;margin:0;background:var(--red);" onclick="emptyTrash()">Empty Trash</button>
+    </div>
+    <p style="font-size:.75rem;opacity:.65;padding:0 0 .8rem;">Deleted bookings, riders and blacklist entries land here first — nothing is gone for good until removed from Trash.</p>
+    <div id="trashList"></div>
+  </div>
+</div>
+
+
+<!-- ══ RECEIPT MODAL ══ -->
+<div id="receiptModal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);overflow-y:auto;">
+  <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;padding:1rem 1rem 160px;">
+    <div id="receiptContent" style="background:#fff;color:#111;border-radius:12px;width:100%;max-width:360px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.5);">
+      <div style="background:#FF6B00;padding:1.4rem 1.2rem 1rem;text-align:center;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.8rem;font-weight:900;letter-spacing:.08em;color:#fff;">Rida<span style="color:#000;">Swift</span></div>
+        <div style="font-size:.68rem;color:rgba(255,255,255,.8);letter-spacing:.1em;text-transform:uppercase;margin-top:.1rem;">Eldoret No.1 Boda Boda Service</div>
+        <div id="rcptRef" style="background:#000;color:#FF6B00;font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;letter-spacing:.15em;padding:.35rem 1rem;margin-top:.7rem;border-radius:6px;display:inline-block;">RS000000</div>
+      </div>
+      <div style="padding:1.2rem;">
+        <div class="receipt-row"><span class="receipt-key">Date</span><span class="receipt-val" id="rcptDate">—</span></div>
+        <div class="receipt-row"><span class="receipt-key">Customer</span><span class="receipt-val" id="rcptName">—</span></div>
+        <div class="receipt-row"><span class="receipt-key">Phone</span><span class="receipt-val" id="rcptPhone">—</span></div>
+        <div id="rcptTypeRows"></div>
+        <div class="receipt-row"><span class="receipt-key">Payment</span><span class="receipt-val" id="rcptPayment">—</span></div>
+        <div class="receipt-row" id="rcptRiderRow" style="display:none;"><span class="receipt-key">Rider</span><span class="receipt-val" id="rcptRider">—</span></div>
+        <div class="receipt-status-stamp"><div class="receipt-stamp" id="rcptStamp">NEW</div></div>
+        <div class="receipt-divider"><span>Fare Estimate</span></div>
+        <div class="receipt-row"><span class="receipt-key">Base Fare</span><span class="receipt-val">KES 50</span></div>
+        <div class="receipt-row" id="rcptDistRow" style="display:none;"><span class="receipt-key">Distance</span><span class="receipt-val" id="rcptDist">—</span></div>
+        <div class="receipt-row" id="rcptPromoRow" style="display:none;"><span class="receipt-key">Promo</span><span class="receipt-val" id="rcptPromo" style="color:#22C55E;">—</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#FF6B00;color:#fff;padding:.7rem 1rem;margin:.8rem -1.2rem -1.2rem;">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;">Amount</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;" id="rcptTotal">KES —</span>
+        </div>
+      </div>
+      <div style="background:#f9f9f9;padding:.8rem 1.2rem;text-align:center;border-top:1px dashed #e5e5e5;">
+        <p style="font-size:.68rem;color:#999;line-height:1.6;">Thank you for riding with <strong style="color:#FF6B00;">RidaSwift</strong>!<br/>📞 0716651788 &nbsp;·&nbsp; M-Pesa Till <strong style="color:#FF6B00;">5440462</strong><br/>Ride Fast. Ride Safe. Ride Smart. 🏍️</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RECEIPT BUTTONS — completely separate from modal, highest z-index, nothing above them -->
+<div id="receiptBtns" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:3000;padding:.8rem 1rem .9rem;background:#0B0B0F;border-top:1px solid rgba(255,255,255,.12);">
+  <button onclick="shareReceipt()" style="display:block;width:100%;padding:.9rem;background:#22C55E;color:#fff;border:none;border-radius:12px;font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-bottom:.5rem;">📤 SEND RECEIPT TO CUSTOMER</button>
+  <button onclick="closeReceipt()" style="display:block;width:100%;padding:.75rem;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);border-radius:12px;font-size:.92rem;font-weight:700;cursor:pointer;">✕ Close Receipt</button>
+</div>
+
+<!-- ══ DELETE RIDER MODAL ══ -->
+<div class="modal" id="delModal">
+  <div class="modal-box red-border">
+    <div class="modal-title" style="color:var(--red);">⚠️ Delete Rider</div>
+    <div class="modal-desc" id="delDesc"></div>
+    <div class="modal-err" id="delErr">❌ Wrong password.</div>
+    <input type="password" class="modal-input" id="delPwd" placeholder="Admin password" onkeydown="if(event.key==='Enter') confirmDelete()"/>
+    <button class="modal-btn red" onclick="confirmDelete()">🗑️ CONFIRM DELETE</button>
+    <button class="modal-btn ghost" onclick="closeModal('delModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- ══ LOG TRIP MODAL ══ -->
+<div class="modal" id="tripModal">
+  <div class="modal-box">
+    <div class="modal-title" style="color:var(--primary);">🏍️ Log Trip</div>
+    <div class="modal-desc" id="tripRiderName">Logging trip for rider</div>
+    <input type="number" class="modal-input" id="tripFare" placeholder="Fare amount (KSh)" min="0"/>
+    <button class="modal-btn primary" onclick="confirmLogTrip()">✅ LOG TRIP</button>
+    <button class="modal-btn ghost" onclick="closeModal('tripModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- ══ ADD BLACKLIST MODAL ══ -->
+<div class="modal" id="blacklistModal">
+  <div class="modal-box red-border">
+    <div class="modal-title" style="color:var(--red);">🚫 Blacklist Customer</div>
+    <input class="modal-input" id="blName" placeholder="Customer name"/>
+    <input class="modal-input" id="blPhone" placeholder="Phone number" type="tel"/>
+    <input class="modal-input" id="blReason" placeholder="Reason (e.g. cancelled 3 times)"/>
+    <button class="modal-btn red" onclick="confirmAddBlacklist()">🚫 ADD TO BLACKLIST</button>
+    <button class="modal-btn ghost" onclick="closeModal('blacklistModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- ══ REPORT MODAL ══ -->
+<div class="modal" id="reportModal">
+  <div class="modal-box" style="max-width:420px;">
+    <div class="modal-title" style="color:var(--primary);">📊 Daily Report</div>
+    <div class="report-box" id="reportText"></div>
+    <button class="modal-btn primary" onclick="shareReport()">📤 Share on WhatsApp</button>
+    <button class="modal-btn ghost" onclick="closeModal('reportModal')">Close</button>
+  </div>
+</div>
+
+<!-- ══ ASSIGN RIDER MODAL ══ -->
+<div class="modal" id="assignModal">
+  <div class="modal-box">
+    <div class="modal-title" style="color:var(--yellow);">🏍️ Assign Rider</div>
+    <div class="modal-desc" id="assignBookingDesc"></div>
+    <select class="modal-input" id="assignRiderSelect"></select>
+    <button class="modal-btn primary" style="background:var(--yellow);color:#000;" onclick="confirmAssign()">✅ ASSIGN</button>
+    <button class="modal-btn ghost" onclick="closeModal('assignModal')">Cancel</button>
+  </div>
+</div>
+
+<script>
+var PASS = 'rahmahjihdin164';
+var PIN  = '1988'; // 4-digit PIN — change this to your preferred PIN
+var pendingId = null;
+var pendingTripRiderId = null;
+var pendingAssignBookingId = null;
+var tempPhotos = {};
+var currentFilter = 'all';
+var isDark = true;
+var pinBuffer = '';
+var pendingTrashId = null;
+
+// ══ CLOUD SYNC (Firestore) ══
+var rsLastWriteId = null;
+function rsBuildState(){
+  return {
+    bookings: JSON.parse(localStorage.getItem('rs_bookings')||'[]'),
+    riders: JSON.parse(localStorage.getItem('rs_riders')||'[]'),
+    blacklist: JSON.parse(localStorage.getItem('rs_blacklist')||'[]'),
+    trash: JSON.parse(localStorage.getItem('rs_trash')||'[]'),
+    writeId: rsLastWriteId,
+    updatedAt: Date.now()
+  };
+}
+function rsApplyRemoteState(data){
+  localStorage.setItem('rs_bookings', JSON.stringify(data.bookings||[]));
+  localStorage.setItem('rs_riders', JSON.stringify(data.riders||[]));
+  localStorage.setItem('rs_blacklist', JSON.stringify(data.blacklist||[]));
+  localStorage.setItem('rs_trash', JSON.stringify(data.trash||[]));
+}
+function rsSetSyncBadge(state){
+  var el = document.getElementById('rsSyncBadge');
+  if(!el) return;
+  if(state==='synced'){ el.textContent='☁️ Synced'; el.style.color='var(--green)'; el.style.borderColor='rgba(34,197,94,.35)'; }
+  else if(state==='syncing'){ el.textContent='↻ Syncing'; el.style.color='var(--primary)'; el.style.borderColor='rgba(255,107,0,.35)'; }
+  else { el.textContent='⚠ Offline'; el.style.color='var(--red)'; el.style.borderColor='rgba(239,68,68,.35)'; }
+}
+function pushToCloud(){
+  if(!window.RS_FB || !window.RS_FB.ready){ rsSetSyncBadge('offline'); return; }
+  rsSetSyncBadge('syncing');
+  rsLastWriteId = 'w'+Date.now()+Math.random().toString(36).slice(2,7);
+  var state = rsBuildState();
+  state.writeId = rsLastWriteId;
+  window.RS_FB.setDoc(window.RS_FB.mainDocRef, state).then(function(){
+    rsSetSyncBadge('synced');
+  }).catch(function(){
+    rsSetSyncBadge('offline');
+  });
+}
+function pullFromCloud(){
+  return new Promise(function(resolve){
+    if(!window.RS_FB || !window.RS_FB.ready){ rsSetSyncBadge('offline'); resolve(false); return; }
+    window.RS_FB.getDoc(window.RS_FB.mainDocRef).then(function(snap){
+      if(snap.exists()){
+        rsApplyRemoteState(snap.data());
+        rsSetSyncBadge('synced');
+        resolve(true);
+      } else {
+        // First-ever run for this app — seed the cloud with whatever is local now.
+        pushToCloud();
+        resolve(false);
+      }
+    }).catch(function(){ rsSetSyncBadge('offline'); resolve(false); });
+  });
+}
+function startCloudRealtimeSync(){
+  if(!window.RS_FB || !window.RS_FB.ready) return;
+  window.RS_FB.onSnapshot(window.RS_FB.mainDocRef, function(snap){
+    if(!snap.exists()) return;
+    var data = snap.data();
+    if(data.writeId && data.writeId===rsLastWriteId) return; // echo of our own write
+    rsApplyRemoteState(data);
+    rsSetSyncBadge('synced');
+    var dashVisible = document.getElementById('dashboard').style.display !== 'none';
+    if(dashVisible){ loadDashboard(); renderRiders(); renderPerf(); renderBlacklist(); renderTrash(); }
+  });
+}
+function rsBootCloudSync(cb){
+  rsSetSyncBadge('syncing');
+  function afterReady(){
+    pullFromCloud().then(function(){
+      startCloudRealtimeSync();
+      if(cb) cb();
+    });
+  }
+  if(window.RS_FB && window.RS_FB.ready){ afterReady(); }
+  else {
+    window.addEventListener('rsfb-ready', afterReady, { once:true });
+    window.addEventListener('rsfb-error', function(){ rsSetSyncBadge('offline'); if(cb) cb(); }, { once:true });
+    setTimeout(function(){ if(!(window.RS_FB && window.RS_FB.ready)){ rsSetSyncBadge('offline'); if(cb) cb(); } }, 6000);
+  }
+}
+
+// ══ PUSH NOTIFICATIONS ══
+function requestNotificationPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+function showNotif(title, body, icon) {
+  if (Notification.permission === 'granted') {
+    new Notification(title, { body:body, icon:icon||'ridaswift-logo.png', vibrate:[200,100,200] });
+  }
+}
+requestNotificationPermission();
+
+// ══ THEME ══
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.classList.toggle('light', !isDark);
+  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+}
+
+// ══ PIN LOGIN ══
+function pinPress(digit) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += digit;
+  updatePinDots();
+  if (pinBuffer.length === 4) {
+    setTimeout(checkPin, 150);
+  }
+}
+function pinDel() {
+  pinBuffer = pinBuffer.slice(0,-1);
+  updatePinDots(false);
+}
+function updatePinDots(error) {
+  for (var i=0;i<4;i++) {
+    var d = document.getElementById('d'+i);
+    d.classList.toggle('filled', i < pinBuffer.length);
+    if (error !== undefined) d.classList.toggle('error', error && i < 4);
+  }
+}
+function checkPin() {
+  if (pinBuffer === PIN) {
+    loginSuccess();
+  } else {
+    updatePinDots(true);
+    document.getElementById('pinError').style.display = 'block';
+    setTimeout(function(){ pinBuffer=''; updatePinDots(false); document.getElementById('pinError').style.display='none'; }, 1000);
+  }
+}
+function showPasswordLogin() {
+  document.getElementById('pwdLoginArea').style.display = 'block';
+}
+function doPwdLogin() {
+  var pwd = document.getElementById('loginPwd').value;
+  if (pwd === PASS) { loginSuccess(); }
+  else { document.getElementById('pinError').textContent='❌ Wrong password.'; document.getElementById('pinError').style.display='block'; }
+}
+function loginSuccess() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  sessionStorage.setItem('rs_admin','1');
+  rsBootCloudSync(function(){
+    loadDashboard(); renderRiders(); renderPerf(); renderBlacklist(); renderTrash();
+  });
+  startAlerts();
+}
+function doLogout() {
+  sessionStorage.removeItem('rs_admin');
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'none';
+  pinBuffer = ''; updatePinDots(false);
+}
+if (sessionStorage.getItem('rs_admin')) {
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  setTimeout(function(){
+    rsBootCloudSync(function(){
+      loadDashboard(); renderRiders(); renderPerf(); renderBlacklist(); renderTrash();
+    });
+    startAlerts();
+  }, 100);
+}
+
+// ══ SECTION TABS ══
+function showSection(name, btn) {
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelectorAll('.section-tab').forEach(function(t){ t.classList.remove('active'); });
+  var id = 'sec'+name.charAt(0).toUpperCase()+name.slice(1);
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (name==='bookings') loadDashboard();
+  if (name==='riders') renderRiders();
+  if (name==='perf') renderPerf();
+  if (name==='blacklist') renderBlacklist();
+  if (name==='earnings') renderEarnings();
+  if (name==='trash') renderTrash();
+}
+
+// ══ SOUND ALERT ══
+var lastBookingCount = 0;
+function playAlert() {
+  try {
+    var ctx = new (window.AudioContext||window.webkitAudioContext)();
+    [880,1100,880].forEach(function(freq, i) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.4, ctx.currentTime + i*0.18);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i*0.18 + 0.35);
+      osc.start(ctx.currentTime + i*0.18);
+      osc.stop(ctx.currentTime + i*0.18 + 0.35);
+    });
+  } catch(e) {}
+}
+function startAlerts() {
+  var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+  lastBookingCount = bookings.length;
+  setInterval(function() {
+    var b = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+    if (b.length > lastBookingCount) { playAlert(); loadDashboard(); showNotif('🏍️ New Booking!','A new booking just came in — check the dashboard now!',''); }
+    lastBookingCount = b.length;
+  }, 15000);
+}
+
+// ══ BOOKINGS ══
+function loadDashboard() {
+  var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+  document.getElementById('statRides').textContent = bookings.filter(function(b){return b.type==='Ride Booking';}).length;
+  document.getElementById('statApps').textContent = bookings.filter(function(b){return b.type==='Rider Application';}).length;
+  document.getElementById('statDeliveries').textContent = bookings.filter(function(b){return b.type==='Delivery Request';}).length;
+  renderBookings();
+}
+function renderBookings() {
+  var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+  var q = (document.getElementById('bookingSearch')||{value:''}).value.toLowerCase();
+  var filtered = bookings;
+  if (currentFilter === '__new') filtered = bookings.filter(function(b){return !b.bStatus||b.bStatus==='New';});
+  else if (currentFilter === '__assigned') filtered = bookings.filter(function(b){return b.bStatus==='Assigned';});
+  else if (currentFilter === '__completed') filtered = bookings.filter(function(b){return b.bStatus==='Completed';});
+  else if (currentFilter !== 'all') filtered = bookings.filter(function(b){return b.type===currentFilter;});
+  if (q) filtered = filtered.filter(function(b){
+    return (b.name||'').toLowerCase().includes(q)||(b.phone||'').includes(q)||
+           (b.pickup||'').toLowerCase().includes(q)||(b.dropoff||'').toLowerCase().includes(q)||(b.area||'').toLowerCase().includes(q);
+  });
+  var list = document.getElementById('bookingsList');
+  if (filtered.length===0) { list.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><div>No bookings found</div></div>'; return; }
+  var riders = JSON.parse(localStorage.getItem('rs_riders')||'[]').filter(function(r){return r.status==='Active';});
+  list.innerHTML = filtered.map(function(b){
+    var tc = b.type==='Ride Booking'?'type-ride':b.type==='Rider Application'?'type-rider':'type-delivery';
+    var cardClass = b.bStatus==='Assigned'?'status-assigned':b.bStatus==='Completed'?'status-completed':'';
+    var pillClass = b.bStatus==='Assigned'?'pill-assigned':b.bStatus==='Completed'?'pill-completed':'pill-new';
+    var pillText = b.bStatus||'New';
+    var details = '';
+    if (b.type==='Ride Booking') {
+      details='<div class="booking-detail">📍 Pickup: <span>'+(b.pickup||'-')+'</span></div>'+
+               '<div class="booking-detail">🏁 Drop-off: <span>'+(b.dropoff||'-')+'</span></div>'+
+               '<div class="booking-detail">🕐 When: <span>'+(b.when||'-')+'</span></div>'+
+               '<div class="booking-detail">💳 Payment: <span>'+(b.payment||'-')+'</span></div>';
+    } else if (b.type==='Rider Application') {
+      details='<div class="booking-detail">📍 Area: <span>'+(b.area||'-')+'</span></div>'+
+               '<div class="booking-detail">⏱️ Experience: <span>'+(b.experience||'-')+'</span></div>'+
+               '<div class="booking-detail">📋 Licence: <span>'+(b.licence||'-')+'</span></div>';
+    } else {
+      details='<div class="booking-detail">📦 <span>'+(b.details||'Check WhatsApp')+'</span></div>';
+    }
+    if (b.assignedRider) details += '<div class="booking-detail">🏍️ Rider: <span>'+b.assignedRider+'</span></div>';
+    var phone=(b.phone||'').replace(/\D/g,''); if(phone.startsWith('0')) phone='254'+phone.slice(1);
+    var riderOptions = '<option value="">-- Select rider --</option>'+riders.map(function(r){return '<option value="'+r.name+'">'+r.name+' · '+r.plate+'</option>';}).join('');
+    var assignHtml = b.type==='Ride Booking'&&b.bStatus!=='Completed'?
+      '<div class="booking-assign">'+
+        '<select class="assign-select" id="asel_'+b.id+'">'+riderOptions+'</select>'+
+        '<button class="assign-btn" onclick="openAssign('+b.id+')">Assign Rider</button>'+
+      '</div>':'';
+    var doneBtn = b.bStatus!=='Completed'?'<button class="action-btn btn-done" onclick="markDone('+b.id+')">✅ Done</button>':'';
+    return '<div class="booking-card '+cardClass+'">'+
+      '<div class="booking-header"><span class="booking-type '+tc+'">'+b.type+'</span><span class="booking-date">'+(b.date||'')+'</span></div>'+
+      '<div class="booking-name">'+(b.name||'Unknown')+'<span class="status-pill '+pillClass+'">'+pillText+'</span></div>'+
+      '<div class="booking-detail">📞 Phone: <span>'+(b.phone||'-')+'</span></div>'+
+      details+assignHtml+
+      '<div class="booking-actions">'+
+        '<a class="action-btn btn-wa" href="https://wa.me/'+phone+'" target="_blank">💬 Chat</a>'+
+        '<a class="action-btn btn-call" href="tel:+'+phone+'">📞 Call</a>'+
+        doneBtn+
+        '<button class="action-btn" style="background:rgba(255,107,0,.15);color:var(--primary);border:1px solid rgba(255,107,0,.3);" onclick="openReceipt('+b.id+')">🧾</button>'+
+        '<button class="action-btn btn-delete" onclick="deleteBooking('+b.id+')">🗑️</button>'+
+      '</div></div>';
+  }).join('');
+}
+function filterBookings(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  renderBookings();
+}
+function markDone(id) {
+  var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+  var booking = bookings.find(function(b){return b.id===id;});
+  bookings = bookings.map(function(b){ if(b.id===id){b.bStatus='Completed';} return b; });
+  localStorage.setItem('rs_bookings', JSON.stringify(bookings));
+  pushToCloud();
+  // Send WhatsApp status update to customer
+  if (booking && booking.phone) {
+    var p = (booking.phone||'').replace(/[^0-9]/g,'');
+    if(p.charAt(0)==='0') p='254'+p.slice(1);
+    var msg = 'Hi '+booking.name+'!\nYour RidaSwift ride is now *Completed*.'
+      +(booking.ref?'\nRef: *'+booking.ref+'*':'')
+      +'\nFrom: '+(booking.pickup||'-')+'\nTo: '+(booking.dropoff||'-')
+      +'\nThank you for riding with RidaSwift!'
+      +'\nWe hope to see you again soon. 🏍️';
+    window.open('https://wa.me/'+p+'?text='+encodeURIComponent(msg),'_blank');
+  }
+  renderBookings();
+}
+function openAssign(id) {
+  var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+  var b = bookings.find(function(x){return x.id===id;});
+  if (!b) return;
+  var riders = JSON.parse(localStorage.getItem('rs_riders')||'[]').filter(function(r){return r.status==='Active';});
+  if (riders.length===0) { alert('No active riders yet. Add riders first.'); return; }
+  pendingAssignBookingId = id;
+  document.getElementById('assignBookingDesc').textContent = 'Assigning booking for '+(b.name||'customer')+' ('+(b.pickup||'')+' → '+(b.dropoff||'')+')';
+  var sel = document.getElementById('assignRiderSelect');
+  sel.innerHTML = '<option value="">-- Select rider --</option>'+riders.map(function(r){return '<option value="'+r.name+'">'+r.name+' · '+r.plate+'</option>';}).join('');
+  openModal('assignModal');
+}
+function confirmAssign() {
+  var sel = document.getElementById('assignRiderSelect').value;
+  if (!sel) { alert('Please select a rider.'); return; }
+  var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+  var booking = bookings.find(function(b){return b.id===pendingAssignBookingId;});
+  bookings = bookings.map(function(b){ if(b.id===pendingAssignBookingId){b.assignedRider=sel;b.bStatus='Assigned';} return b; });
+  localStorage.setItem('rs_bookings', JSON.stringify(bookings));
+  pushToCloud();
+  // Send WhatsApp update to customer
+  if (booking && booking.phone) {
+    var p = (booking.phone||'').replace(/[^0-9]/g,'');
+    if(p.charAt(0)==='0') p='254'+p.slice(1);
+    var riderName = sel.split(' ·')[0];
+    var msg = 'Hi '+booking.name+'!\nGood news! Your RidaSwift rider has been assigned.'
+      +(booking.ref?'\nRef: *'+booking.ref+'*':'')
+      +'\nRider: *'+riderName+'*'
+      +'\nFrom: '+(booking.pickup||'-')+'\nTo: '+(booking.dropoff||'-')
+      +'\nYour rider is on the way! 🏍️'
+      +'\nNeed help? Call 0716651788.';
+    window.open('https://wa.me/'+p+'?text='+encodeURIComponent(msg),'_blank');
+  }
+  closeModal('assignModal');
+  renderBookings();
+}
+function deleteBooking(id) {
+  var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+  var b = bookings.find(function(x){return x.id===id;});
+  if(!b) return;
+  if(!confirm('Move this booking to Trash?')) return;
+  rsMoveToTrash('booking', (b.name||'Unknown')+' — '+b.type, b);
+  bookings = bookings.filter(function(x){return x.id!==id;});
+  localStorage.setItem('rs_bookings', JSON.stringify(bookings));
+  pushToCloud();
+  loadDashboard();
+}
+function clearAllBookings() {
+  if (confirm('Delete ALL bookings? This cannot be undone. (This does not go to Trash — it is permanent.)')) {
+    localStorage.removeItem('rs_bookings'); pushToCloud(); loadDashboard();
+  }
+}
+
+// ══ PHOTO HANDLING ══
+function compress(dataUrl, maxPx, quality, cb) {
+  var img = new Image();
+  img.onload = function() {
+    var w=img.width,h=img.height;
+    if(w>h){if(w>maxPx){h=Math.round(h*maxPx/w);w=maxPx;}}
+    else{if(h>maxPx){w=Math.round(w*maxPx/h);h=maxPx;}}
+    var c=document.createElement('canvas'); c.width=w; c.height=h;
+    c.getContext('2d').drawImage(img,0,0,w,h);
+    cb(c.toDataURL('image/jpeg',quality));
+  };
+  img.src=dataUrl;
+}
+function handlePhoto(input,previewId,placeholderId,labelId,key) {
+  if(!input.files||!input.files[0]) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    compress(e.target.result,400,0.6,function(small){
+      var preview=document.getElementById(previewId);
+      var placeholder=document.getElementById(placeholderId);
+      var lbl=document.getElementById(labelId);
+      var lblTxt=document.getElementById('riderPhotoLblText');
+      if(preview){preview.src=small;preview.style.display='block';}
+      if(placeholder) placeholder.style.display='none';
+      if(lblTxt) lblTxt.textContent='✅ Photo uploaded';
+      if(lbl) lbl.classList.add('done');
+      tempPhotos[key]=small;
+    });
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function handleIdPhoto(input,previewId,boxId,key) {
+  if(!input.files||!input.files[0]) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    compress(e.target.result,600,0.65,function(small){
+      var preview=document.getElementById(previewId);
+      var box=document.getElementById(boxId);
+      if(preview){preview.src=small;preview.style.display='block';}
+      if(box){box.querySelectorAll('.id-icon,.id-lbl').forEach(function(el){el.style.display='none';});box.classList.add('done');}
+      tempPhotos[key]=small;
+    });
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+// ══ ADD RIDER ══
+function addRider() {
+  var name=document.getElementById('fName').value.trim();
+  var phone=document.getElementById('fPhone').value.trim();
+  var plate=document.getElementById('fPlate').value.trim().toUpperCase();
+  var idnum=document.getElementById('fIdNum').value.trim();
+  var area=document.getElementById('fArea').value.trim();
+  var status=document.getElementById('fStatus').value;
+  if(!name||!phone||!plate){alert('Name, Phone and Plate are required');return;}
+  var riders=JSON.parse(localStorage.getItem('rs_riders')||'[]');
+  var newRider={id:Date.now(),name:name,phone:phone,plate:plate,idnum:idnum,area:area,status:status,
+    photo:tempPhotos.riderPhoto||'',idFront:tempPhotos.idFront||'',idBack:tempPhotos.idBack||'',bikePic:tempPhotos.bikePic||'',
+    joined:new Date().toLocaleDateString('en-KE'),trips:0,earnings:0};
+  riders.unshift(newRider);
+  try { localStorage.setItem('rs_riders',JSON.stringify(riders)); }
+  catch(e){ alert('Storage full! Delete some riders first.'); return; }
+  pushToCloud();
+  ['fName','fPhone','fPlate','fIdNum','fArea'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('fStatus').value='Active';
+  var rp=document.getElementById('previewRiderPhoto');if(rp){rp.src='';rp.style.display='none';}
+  var ph=document.getElementById('photoPlaceholder');if(ph)ph.style.display='block';
+  var lt=document.getElementById('riderPhotoLblText');if(lt)lt.textContent='📷 Tap to upload rider photo';
+  var lb=document.getElementById('riderPhotoLbl');if(lb)lb.classList.remove('done');
+  ['previewIdFront','previewIdBack','previewBike'].forEach(function(id){var el=document.getElementById(id);if(el){el.src='';el.style.display='none';}});
+  ['boxIdFront','boxIdBack','boxBike'].forEach(function(id){var b=document.getElementById(id);if(b){b.classList.remove('done');b.querySelectorAll('.id-icon,.id-lbl').forEach(function(el){el.style.display='';}); }});
+  tempPhotos={};
+  renderRiders(); renderPerf();
+  alert('✅ '+name+' added!');
+}
+
+// ══ RENDER RIDERS ══
+function renderRiders() {
+  var riders=JSON.parse(localStorage.getItem('rs_riders')||'[]');
+  var q=(document.getElementById('riderSearch')||{value:''}).value.toLowerCase();
+  if(q) riders=riders.filter(function(r){return r.name.toLowerCase().includes(q)||(r.phone||'').includes(q)||(r.plate||'').toLowerCase().includes(q)||(r.area||'').toLowerCase().includes(q);});
+  var all=JSON.parse(localStorage.getItem('rs_riders')||'[]');
+  var stA=document.getElementById('stActive');if(stA)stA.textContent=all.filter(function(r){return r.status==='Active';}).length;
+  var stT=document.getElementById('stTotal');if(stT)stT.textContent=all.length;
+  var stS=document.getElementById('stSuspended');if(stS)stS.textContent=all.filter(function(r){return r.status==='Suspended';}).length;
+  var list=document.getElementById('ridersList');
+  if(!list)return;
+  if(riders.length===0){list.innerHTML='<div class="empty-state"><div class="empty-icon">🏍️</div><div>No riders yet.</div></div>';return;}
+  var html='';
+  for(var i=0;i<riders.length;i++){
+    var r=riders[i];
+    var p=(r.phone||'').replace(/[^0-9]/g,'');if(p.charAt(0)==='0')p='254'+p.slice(1);
+    var sc=r.status==='Active'?'status-active':r.status==='Inactive'?'status-inactive':'status-suspended';
+    var photoHtml=r.photo?'<div class="rider-photo"><img src="'+r.photo+'" alt=""/></div>':'<div class="rider-photo">🏍️</div>';
+    var docsHtml='<div class="rider-docs">';
+    docsHtml+=r.idFront?'<div class="doc-box"><img src="'+r.idFront+'" alt=""/><div class="doc-lbl">ID Front</div></div>':'<div class="doc-box"><div class="doc-none">🪪</div><div class="doc-lbl">ID Front</div></div>';
+    docsHtml+=r.idBack?'<div class="doc-box"><img src="'+r.idBack+'" alt=""/><div class="doc-lbl">ID Back</div></div>':'<div class="doc-box"><div class="doc-none">🪪</div><div class="doc-lbl">ID Back</div></div>';
+    docsHtml+=r.bikePic?'<div class="doc-box"><img src="'+r.bikePic+'" alt=""/><div class="doc-lbl">Bike</div></div>':'<div class="doc-box"><div class="doc-none">🏍️</div><div class="doc-lbl">Bike</div></div>';
+    docsHtml+='</div>';
+    var safeName=(r.name||'').replace(/'/g,'');
+    html+='<div class="rider-card"><div class="rider-top">'+photoHtml+'<div class="rider-info">'+
+      '<div class="rider-name">'+r.name+'</div>'+
+      '<div class="rider-meta">📱 '+r.phone+' &nbsp;·&nbsp; 🏍️ '+r.plate+'</div>'+
+      (r.area?'<div class="rider-meta">📍 '+r.area+'</div>':'')+
+      (r.idnum?'<div class="rider-meta">🪪 ID: '+r.idnum+'</div>':'')+
+      '<div class="rider-meta" style="color:var(--text3);">Joined: '+(r.joined||'-')+'</div>'+
+      '</div><span class="status-badge '+sc+'">'+r.status+'</span></div>'+
+      '<div class="rider-stats-row">'+
+        '<div class="rider-stat"><div class="rider-stat-num">'+(r.trips||0)+'</div><div class="rider-stat-lbl">Trips</div></div>'+
+        '<div class="rider-stat"><div class="rider-stat-num">KSh '+(r.earnings||0)+'</div><div class="rider-stat-lbl">Earnings</div></div>'+
+      '</div>'+
+      docsHtml+
+      '<div class="rider-actions">'+
+        '<a class="r-action" style="background:var(--green);color:#fff;" href="https://wa.me/'+p+'" target="_blank">💬 Chat</a>'+
+        '<a class="r-action" style="background:var(--primary);color:#fff;" href="tel:+'+p+'">📞 Call</a>'+
+        '<button class="r-action" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2);" onclick="openDelete('+r.id+',\''+safeName+'\')">🗑️ Delete</button>'+
+      '</div></div>';
+  }
+  list.innerHTML=html;
+}
+
+// ══ PERFORMANCE ══
+function renderPerf() {
+  var riders=JSON.parse(localStorage.getItem('rs_riders')||'[]');
+  var list=document.getElementById('perfList');
+  if(!list)return;
+  if(riders.length===0){list.innerHTML='<div class="empty-state"><div class="empty-icon">📈</div><div>Add riders first.</div></div>';return;}
+  riders.sort(function(a,b){return (b.trips||0)-(a.trips||0);});
+  list.innerHTML=riders.map(function(r,i){
+    var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    var photoHtml=r.photo?'<img src="'+r.photo+'" alt=""/>':'🏍️';
+    return '<div class="perf-card">'+
+      '<div class="perf-photo">'+photoHtml+'</div>'+
+      '<div class="perf-info">'+
+        '<div class="perf-name">'+medal+' '+r.name+'</div>'+
+        '<div class="perf-stats">'+
+          '<span class="perf-badge gold">🏍️ '+(r.trips||0)+' trips</span>'+
+          '<span class="perf-badge green">💰 KSh '+(r.earnings||0)+'</span>'+
+          '<span class="perf-badge">'+r.plate+'</span>'+
+          '<span class="perf-badge" style="'+(r.status==='Active'?'color:var(--green)':'color:var(--red)')+'">'+r.status+'</span>'+
+        '</div>'+
+      '</div>'+
+        +'<button class="log-trip-btn" onclick="openLogTripById('+r.id+')">+ Trip</button>'
+    '</div>';
+  }).join('');
+}
+
+function openLogTripById(riderId) {
+  var riders = JSON.parse(localStorage.getItem('rs_riders')||'[]');
+  var rider = riders.find(function(r){ return r.id === riderId; });
+  if (rider) openLogTrip(rider.id, rider.name);
+}
+
+function openLogTrip(riderId, riderName) {
+  pendingTripRiderId = riderId;
+  document.getElementById('tripRiderName').textContent = 'Logging trip for: '+riderName;
+  document.getElementById('tripFare').value = '';
+  openModal('tripModal');
+}
+function confirmLogTrip() {
+  var fare = parseInt(document.getElementById('tripFare').value)||0;
+  var riders = JSON.parse(localStorage.getItem('rs_riders')||'[]');
+  riders = riders.map(function(r){
+    if(r.id===pendingTripRiderId){ r.trips=(r.trips||0)+1; r.earnings=(r.earnings||0)+fare; }
+    return r;
+  });
+  localStorage.setItem('rs_riders',JSON.stringify(riders));
+  pushToCloud();
+  closeModal('tripModal');
+  renderRiders(); renderPerf();
+}
+
+// ══ BLACKLIST ══
+function renderBlacklist() {
+  var list = JSON.parse(localStorage.getItem('rs_blacklist')||'[]');
+  var el = document.getElementById('blacklistItems');
+  if(!el)return;
+  if(list.length===0){el.innerHTML='<div class="empty-state"><div class="empty-icon">🚫</div><div>No blacklisted customers.</div></div>';return;}
+  el.innerHTML=list.map(function(b){
+    var phone=(b.phone||'').replace(/\D/g,'');if(phone.startsWith('0'))phone='254'+phone.slice(1);
+    return '<div class="blacklist-card">'+
+      '<div class="blacklist-name">🚫 '+b.name+'</div>'+
+      '<div class="blacklist-detail">📞 '+b.phone+'</div>'+
+      '<div class="blacklist-reason">Reason: '+b.reason+'</div>'+
+      '<div class="blacklist-actions">'+
+        '<a class="action-btn btn-wa" href="https://wa.me/'+phone+'" target="_blank" style="flex:0 0 auto;padding:.42rem .8rem;">💬</a>'+
+        '<button class="action-btn btn-delete" onclick="removeBlacklist('+b.id+')">Remove</button>'+
+      '</div></div>';
+  }).join('');
+}
+function openAddBlacklist() { openModal('blacklistModal'); }
+function confirmAddBlacklist() {
+  var name=document.getElementById('blName').value.trim();
+  var phone=document.getElementById('blPhone').value.trim();
+  var reason=document.getElementById('blReason').value.trim();
+  if(!name||!phone){alert('Name and phone required');return;}
+  var list=JSON.parse(localStorage.getItem('rs_blacklist')||'[]');
+  list.unshift({id:Date.now(),name:name,phone:phone,reason:reason||'No reason given'});
+  localStorage.setItem('rs_blacklist',JSON.stringify(list));
+  pushToCloud();
+  ['blName','blPhone','blReason'].forEach(function(id){document.getElementById(id).value='';});
+  closeModal('blacklistModal'); renderBlacklist();
+}
+function removeBlacklist(id) {
+  var list=JSON.parse(localStorage.getItem('rs_blacklist')||'[]');
+  var b = list.find(function(x){return x.id===id;});
+  if(!b) return;
+  if(!confirm('Move this blacklist entry to Trash?')) return;
+  rsMoveToTrash('blacklist', b.name+' — '+b.phone, b);
+  list = list.filter(function(x){return x.id!==id;});
+  localStorage.setItem('rs_blacklist',JSON.stringify(list));
+  pushToCloud();
+  renderBlacklist();
+}
+
+// ══ REPORT ══
+function openReport() {
+  var bookings=JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+  var riders=JSON.parse(localStorage.getItem('rs_riders')||'[]');
+  var today=new Date().toLocaleDateString('en-KE');
+  var todayB=bookings.filter(function(b){return (b.date||'').startsWith(today.split('/')[0]);});
+  var rides=bookings.filter(function(b){return b.type==='Ride Booking';});
+  var done=bookings.filter(function(b){return b.bStatus==='Completed';});
+  var assigned=bookings.filter(function(b){return b.bStatus==='Assigned';});
+  var totalEarnings=riders.reduce(function(s,r){return s+(r.earnings||0);},0);
+  var topRider=riders.sort(function(a,b){return (b.trips||0)-(a.trips||0);})[0];
+  var report='📊 *RIDASWIFT DAILY REPORT*\n'+'📅 '+new Date().toLocaleString('en-KE')+'\n\n'+
+    '━━━━━━━━━━━━━━━━\n'+
+    '📋 *BOOKINGS*\n'+
+    '• Total: '+bookings.length+'\n'+
+    '• Rides: '+rides.length+'\n'+
+    '• Completed: '+done.length+'\n'+
+    '• Assigned: '+assigned.length+'\n'+
+    '• Pending: '+(bookings.length-done.length-assigned.length)+'\n\n'+
+    '🏍️ *RIDERS*\n'+
+    '• Total: '+riders.length+'\n'+
+    '• Active: '+riders.filter(function(r){return r.status==='Active';}).length+'\n'+
+    '• Total Trips Logged: '+riders.reduce(function(s,r){return s+(r.trips||0);},0)+'\n'+
+    '• Total Earnings: KSh '+totalEarnings+'\n'+
+    (topRider?'• Top Rider: '+topRider.name+' ('+( topRider.trips||0)+' trips)\n':'')+
+    '━━━━━━━━━━━━━━━━\n'+
+    'Generated by RidaSwift Admin';
+  document.getElementById('reportText').textContent=report;
+  openModal('reportModal');
+}
+function shareReport() {
+  var text=document.getElementById('reportText').textContent;
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+}
+
+
+// ══ EARNINGS SUMMARY ══
+function renderEarnings() {
+  var riders = JSON.parse(localStorage.getItem('rs_riders')||'[]');
+  var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+  var el = document.getElementById('earningsContent');
+  if (!el) return;
+
+  var totalTrips = riders.reduce(function(s,r){return s+(r.trips||0);},0);
+  var totalEarnings = riders.reduce(function(s,r){return s+(r.earnings||0);},0);
+  var completed = bookings.filter(function(b){return b.bStatus==='Completed';}).length;
+  var activeRiders = riders.filter(function(r){return r.status==='Active';});
+  var avgPerTrip = totalTrips>0 ? Math.round(totalEarnings/totalTrips) : 0;
+
+  // Today's bookings
+  var today = new Date().toLocaleDateString('en-KE');
+  var todayBookings = bookings.filter(function(b){ return (b.date||'').includes(today.split('/')[0]); });
+
+  // Weekly breakdown (last 7 days)
+  var weekEarnings = 0;
+  var now = Date.now();
+  var week = 7*24*60*60*1000;
+  riders.forEach(function(r){ if(r.earnings) weekEarnings += (r.earnings||0); });
+
+  var html = '<div class="stats-grid" style="margin-bottom:1.2rem;">'
+    +'<div class="stat-card"><div class="stat-icon">💰</div><div class="stat-num">KSh '+totalEarnings.toLocaleString()+'</div><div class="stat-label">Total Logged</div></div>'
+    +'<div class="stat-card"><div class="stat-icon">🏍️</div><div class="stat-num">'+totalTrips+'</div><div class="stat-label">Total Trips</div></div>'
+    +'<div class="stat-card"><div class="stat-icon">📊</div><div class="stat-num">KSh '+avgPerTrip+'</div><div class="stat-label">Avg Per Trip</div></div>'
+    +'</div>';
+
+  // Per-rider breakdown
+  html += '<div style="font-family:Barlow Condensed,sans-serif;font-size:.95rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--primary);margin-bottom:.8rem;">Rider Breakdown</div>';
+
+  if (riders.length === 0) {
+    html += '<div class="empty-state"><div class="empty-icon">💰</div><div>No riders yet.</div></div>';
+  } else {
+    riders.sort(function(a,b){return (b.earnings||0)-(a.earnings||0);});
+    riders.forEach(function(r,i) {
+      var pct = totalEarnings > 0 ? Math.round((r.earnings||0)/totalEarnings*100) : 0;
+      var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+      var sc = r.status==='Active'?'status-active':r.status==='Inactive'?'status-inactive':'status-suspended';
+      html += '<div class="perf-card" style="margin-bottom:.7rem;flex-wrap:wrap;gap:.6rem;">'
+        +'<div class="perf-photo">'+(r.photo?'<img src="'+r.photo+'" alt=""/>':'🏍️')+'</div>'
+        +'<div class="perf-info" style="flex:1;min-width:140px;">'
+          +'<div class="perf-name">'+medal+' '+r.name+' <span class="status-badge '+sc+'" style="font-size:.55rem;">'+r.status+'</span></div>'
+          +'<div style="background:var(--bg3);border-radius:6px;height:6px;margin:.4rem 0;overflow:hidden;">'
+            +'<div style="background:var(--primary);height:100%;width:'+pct+'%;border-radius:6px;transition:width .5s;"></div>'
+          +'</div>'
+          +'<div class="perf-stats">'
+            +'<span class="perf-badge gold">🏍️ '+(r.trips||0)+' trips</span>'
+            +'<span class="perf-badge green">💰 KSh '+(r.earnings||0)+'</span>'
+            +'<span class="perf-badge">'+pct+'% share</span>'
+          +'</div>'
+        +'</div>'
+        +'<button class="log-trip-btn" onclick="openLogTripById('+r.id+')">+ Trip</button>'
+      +'</div>';
+    });
+  }
+
+  el.innerHTML = html;
+}
+
+
+// ══ DIGITAL RECEIPT ══
+var currentReceiptBooking = null;
+
+function openReceipt(id) {
+  var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+  var b = bookings.find(function(x){ return x.id === id; });
+  if (!b) return;
+  currentReceiptBooking = b;
+
+  // Ref
+  var ref = b.ref || ('RS' + String(b.id).slice(-6));
+  document.getElementById('rcptRef').textContent = ref;
+
+  // Basic fields
+  document.getElementById('rcptDate').textContent    = b.date || new Date(b.id).toLocaleString('en-KE');
+  document.getElementById('rcptName').textContent    = b.name || '—';
+  document.getElementById('rcptPhone').textContent   = b.phone || '—';
+  document.getElementById('rcptPayment').textContent = b.payment || 'M-Pesa / Cash';
+
+  // Assigned rider
+  var riderRow = document.getElementById('rcptRiderRow');
+  var rcptRider = document.getElementById('rcptRider');
+  if (b.assignedRider) { rcptRider.textContent = b.assignedRider; riderRow.style.display='flex'; }
+  else { riderRow.style.display='none'; }
+
+  // Type-specific rows
+  var typeRows = document.getElementById('rcptTypeRows');
+  var typeHtml = '';
+  if (b.type === 'Ride Booking') {
+    typeHtml += '<div class="receipt-row"><span class="receipt-key">From</span><span class="receipt-val">'+(b.pickup||'—')+'</span></div>';
+    typeHtml += '<div class="receipt-row"><span class="receipt-key">To</span><span class="receipt-val">'+(b.dropoff||'—')+'</span></div>';
+    typeHtml += '<div class="receipt-row"><span class="receipt-key">When</span><span class="receipt-val">'+(b.when||'—')+'</span></div>';
+    typeHtml += '<div class="receipt-row"><span class="receipt-key">Type</span><span class="receipt-val">🏍️ Ride Booking</span></div>';
+  } else if (b.type === 'Rider Application') {
+    typeHtml += '<div class="receipt-row"><span class="receipt-key">Area</span><span class="receipt-val">'+(b.area||'—')+'</span></div>';
+    typeHtml += '<div class="receipt-row"><span class="receipt-key">Type</span><span class="receipt-val">👤 Rider Application</span></div>';
+  } else {
+    typeHtml += '<div class="receipt-row"><span class="receipt-key">Type</span><span class="receipt-val">📦 Delivery Request</span></div>';
+  }
+  typeRows.innerHTML = typeHtml;
+
+  // Fare calculation — use stored fare if available
+  var distRow  = document.getElementById('rcptDistRow');
+  var promoRow = document.getElementById('rcptPromoRow');
+  var totalEl  = document.getElementById('rcptTotal');
+  distRow.style.display  = 'none';
+  promoRow.style.display = 'none';
+
+  var fare = b.fare ? parseInt(b.fare) : 0;
+
+  // If no stored fare, calculate from distance if stored
+  if (!fare && b.distance) {
+    var km = parseFloat(b.distance);
+    if (!isNaN(km) && km > 0) fare = Math.round(50 + km * 25);
+  }
+
+  // If still no fare, use minimum based on type
+  if (!fare) {
+    fare = b.type === 'Ride Booking' ? 80 : b.type === 'Delivery Request' ? 100 : 0;
+  }
+
+  // Show distance row if available
+  if (b.distance && parseFloat(b.distance) > 0) {
+    document.getElementById('rcptDist').textContent = parseFloat(b.distance).toFixed(1) + ' km';
+    distRow.style.display = 'flex';
+  }
+
+  totalEl.textContent = fare > 0 ? 'KES ' + fare : 'KES —';
+
+  // Promo
+  if (b.promo) {
+    document.getElementById('rcptPromo').textContent = b.promo + ' applied';
+    promoRow.style.display = 'flex';
+  }
+
+  // Status stamp
+  var stamp = document.getElementById('rcptStamp');
+  var status = b.bStatus || 'New';
+  stamp.textContent = status.toUpperCase();
+  stamp.className = 'receipt-stamp ' + (status==='Completed'?'stamp-completed':status==='Assigned'?'stamp-assigned':'stamp-new');
+
+  document.getElementById('receiptModal').style.display='block';
+  document.getElementById('receiptBtns').style.display='block';
+}
+
+function closeReceipt() {
+  document.getElementById('receiptModal').style.display='none';
+  document.getElementById('receiptBtns').style.display='none';
+}
+function shareReceipt() {
+  if (!currentReceiptBooking) return;
+  var b = currentReceiptBooking;
+  var ref = b.ref || ('RS' + String(b.id).slice(-6));
+  var status = b.bStatus || 'New';
+
+  var receiptText =
+    '🧾 *RIDASWIFT RECEIPT*\n' +
+    '━━━━━━━━━━━━━━━━━\n' +
+    'Ref: *' + ref + '*\n' +
+    'Date: ' + (b.date || '—') + '\n' +
+    '━━━━━━━━━━━━━━━━━\n' +
+    'Customer: ' + (b.name || '—') + '\n' +
+    'Phone: ' + (b.phone || '—') + '\n';
+
+  if (b.type === 'Ride Booking') {
+    receiptText +=
+      'From: ' + (b.pickup || '—') + '\n' +
+      'To: ' + (b.dropoff || '—') + '\n' +
+      'When: ' + (b.when || '—') + '\n';
+  }
+
+  receiptText +=
+    'Payment: ' + (b.payment || 'M-Pesa/Cash') + '\n';
+
+  // Fare
+  var shareFare = b.fare ? 'KES ' + b.fare : (b.distance ? 'KES ' + Math.round(50 + parseFloat(b.distance) * 25) : 'KES —');
+  receiptText += 'Amount: *' + shareFare + '*\n';
+  if (b.assignedRider) receiptText += 'Rider: ' + b.assignedRider + '\n';
+  if (b.promo) receiptText += 'Promo: ' + b.promo + '\n';
+
+  receiptText +=
+    'Status: *' + status + '*\n' +
+    '━━━━━━━━━━━━━━━━━\n' +
+    '📍 RidaSwift Eldoret\n' +
+    '📞 0716651788\n' +
+    '💚 M-Pesa Till: 5440462\n' +
+    '🏍️ Ride Fast. Ride Safe. Ride Smart.';
+
+  // Send to customer on WhatsApp
+  var phone = (b.phone||'').replace(/[^0-9]/g,'');
+  if (phone.charAt(0)==='0') phone = '254' + phone.slice(1);
+  var url = phone.length > 9
+    ? 'https://wa.me/' + phone + '?text=' + encodeURIComponent(receiptText)
+    : 'https://wa.me/?text=' + encodeURIComponent(receiptText);
+
+  window.open(url, '_blank');
+  closeReceipt();
+}
+
+// ══ DELETE RIDER ══
+function openDelete(id, name) {
+  pendingId=id;
+  document.getElementById('delModal').setAttribute('data-mode','rider');
+  document.getElementById('delDesc').textContent='Enter admin password to delete "'+name+'".';
+  document.getElementById('delPwd').value='';
+  document.getElementById('delErr').style.display='none';
+  openModal('delModal');
+  setTimeout(function(){document.getElementById('delPwd').focus();},300);
+}
+function confirmDelete() {
+  if(document.getElementById('delPwd').value!==PASS){
+    document.getElementById('delErr').style.display='block';
+    document.getElementById('delPwd').value='';return;
+  }
+  if(document.getElementById('delModal').getAttribute('data-mode')==='trash'){
+    permanentlyDeleteTrashItem();
+    return;
+  }
+  var all = JSON.parse(localStorage.getItem('rs_riders')||'[]');
+  var r = all.find(function(x){return x.id===pendingId;});
+  if(r){ rsMoveToTrash('rider', r.name+' — '+r.plate, r); }
+  var riders = all.filter(function(x){return x.id!==pendingId;});
+  localStorage.setItem('rs_riders',JSON.stringify(riders));
+  pushToCloud();
+  closeModal('delModal'); renderRiders(); renderPerf();
+}
+
+// ══ TRASH ══
+function rsMoveToTrash(type, label, data){
+  var trash = JSON.parse(localStorage.getItem('rs_trash')||'[]');
+  trash.unshift({ id:'t'+Date.now()+Math.random().toString(36).slice(2,7), type:type, label:label, data:data, deletedAt:new Date().toISOString() });
+  if(trash.length>300) trash = trash.slice(0,300);
+  localStorage.setItem('rs_trash', JSON.stringify(trash));
+}
+function renderTrash(){
+  var wrap = document.getElementById('trashList');
+  if(!wrap) return;
+  var trash = JSON.parse(localStorage.getItem('rs_trash')||'[]');
+  var countEl = document.getElementById('trashCount');
+  if(countEl) countEl.textContent = trash.length + ' item(s)';
+  if(trash.length===0){ wrap.innerHTML = '<p style="opacity:.6;font-size:13px;padding:20px 0;text-align:center;">Trash is empty.</p>'; return; }
+  wrap.innerHTML = trash.map(function(t){
+    return '<div class="rider-card"><div style="flex:1;">'+
+      '<div style="font-weight:700;">'+t.label+'</div>'+
+      '<div style="font-size:11px;opacity:.6;">'+t.type+' &middot; deleted '+new Date(t.deletedAt).toLocaleDateString('en-KE')+'</div>'+
+      '</div><div style="display:flex;gap:6px;">'+
+      '<button class="action-btn btn-assign" onclick="restoreFromTrash(\''+t.id+'\')">Restore</button>'+
+      '<button class="action-btn btn-delete" onclick="openTrashDeleteConfirm(\''+t.id+'\')">Delete Forever</button>'+
+      '</div></div>';
+  }).join('');
+}
+function restoreFromTrash(id){
+  var trash = JSON.parse(localStorage.getItem('rs_trash')||'[]');
+  var entry = trash.find(function(t){return t.id===id;});
+  if(!entry) return;
+  if(entry.type==='booking'){
+    var bookings = JSON.parse(localStorage.getItem('rs_bookings')||'[]');
+    bookings.push(entry.data); localStorage.setItem('rs_bookings', JSON.stringify(bookings));
+  } else if(entry.type==='rider'){
+    var riders = JSON.parse(localStorage.getItem('rs_riders')||'[]');
+    riders.push(entry.data); localStorage.setItem('rs_riders', JSON.stringify(riders));
+  } else if(entry.type==='blacklist'){
+    var list = JSON.parse(localStorage.getItem('rs_blacklist')||'[]');
+    list.push(entry.data); localStorage.setItem('rs_blacklist', JSON.stringify(list));
+  }
+  trash = trash.filter(function(t){return t.id!==id;});
+  localStorage.setItem('rs_trash', JSON.stringify(trash));
+  pushToCloud();
+  renderTrash(); loadDashboard(); renderRiders(); renderPerf(); renderBlacklist();
+}
+function openTrashDeleteConfirm(id){
+  pendingTrashId = id;
+  if(document.getElementById('delDesc')){
+    document.getElementById('delDesc').textContent = 'Enter admin password to permanently delete this item from Trash.';
+    document.getElementById('delPwd').value='';
+    document.getElementById('delErr').style.display='none';
+    document.getElementById('delModal').setAttribute('data-mode','trash');
+    openModal('delModal');
+    setTimeout(function(){document.getElementById('delPwd').focus();},300);
+  }
+}
+function permanentlyDeleteTrashItem(){
+  var trash = JSON.parse(localStorage.getItem('rs_trash')||'[]').filter(function(t){return t.id!==pendingTrashId;});
+  localStorage.setItem('rs_trash', JSON.stringify(trash));
+  pushToCloud();
+  closeModal('delModal'); renderTrash();
+}
+function emptyTrash(){
+  if(!confirm('Permanently erase everything in Trash? This cannot be undone.')) return;
+  localStorage.setItem('rs_trash', '[]');
+  pushToCloud();
+  renderTrash();
+}
+
+// ══ MODAL HELPERS ══
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal').forEach(function(m){
+  m.addEventListener('click',function(e){if(e.target===this)closeModal(this.id);});
+});
+</script>
+</body>
+</html>
