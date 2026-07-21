@@ -1,0 +1,2724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0B0B0F">
+<meta name="description" content="Digital passbook for Pioneer Kapseret Boda Boda Sacco — members, savings, loans and notices.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pioneer KBS">
+<meta name="apple-touch-fullscreen" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Pioneer Kapseret Boda Boda Sacco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#FF6B00;
+  --primary-dark:#E55A00;
+  --primary-light:rgba(255,107,0,.12);
+  --bg:#0B0B0F;
+  --bg2:#131318;
+  --bg3:#1A1A22;
+  --card:#1E1E28;
+  --border:rgba(255,255,255,.08);
+  --text:#FFFFFF;
+  --text2:rgba(255,255,255,.6);
+  --text3:rgba(255,255,255,.35);
+  --green:#22C55E;
+  --green-bg:rgba(34,197,94,.12);
+  --rust:#EF4444;
+  --rust-bg:rgba(239,68,68,.12);
+  --radius:16px;
+  --radius-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  background:var(--bg);
+  background-image:radial-gradient(ellipse at top left, rgba(255,107,0,.06), transparent 55%);
+  font-family:'Barlow',sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  font-weight:500;
+  -webkit-font-smoothing:antialiased;
+  transition:background .3s, color .3s;
+}
+
+/* LIGHT MODE */
+body.light{
+  background:#F5F0E8;
+  --bg:#F8F8FC; --bg2:#FFFFFF; --bg3:#F0F0F5;
+  --card:#FFFFFF; --border:rgba(0,0,0,.08);
+  --text:#0B0B0F; --text2:rgba(11,11,15,.6); --text3:rgba(11,11,15,.4);
+}
+body.light{background-image:radial-gradient(ellipse at top left, rgba(255,107,0,.08), transparent 55%);}
+::selection{background:var(--primary-light);color:var(--text);}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--primary);border-radius:4px;}
+.mono{font-family:'Barlow Condensed',sans-serif;letter-spacing:0.01em;}
+.display{font-family:'Barlow Condensed',sans-serif;letter-spacing:0.02em;font-weight:800;}
+
+/* ---------- LOGIN ---------- */
+#loginScreen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+.cover{
+  width:100%;max-width:380px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:36px 28px 30px;
+  color:var(--text);
+  box-shadow:0 24px 64px rgba(0,0,0,.5);
+  position:relative;
+  overflow:hidden;
+}
+.cover::before{
+  content:"";position:absolute;top:-80px;right:-80px;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,107,0,.18), transparent 70%);
+  pointer-events:none;
+}
+.cover-eyebrow{
+  font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--primary);opacity:0.95;margin-bottom:6px;font-weight:700;
+}
+.cover-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;
+  font-size:44px;line-height:0.95;letter-spacing:0.01em;
+  margin-bottom:4px;
+}
+.cover-sub{
+  font-size:13px;color:var(--text2);margin-bottom:26px;
+  font-family:'Barlow Condensed',sans-serif;letter-spacing:0.02em;
+}
+.cover-badge{
+  width:90px;height:100px;border-radius:10px;
+  background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 22px;
+  filter:drop-shadow(0 8px 20px rgba(0,0,0,.5));
+}
+.cover-badge img{width:100%;height:100%;object-fit:contain;}
+.pin-row{display:flex;gap:8px;justify-content:center;margin:22px 0 18px;}
+.pin-dot{
+  width:38px;height:44px;border-radius:var(--radius-sm);
+  background:var(--bg3);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-size:22px;
+}
+#pinInput{
+  position:absolute;opacity:0;pointer-events:none;
+}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.keypad button{
+  padding:14px 0;border-radius:var(--radius-sm);border:1px solid var(--border);
+  background:var(--bg3);color:var(--text);
+  font-family:'Barlow Condensed',sans-serif;font-size:18px;cursor:pointer;
+  transition:background 0.15s, border-color .15s;
+}
+.keypad button:active{background:var(--primary-light);border-color:var(--primary);}
+.keypad button.wide{grid-column:span 1;font-size:13px;color:var(--primary);font-family:'Barlow',sans-serif;font-weight:600;}
+#loginError{color:var(--rust);font-size:12px;text-align:center;margin-top:12px;min-height:16px;font-weight:600;}
+.login-hint{text-align:center;font-size:11px;color:var(--text3);margin-top:16px;}
+
+/* ---------- APP SHELL ---------- */
+#app{display:none;min-height:100vh;flex-direction:column;}
+header.topbar{
+  background:rgba(11,11,15,.85);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  color:var(--text);
+  padding:calc(env(safe-area-inset-top,0px) + 14px) 18px 14px;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:20;
+}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:8px;max-width:980px;margin:0 auto;}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 auto;overflow:hidden;}
+.brand-mark{
+  width:36px;height:40px;border-radius:6px;
+  background:transparent;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.brand-mark img{width:100%;height:100%;object-fit:contain;}
+.brand-text{min-width:0;overflow:hidden;}
+.brand-text .display{font-size:20px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.brand-text .sub{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.sync-badge{
+  font-size:10px;font-weight:700;letter-spacing:.02em;padding:4px 9px;border-radius:20px;
+  white-space:nowrap;border:1px solid var(--border);color:var(--text2);background:var(--bg3);
+  flex-shrink:0;
+}
+.sync-badge.synced{color:var(--green);border-color:rgba(34,197,94,.35);background:var(--green-bg);}
+.sync-badge.syncing{color:var(--primary);border-color:rgba(255,107,0,.35);background:var(--primary-light);}
+.sync-badge.offline{color:var(--rust);border-color:rgba(239,68,68,.35);background:var(--rust-bg);}
+.icon-btn{
+  background:none;border:1px solid var(--border);color:var(--text2);
+  width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;
+  align-items:center;justify-content:center;font-size:14px;flex-shrink:0;
+}
+.icon-btn:hover{border-color:var(--primary);color:var(--primary);}
+.logout-btn{
+  background:none;border:1px solid var(--border);color:var(--text2);
+  font-size:11px;padding:7px 12px;border-radius:20px;cursor:pointer;font-weight:600;
+}
+.logout-btn:hover{border-color:var(--primary);color:var(--primary);}
+
+/* ---------- BOTTOM TAB BAR (native app pattern) ---------- */
+nav.bottombar{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;
+  display:flex;
+  background:rgba(11,11,15,.92);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  padding:8px 4px calc(env(safe-area-inset-bottom,0px) + 6px);
+}
+body.light nav.bottombar{background:rgba(255,255,255,.92);}
+nav.bottombar button{
+  flex:1;background:none;border:none;color:var(--text3);
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 2px;font-family:'Barlow',sans-serif;font-size:10px;font-weight:600;
+  cursor:pointer;
+}
+nav.bottombar button .tab-ic{font-size:19px;line-height:1;}
+nav.bottombar button.active{color:var(--primary);}
+nav.bottombar button.active .tab-ic{transform:scale(1.08);}
+
+.more-sheet-item{
+  display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--border);
+  cursor:pointer;font-size:14px;font-weight:600;
+}
+.more-sheet-item:last-child{border-bottom:none;}
+.more-sheet-item .ic{font-size:18px;width:26px;text-align:center;}
+
+/* ---------- NATIVE APP FEEL ---------- */
+html{overscroll-behavior-y:none;}
+body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}
+button, .btn, .rcard, .stat-card, .panel, nav.bottombar button, .icon-btn{
+  -webkit-touch-callout:none;touch-action:manipulation;
+}
+button, .btn{user-select:none;-webkit-user-select:none;}
+main{padding-bottom:96px;}
+
+/* ---------- SPLASH SCREEN ---------- */
+#splash{
+  position:fixed;inset:0;background:#0B0B0F;z-index:200;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;
+  transition:opacity .4s ease, visibility .4s ease;
+}
+#splash.hide{opacity:0;visibility:hidden;pointer-events:none;}
+#splash .splash-badge{
+  width:108px;height:120px;border-radius:12px;
+  background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  filter:drop-shadow(0 12px 30px rgba(0,0,0,.6));
+  animation:splashPulse 1.4s ease-in-out infinite;
+}
+#splash .splash-badge img{width:100%;height:100%;object-fit:contain;}
+@keyframes splashPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+#splash .splash-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;color:#fff;letter-spacing:0.02em;}
+
+main{flex:1;max-width:980px;width:100%;margin:0 auto;padding:20px 16px 60px;}
+.page{display:none;}
+.page.active{display:block;animation:fadeIn 0.25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+.section-head h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;color:var(--text);letter-spacing:0.01em;}
+.section-head .count{font-size:11px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;}
+
+.btn{
+  background:var(--primary);color:#fff;border:none;padding:11px 16px;border-radius:var(--radius-sm);
+  font-weight:700;font-size:13px;cursor:pointer;font-family:'Barlow',sans-serif;
+  box-shadow:0 4px 20px rgba(255,107,0,.3);
+  transition:background .2s, transform .15s, box-shadow .2s;
+}
+.btn:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 8px 28px rgba(255,107,0,.4);}
+.btn:active{transform:translateY(0);}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text);box-shadow:none;}
+.btn.ghost:hover{border-color:var(--primary);color:var(--primary);background:transparent;transform:none;box-shadow:none;}
+.btn.small{padding:6px 10px;font-size:11px;box-shadow:none;}
+.btn.danger{background:var(--rust);color:#fff;box-shadow:0 4px 16px rgba(239,68,68,.3);}
+.btn.danger:hover{background:#DC2626;}
+.btn.green{background:var(--green);color:#fff;box-shadow:0 4px 20px rgba(34,197,94,.25);}
+.btn.green:hover{background:#16a34a;}
+
+/* ---------- DASHBOARD ---------- */
+.stat-hero-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.stat-hero{
+  background:linear-gradient(155deg, var(--card), var(--bg3));border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.3);position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:space-between;min-height:96px;
+}
+.stat-hero::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;background:var(--primary);}
+.stat-hero .sh-top{display:flex;align-items:center;gap:6px;}
+.stat-hero .sh-icon{font-size:15px;}
+.stat-hero .sh-label{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text2);font-weight:700;}
+.stat-hero .sh-value{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(18px,5.5vw,24px);color:var(--text);margin-top:8px;line-height:1;}
+.stat-hero.alert::before{background:var(--rust);}
+.stat-hero.alert .sh-value{color:var(--rust);}
+
+.grid-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px 12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;min-height:74px;
+}
+.stat-card::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;background:var(--primary);}
+.stat-label{font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text2);margin-bottom:5px;font-weight:600;display:flex;align-items:center;gap:5px;}
+.stat-value{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(15px,4.5vw,19px);color:var(--text);line-height:1.1;overflow-wrap:anywhere;}
+.stat-card.alert::before{background:var(--rust);}
+.stat-card.alert .stat-value{color:var(--rust);}
+
+.panel{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
+}
+.panel h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:19px;color:var(--text);margin-bottom:10px;letter-spacing:0.01em;}
+.mini-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.mini-row:last-child{border-bottom:none;}
+.mini-row .name{font-weight:600;}
+.mini-row .val{font-family:'Barlow Condensed',sans-serif;color:var(--primary);font-weight:700;font-size:14px;}
+.empty-note{font-size:12.5px;color:var(--text3);padding:10px 0;font-style:italic;}
+
+/* ---------- CARDS / LISTS ---------- */
+.card-list{display:flex;flex-direction:column;gap:10px;}
+.rcard{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
+  display:flex;justify-content:space-between;gap:12px;align-items:flex-start;
+  position:relative;
+}
+.rcard-main{flex:1;min-width:0;}
+.rcard-title{font-weight:700;font-size:15px;margin-bottom:2px;}
+.rcard-sub{font-size:12px;color:var(--text2);font-family:'Barlow Condensed',sans-serif;}
+.rcard-meta{font-size:11.5px;color:var(--text3);margin-top:6px;line-height:1.5;}
+.rcard-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0;align-items:flex-end;}
+.rcard-amount{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:var(--text);}
+
+/* status pill (matches RidaSwift's live-status pills) */
+.stamp{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:'Barlow',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;
+  padding:.3rem .8rem;border-radius:20px;
+}
+.stamp.paid,.stamp.approved,.stamp.active{color:var(--green);background:var(--green-bg);}
+.stamp.pending{color:var(--primary);background:var(--primary-light);}
+.stamp.rejected,.stamp.defaulting,.stamp.inactive{color:var(--rust);background:var(--rust-bg);}
+
+/* search / filter bar */
+.toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.toolbar input, .toolbar select{
+  flex:1;min-width:140px;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);
+  background:var(--bg3);color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;
+}
+.toolbar input::placeholder{color:var(--text3);}
+.toolbar select option{color:var(--text);background:var(--bg3);}
+
+/* ---------- MODAL ---------- */
+.modal-bg{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
+  z-index:50;align-items:flex-end;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.modal-bg.open{display:flex;}
+.modal{
+  background:var(--card);border:1px solid var(--border);width:100%;max-width:520px;border-radius:24px 24px 0 0;
+  padding:22px 20px 26px;max-height:88vh;overflow-y:auto;
+  animation:slideUp 0.25s ease;
+}
+@media(min-width:640px){
+  .modal-bg{align-items:center;}
+  .modal{border-radius:var(--radius);}
+}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;color:var(--text);margin-bottom:14px;}
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text2);margin-bottom:5px;font-weight:600;}
+.field input,.field select,.field textarea{
+  width:100%;padding:11px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);
+  background:var(--bg3);font-family:'Barlow',sans-serif;font-size:14px;color:var(--text);
+}
+.field select option{background:var(--bg3);color:var(--text);}
+.field textarea{resize:vertical;min-height:60px;}
+.modal-actions{display:flex;gap:10px;margin-top:18px;}
+.modal-actions .btn{flex:1;}
+.close-x{position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:var(--text2);cursor:pointer;}
+
+/* fab */
+.fab{
+  position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 78px);right:18px;width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg, var(--primary), #FF9500);color:#fff;font-size:26px;border:none;
+  box-shadow:0 8px 28px rgba(255,107,0,.4);
+  cursor:pointer;z-index:15;display:flex;align-items:center;justify-content:center;
+}
+
+.toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+  background:var(--card);color:var(--text);padding:10px 18px;border-radius:20px;
+  font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:60;
+  opacity:0;pointer-events:none;transition:opacity 0.25s, transform 0.25s;
+  border:1px solid var(--border);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+
+.notice-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.3);margin-bottom:10px;border-left:3px solid var(--primary);}
+
+.backup-banner{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:var(--card);border:1px solid var(--primary);border-radius:var(--radius);
+  padding:12px 14px;margin-bottom:16px;
+}
+.backup-banner .bb-title{font-weight:700;font-size:13px;color:var(--primary);}
+.backup-banner .bb-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+.notice-date{font-size:10.5px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;margin-bottom:4px;}
+.notice-text{font-size:13.5px;line-height:1.5;color:var(--text);}
+
+.report-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;font-family:'Barlow Condensed',sans-serif;font-size:13.5px;white-space:pre-wrap;line-height:1.7;color:var(--text);box-shadow:0 8px 24px rgba(0,0,0,.3);}
+
+/* ---------- ABOUT PAGE ---------- */
+.about-photo-wrap{display:flex;justify-content:center;margin:8px 0 18px;}
+.about-photo{
+  width:132px;height:132px;border-radius:50%;object-fit:cover;
+  border:3px solid var(--primary);box-shadow:0 12px 32px rgba(255,107,0,.3);
+}
+.about-name{text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;margin-bottom:2px;}
+.about-role{text-align:center;font-size:11.5px;color:var(--primary);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:20px;}
+.about-body p{font-size:13.5px;line-height:1.7;color:var(--text2);margin-bottom:14px;}
+.about-body strong{color:var(--text);}
+.about-credit{
+  margin-top:24px;padding-top:16px;border-top:1px solid var(--border);
+  text-align:center;font-size:11.5px;color:var(--text3);line-height:1.8;
+}
+.about-credit .flag{font-size:14px;}
+
+footer.appfoot{text-align:center;font-size:10.5px;color:var(--text3);padding:20px 0 30px;}
+
+/* ---------- PRINTABLE STATEMENT ---------- */
+#printArea{display:none;}
+.stmt-head{text-align:center;margin-bottom:18px;}
+.stmt-head h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;}
+.stmt-head .sub{font-size:11px;color:var(--text2);}
+.stmt-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px;}
+.stmt-table th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);color:var(--text2);font-size:10px;text-transform:uppercase;}
+.stmt-table td{padding:6px 8px;border-bottom:1px solid var(--border);}
+@media print{
+  body *{visibility:hidden;}
+  #printArea, #printArea *{visibility:visible;}
+  #printArea{display:block !important;position:absolute;left:0;top:0;width:100%;background:#fff;color:#111;padding:20px;}
+  .stmt-table th{color:#555;}
+  .stmt-table td, .stmt-table th{border-bottom:1px solid #ddd;}
+}
+
+/* ---------- DIGITAL ID CARD ---------- */
+.id-card{
+  width:100%;max-width:340px;aspect-ratio:1.58/1;margin:0 auto;border-radius:16px;
+  background:linear-gradient(135deg, #1E1E28, #0B0B0F 70%);
+  border:1px solid rgba(255,107,0,.3);
+  padding:16px 18px;color:#fff;position:relative;overflow:hidden;
+  box-shadow:0 16px 40px rgba(0,0,0,.5);
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.id-card::before{
+  content:"";position:absolute;top:-60px;right:-60px;width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,107,0,.25), transparent 70%);
+}
+.id-card-top{display:flex;align-items:center;justify-content:space-between;}
+.id-card-brand{display:flex;align-items:center;gap:8px;}
+.id-card-brand .badge{
+  width:22px;height:24px;border-radius:4px;background:transparent;
+  display:flex;align-items:center;justify-content:center;
+}
+.id-card-brand .badge img{width:100%;height:100%;object-fit:contain;}
+.id-card-brand .name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.05em;text-transform:uppercase;}
+.id-card-status{font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:rgba(34,197,94,.15);color:#22C55E;font-weight:700;}
+.id-card-mid{display:flex;align-items:center;gap:14px;}
+.id-card-avatar{
+  width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg, #FF6B00, #FF9500);
+  display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;flex-shrink:0;
+}
+.id-card-info .id-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;line-height:1.05;}
+.id-card-info .id-sub{font-size:10px;color:rgba(255,255,255,.55);margin-top:2px;}
+.id-card-bottom{display:flex;align-items:flex-end;justify-content:space-between;}
+.id-card-fields{font-size:9.5px;color:rgba(255,255,255,.7);line-height:1.6;font-family:'Barlow Condensed',sans-serif;letter-spacing:.02em;}
+.id-card-fields b{color:#fff;}
+.id-card-qr{width:58px;height:58px;background:#fff;border-radius:6px;padding:4px;flex-shrink:0;}
+.id-card-qr img{width:100%;height:100%;display:block;}
+@media print{
+  #printArea .id-card{box-shadow:none;border:1px solid #ccc;}
+}
+
+/* ---------- INSTALL BANNER ---------- */
+.install-banner{
+  position:fixed;left:14px;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 78px);z-index:70;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 16px;display:none;align-items:center;gap:12px;
+  box-shadow:0 20px 50px rgba(0,0,0,.5);max-width:460px;margin:0 auto;
+}
+.install-banner.show{display:flex;animation:slideUp .3s ease;}
+.install-banner .ib-icon{
+  width:40px;height:44px;border-radius:6px;flex-shrink:0;
+  background:transparent;
+  display:flex;align-items:center;justify-content:center;
+}
+.install-banner .ib-icon img{width:100%;height:100%;object-fit:contain;}
+.install-banner .ib-text{flex:1;min-width:0;}
+.install-banner .ib-text .t1{font-weight:700;font-size:13px;}
+.install-banner .ib-text .t2{font-size:11.5px;color:var(--text2);}
+.install-banner .ib-actions{display:flex;gap:6px;flex-shrink:0;}
+
+/* ---------- WHATSAPP QUICK ACTIONS ---------- */
+.btn.wa{
+  background:var(--green);color:#fff;box-shadow:0 4px 20px rgba(34,197,94,.25);
+}
+.btn.wa:hover{background:#16a34a;}
+
+/* ---------- SAVINGS GOAL PROGRESS ---------- */
+.goal-wrap{margin-top:8px;}
+.goal-bar-track{width:100%;height:6px;border-radius:4px;background:var(--bg3);overflow:hidden;}
+.goal-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg, var(--primary), #FF9500);transition:width .3s;}
+.goal-label{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;font-family:'Barlow Condensed',sans-serif;}
+
+/* ---------- DIVIDENDS PANEL ---------- */
+.divi-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5px;}
+.divi-table th{text-align:left;color:var(--text3);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.05em;padding:6px 8px;border-bottom:1px solid var(--border);}
+.divi-table td{padding:8px;border-bottom:1px solid var(--border);}
+.divi-table td.num{font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--primary);}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="splash-badge"><img src="logo.png" alt="KBS"></div>
+  <div class="splash-title">PIONEER KAPSERET SACCO</div>
+  <div class="splash-status" id="splashStatus">Connecting…</div>
+</div>
+
+<!-- ===================== LOGIN ===================== -->
+<div id="loginScreen">
+  <div class="cover">
+    <div class="cover-badge"><img src="logo.png" alt="KBS"></div>
+    <div class="cover-eyebrow">Members' Passbook &middot; Digital</div>
+    <div class="cover-title">PIONEER<br>KAPSERET<br>BODA BODA<br>SACCO</div>
+    <div class="cover-sub">// register &middot; savings &middot; loans</div>
+    <div class="pin-row" id="pinRow"></div>
+    <input type="tel" id="pinInput" maxlength="4" autocomplete="off">
+    <div class="keypad" id="keypad"></div>
+    <div id="loginError"></div>
+    <div class="login-hint">Chairman PIN 1234 &middot; Member PIN 0000 &middot; change these under Settings once inside</div>
+  </div>
+</div>
+
+<!-- ===================== APP ===================== -->
+<div id="app">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark"><img src="logo.png" alt="KBS"></div>
+        <div class="brand-text">
+          <div class="display">KAPSERET SACCO</div>
+          <div class="sub">Office Register</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="sync-badge" id="syncBadge">↻ Syncing…</span>
+        <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+        <button class="logout-btn" onclick="logout()">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section class="page active" id="page-dashboard">
+      <div class="section-head"><h2>Dashboard</h2><span class="count mono" id="todayDate"></span></div>
+      <div id="backupReminder"></div>
+      <div class="stat-hero-row" id="statsHero"></div>
+      <div class="grid-stats" id="statsGrid"></div>
+      <div class="panel">
+        <h3>Savings Growth (6 months)</h3>
+        <canvas id="savingsChart" height="160"></canvas>
+      </div>
+      <div class="panel">
+        <h3>Loan Portfolio</h3>
+        <canvas id="loanChart" height="160"></canvas>
+      </div>
+      <div class="panel">
+        <h3>Recent Savings</h3>
+        <div id="recentContrib"></div>
+      </div>
+      <div class="panel">
+        <h3>Loans Needing Attention</h3>
+        <div id="loanAlerts"></div>
+      </div>
+    </section>
+
+    <!-- MEMBERS -->
+    <section class="page" id="page-members">
+      <div class="section-head"><h2>Members</h2><span class="count mono" id="memberCount"></span></div>
+      <div class="toolbar">
+        <input type="text" id="memberSearch" placeholder="Search name, ID, moto reg...">
+        <select id="memberFilter">
+          <option value="all">All status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+      <div class="card-list" id="membersList"></div>
+    </section>
+
+    <!-- CONTRIBUTIONS -->
+    <section class="page" id="page-contributions">
+      <div class="section-head"><h2>Savings Ledger</h2><span class="count mono" id="contribCount"></span></div>
+      <div class="toolbar">
+        <select id="contribMemberFilter"><option value="all">All members</option></select>
+        <select id="contribTypeFilter">
+          <option value="all">Deposit &amp; Withdrawal</option>
+          <option value="deposit">Deposits only</option>
+          <option value="withdrawal">Withdrawals only</option>
+        </select>
+      </div>
+      <div class="card-list" id="contribList"></div>
+    </section>
+
+    <!-- LOANS -->
+    <section class="page" id="page-loans">
+      <div class="section-head"><h2>Loans</h2><span class="count mono" id="loanCount"></span></div>
+      <div class="toolbar">
+        <select id="loanFilter">
+          <option value="all">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved / Active</option>
+          <option value="paid">Fully Paid</option>
+          <option value="defaulting">Defaulting</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+      <div class="card-list" id="loansList"></div>
+    </section>
+
+    <!-- DIVIDENDS -->
+    <section class="page" id="page-dividends">
+      <div class="section-head"><h2>Dividends</h2><span class="count mono">Share-out calculator</span></div>
+      <div class="panel">
+        <h3>Calculate a payout</h3>
+        <p style="font-size:12.5px;color:var(--text2);margin-bottom:12px;">Enter the total amount the sacco is sharing out. Each member's payout is based on their share of total savings.</p>
+        <div class="field"><label>Total dividend pool (KSh)</label><input type="number" id="divi_pool" placeholder="e.g. 100000"></div>
+        <button class="btn green" onclick="calculateDividends()">Calculate payouts</button>
+      </div>
+      <div class="panel" id="divi_results_panel" style="display:none;">
+        <h3>Payout breakdown</h3>
+        <table class="divi-table">
+          <thead><tr><th>Member</th><th>Savings</th><th>Share</th><th>Payout</th></tr></thead>
+          <tbody id="divi_table_body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- NOTICES -->
+    <section class="page" id="page-notices">
+      <div class="section-head"><h2>Notices</h2><span class="count mono" id="noticeCount"></span></div>
+      <div id="noticesList"></div>
+    </section>
+
+    <!-- WELFARE FUND -->
+    <section class="page" id="page-welfare">
+      <div class="section-head"><h2>Welfare Fund</h2><span class="count mono" id="welfareBalance"></span></div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">Separate from savings — for accident, hospital and burial support when a member needs help.</p>
+      <div class="toolbar">
+        <select id="welfareTypeFilter">
+          <option value="all">Contributions &amp; Payouts</option>
+          <option value="contribution">Contributions only</option>
+          <option value="payout">Payouts only</option>
+        </select>
+      </div>
+      <div class="card-list" id="welfareList"></div>
+    </section>
+
+    <!-- FINES -->
+    <section class="page" id="page-fines">
+      <div class="section-head"><h2>Fines &amp; Penalties</h2><span class="count mono" id="finesOutstanding"></span></div>
+      <div class="toolbar">
+        <select id="finesFilter">
+          <option value="all">All fines</option>
+          <option value="unpaid">Unpaid only</option>
+          <option value="paid">Paid only</option>
+        </select>
+      </div>
+      <div class="card-list" id="finesList"></div>
+    </section>
+
+    <!-- MEETINGS -->
+    <section class="page" id="page-meetings">
+      <div class="section-head"><h2>Meetings</h2><span class="count mono" id="meetingCount"></span></div>
+      <div class="card-list" id="meetingsList"></div>
+    </section>
+
+    <!-- ROTATION / MERRY-GO-ROUND -->
+    <section class="page" id="page-rotation">
+      <div class="section-head"><h2>Merry-Go-Round</h2></div>
+      <div class="panel">
+        <h3>Current Turn</h3>
+        <div id="rotationCurrent"></div>
+      </div>
+      <div class="panel">
+        <h3>Rotation Order</h3>
+        <div class="finance-only">
+          <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">Set the per-round contribution amount and the order members receive the payout.</p>
+          <div class="field"><label>Contribution per member, per round (KSh)</label><input type="number" id="rot_amount"></div>
+          <button class="btn small green" onclick="saveRotationAmount()">Save amount</button>
+        </div>
+        <div id="rotationOrderList" style="margin-top:14px;"></div>
+        <button class="btn small ghost finance-only" style="margin-top:10px;" onclick="rotationAddMemberModal()">Add member to order</button>
+      </div>
+      <div class="panel">
+        <h3>History</h3>
+        <div id="rotationHistory"></div>
+      </div>
+    </section>
+
+    <!-- ELECTIONS -->
+    <section class="page" id="page-elections">
+      <div class="section-head"><h2>Elections</h2></div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">Members vote by selecting their name once per position — one vote per member per position. Not cryptographically secure, but suited to a small trusted sacco.</p>
+      <div class="card-list" id="electionsList"></div>
+    </section>
+
+    <!-- REPORTS -->
+    <section class="page" id="page-reports">
+      <div class="section-head"><h2>Reports</h2></div>
+      <div class="toolbar">
+        <button class="btn green" onclick="generateReport()">Generate summary</button>
+        <button class="btn ghost" onclick="copyReport()">Copy for WhatsApp</button>
+        <button class="btn ghost" onclick="exportCSV()">Export members CSV</button>
+      </div>
+      <div class="report-box" id="reportBox">Tap "Generate summary" to build today's office report.</div>
+    </section>
+
+    <!-- AGM REPORT -->
+    <section class="page" id="page-agm">
+      <div class="section-head"><h2>AGM Report</h2></div>
+      <div class="toolbar">
+        <select id="agmYear"></select>
+        <button class="btn green" onclick="generateAGMReport()">Generate report</button>
+        <button class="btn ghost" onclick="copyAGMReport()">Copy for sharing</button>
+      </div>
+      <div class="report-box" id="agmReportBox">Pick a year and tap "Generate report" to build the Annual General Meeting summary.</div>
+    </section>
+
+    <!-- ACTIVITY LOG -->
+    <section class="page" id="page-activitylog">
+      <div class="section-head"><h2>Activity Log</h2><span class="count mono" id="activityLogCount"></span></div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">A record of who did what, and when. Shows the most recent 150 entries.</p>
+      <div class="panel"><div id="activityLogList"></div></div>
+    </section>
+
+    <!-- TRASH -->
+    <section class="page" id="page-trash">
+      <div class="section-head"><h2>Trash</h2><span class="count mono" id="trashCount"></span></div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">Deleted members, entries and records land here first — nothing is erased permanently until removed from Trash. Items are kept for 90 days.</p>
+      <div class="toolbar admin-only">
+        <button class="btn danger" onclick="emptyTrash()">Empty Trash</button>
+      </div>
+      <div class="card-list" id="trashList"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="page" id="page-about">
+      <div class="section-head"><h2>About</h2></div>
+      <div class="panel">
+        <div class="about-photo-wrap"><img class="about-photo" src="evans-photo.jpg" alt="Evans Abok"></div>
+        <div class="about-name">Evans Abok</div>
+        <div class="about-role">Founder &amp; Developer</div>
+        <div class="about-body">
+          <p><strong>Pioneer Kapseret Boda Boda Sacco</strong> is a savings and credit cooperative built for boda boda riders in Kapseret, Eldoret. It exists to help members save consistently, access fair loans, support one another through the Welfare Fund, and run their sacco transparently — from savings and loan tracking to meetings, elections, and dividends.</p>
+          <p>This app was built to bring that office register onto every member's phone: a digital passbook that's always up to date, backed up, and accessible to the people who run and rely on the sacco.</p>
+        </div>
+        <div class="about-credit">
+          © 2026 Pioneer Kapseret Boda Boda Sacco. All rights reserved.<br>
+          Designed &amp; Developed by Evans Abok<br>
+          <span class="flag">🇰🇪</span> Proudly Kenyan
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="page" id="page-settings">
+      <div class="section-head"><h2>Settings</h2><span class="count mono" id="roleLabel"></span></div>
+      <div class="panel" id="changePinPanel">
+        <h3>Change My PIN</h3>
+        <div class="field"><label>Current PIN</label><input type="password" id="curPin" maxlength="4" inputmode="numeric"></div>
+        <div class="field"><label>New PIN (4 digits)</label><input type="password" id="newPin" maxlength="4" inputmode="numeric"></div>
+        <button class="btn green" onclick="changePin()">Update my PIN</button>
+      </div>
+      <div class="panel">
+        <h3>Due-Date Reminders</h3>
+        <p style="font-size:12.5px;color:var(--text2);margin-bottom:10px;">Get a notification about overdue or upcoming loan installments when you open the app. This only works while the app is open on this device — it can't notify you while fully closed.</p>
+        <div id="reminderPermissionBox"></div>
+      </div>
+      <div class="panel admin-only">
+        <h3>Officer &amp; Member PINs</h3>
+        <p style="font-size:12.5px;color:var(--text2);margin-bottom:10px;">Only the Chairman can view or reset login PINs, including the shared Member PIN.</p>
+        <div id="officerPinsList"></div>
+      </div>
+      <div class="panel finance-only">
+        <h3>Sacco Details</h3>
+        <div class="field"><label>Loan interest rate (% flat, per loan)</label><input type="number" id="interestRate" value="10"></div>
+        <button class="btn green" onclick="saveInterest()">Save</button>
+      </div>
+      <div class="panel">
+        <h3>Backup &amp; Restore</h3>
+        <p style="font-size:12.5px;color:var(--text2);margin-bottom:10px;">Download a full backup of members, savings, loans and notices. Keep it safe — restoring replaces everything currently on this device.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn green admin-only" onclick="downloadBackup()">Download backup</button>
+          <button class="btn ghost admin-only" onclick="document.getElementById('restoreFile').click()">Restore from backup</button>
+        </div>
+        <input type="file" id="restoreFile" accept="application/json" style="display:none;" onchange="restoreBackup(this.files[0])">
+      </div>
+      <div class="panel admin-only">
+        <h3>Danger Zone</h3>
+        <p style="font-size:12.5px;color:var(--text2);margin-bottom:10px;">This permanently erases all sacco records from this device.</p>
+        <button class="btn danger" onclick="wipeData()">Erase all sacco data</button>
+      </div>
+    </section>
+  </main>
+
+  <button class="fab" id="fabBtn" onclick="openFabModal()">+</button>
+  <footer class="appfoot">PIONEER KAPSERET BODA BODA SACCO &middot; DIGITAL PASSBOOK</footer>
+
+  <nav class="bottombar" id="bottomNav">
+    <button data-page="dashboard" class="active"><span class="tab-ic">🏠</span>Home</button>
+    <button data-page="members"><span class="tab-ic">👥</span>Members</button>
+    <button data-page="contributions"><span class="tab-ic">💰</span>Savings</button>
+    <button data-page="loans"><span class="tab-ic">📋</span>Loans</button>
+    <button data-page="more"><span class="tab-ic">⋯</span>More</button>
+  </nav>
+</div>
+
+<!-- ===================== MODAL ===================== -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modalBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<div class="install-banner" id="installBanner">
+  <div class="ib-icon"><img src="logo.png" alt="KBS"></div>
+  <div class="ib-text">
+    <div class="t1">Install Pioneer KBS</div>
+    <div class="t2">Add to your home screen for offline access</div>
+  </div>
+  <div class="ib-actions">
+    <button class="btn small ghost" onclick="dismissInstallBanner()">Later</button>
+    <button class="btn small green" onclick="triggerInstall()">Install</button>
+  </div>
+</div>
+
+<script type="module">
+  // ---- Cloud sync (Firestore) ----
+  // Wraps Firebase so the rest of the app (a plain classic <script>, no
+  // build tools) can call simple functions off window.KBS_FB instead of
+  // dealing with ES module imports directly.
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, onSnapshot
+  } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+  import {
+    getAuth, signInAnonymously, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDvRorSsFZzS9nQaTGQisz7HCHmU-g9uHY",
+    authDomain: "kapseret-sacco.firebaseapp.com",
+    projectId: "kapseret-sacco",
+    storageBucket: "kapseret-sacco.firebasestorage.app",
+    messagingSenderId: "1098351984161",
+    appId: "1:1098351984161:web:ab91d408fa4150ae486d60"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  const docRef = doc(db, "sacco", "data");
+
+  const authReady = new Promise(resolve => {
+    onAuthStateChanged(auth, user => { if(user) resolve(user); });
+    signInAnonymously(auth).catch(err => console.warn('KBS_FB auth failed', err));
+  });
+
+  async function loadState(timeoutMs){
+    try{
+      await Promise.race([
+        authReady,
+        new Promise((_, rej) => setTimeout(()=>rej(new Error('auth timeout')), timeoutMs))
+      ]);
+      const snap = await Promise.race([
+        getDoc(docRef),
+        new Promise((_, rej) => setTimeout(()=>rej(new Error('fetch timeout')), timeoutMs))
+      ]);
+      if(snap.exists()) return { ok:true, exists:true, data: snap.data() };
+      return { ok:true, exists:false };
+    }catch(err){
+      console.warn('KBS_FB loadState failed, using local data', err);
+      return { ok:false };
+    }
+  }
+
+  async function saveState(stateObj){
+    try{
+      await authReady;
+      await setDoc(docRef, stateObj);
+      return true;
+    }catch(err){
+      console.warn('KBS_FB saveState failed', err);
+      return false;
+    }
+  }
+
+  function subscribe(callback){
+    authReady.then(()=>{
+      onSnapshot(docRef, { includeMetadataChanges:true }, snap => {
+        if(snap.metadata.hasPendingWrites) return; // ignore our own in-flight write echo
+        if(!snap.exists()) return;
+        callback(snap.data());
+      }, err => console.warn('KBS_FB subscribe error', err));
+    });
+  }
+
+  window.KBS_FB = { loadState, saveState, subscribe };
+</script>
+
+<script>
+/* ============ DATA LAYER ============ */
+const DB = {
+  get(key, fallback){ try{ const v = localStorage.getItem('kbs_'+key); return v? JSON.parse(v): fallback; }catch(e){ return fallback; } },
+  set(key, val){ localStorage.setItem('kbs_'+key, JSON.stringify(val)); }
+};
+let members = DB.get('members', []);
+let contributions = DB.get('contributions', []);
+let loans = DB.get('loans', []);
+let notices = DB.get('notices', []);
+let welfareEntries = DB.get('welfareEntries', []);
+let fines = DB.get('fines', []);
+let meetings = DB.get('meetings', []);
+let rotation = DB.get('rotation', {amount:0, order:[], currentIndex:0, history:[]});
+let trash = DB.get('trash', []);
+let lastBackupAt = DB.get('lastBackupAt', null);
+let activityLog = DB.get('activityLog', []);
+let elections = DB.get('elections', []);
+let currentMemberId = null;
+let pin = DB.get('pin', '1234');
+let interestRate = DB.get('interestRate', 10);
+let theme = DB.get('theme', 'dark');
+let roles = DB.get('roles', null);
+if(!roles){
+  // migrate: old single PIN becomes the Chairman PIN
+  roles = {
+    chairman:  { label:'Chairman',  pin: pin,    canAdmin:true,  canFinance:true,  canMembers:true,  canNotices:true },
+    treasurer: { label:'Treasurer', pin: '2222', canAdmin:false, canFinance:true,  canMembers:true,  canNotices:false },
+    secretary: { label:'Secretary', pin: '3333', canAdmin:false, canFinance:false, canMembers:true,  canNotices:true }
+  };
+}
+if(!roles.member){
+  roles.member = { label:'Member', pin:'0000', canAdmin:false, canFinance:false, canMembers:false, canNotices:false };
+}
+// Enforce: only the Chairman can make edits — every other role is view-only, always.
+Object.keys(roles).forEach(r=>{
+  if(r!=='chairman'){
+    roles[r].canAdmin = false;
+    roles[r].canFinance = false;
+    roles[r].canMembers = false;
+    roles[r].canNotices = false;
+  }
+});
+DB.set('roles', roles);
+let currentRole = null;
+
+function saveAll(){
+  DB.set('members', members);
+  DB.set('contributions', contributions);
+  DB.set('loans', loans);
+  DB.set('notices', notices);
+  DB.set('welfareEntries', welfareEntries);
+  DB.set('fines', fines);
+  DB.set('meetings', meetings);
+  DB.set('rotation', rotation);
+  DB.set('trash', trash);
+  DB.set('activityLog', activityLog);
+  DB.set('elections', elections);
+  DB.set('interestRate', interestRate);
+  DB.set('roles', roles);
+  pushToCloud();
+}
+function can(perm){ return currentRole && roles[currentRole] && roles[currentRole][perm]; }
+function uid(){ return 'id' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function logActivity(action, detail){
+  activityLog.unshift({
+    id: uid(), action, detail,
+    role: currentRole? roles[currentRole].label : 'Unknown',
+    date: new Date().toISOString()
+  });
+  if(activityLog.length > 400) activityLog = activityLog.slice(0, 400);
+}
+
+/* ============ CLOUD SYNC (Firestore) ============ */
+// All devices that open this app's link read and write the same shared
+// document, so data added on one phone shows up on every other phone.
+let cloudReady = false;
+let cloudSyncBadge = null; // set once DOM exists
+
+function buildStateObject(){
+  return {
+    members, contributions, loans, notices, welfareEntries, fines,
+    meetings, rotation, trash, activityLog, elections, interestRate, roles, lastBackupAt,
+    updatedAt: Date.now()
+  };
+}
+function applyRemoteState(data){
+  members = data.members || [];
+  contributions = data.contributions || [];
+  loans = data.loans || [];
+  notices = data.notices || [];
+  welfareEntries = data.welfareEntries || [];
+  fines = data.fines || [];
+  meetings = data.meetings || [];
+  rotation = data.rotation || {amount:0, order:[], currentIndex:0, history:[]};
+  trash = data.trash || [];
+  activityLog = data.activityLog || [];
+  elections = data.elections || [];
+  interestRate = (data.interestRate!=null) ? data.interestRate : interestRate;
+  lastBackupAt = data.lastBackupAt || lastBackupAt;
+  if(data.roles){
+    // keep the member-role/edit-permission lockdown enforced even on synced data
+    Object.keys(data.roles).forEach(r=>{
+      if(r!=='chairman') data.roles[r] = {...data.roles[r], canAdmin:false, canFinance:false, canMembers:false, canNotices:false};
+    });
+    roles = data.roles;
+  }
+  DB.set('members', members); DB.set('contributions', contributions); DB.set('loans', loans);
+  DB.set('notices', notices); DB.set('welfareEntries', welfareEntries); DB.set('fines', fines);
+  DB.set('meetings', meetings); DB.set('rotation', rotation); DB.set('trash', trash);
+  DB.set('activityLog', activityLog); DB.set('elections', elections);
+  DB.set('interestRate', interestRate); DB.set('roles', roles); DB.set('lastBackupAt', lastBackupAt);
+}
+function pushToCloud(){
+  if(!window.KBS_FB) return;
+  window.KBS_FB.saveState(buildStateObject()).then(ok=>{
+    setSyncBadge(ok ? 'synced' : 'offline');
+  });
+}
+function setSyncBadge(state){
+  const el = document.getElementById('syncBadge');
+  if(!el) return;
+  if(state==='synced'){
+    el.textContent = '☁️ Synced'; el.className = 'sync-badge synced';
+    el.title = 'Connected — this data is shared live across every device';
+  } else if(state==='syncing'){
+    el.textContent = '↻ Syncing'; el.className = 'sync-badge syncing';
+    el.title = 'Connecting to shared data…';
+  } else {
+    el.textContent = '⚠ Offline'; el.className = 'sync-badge offline';
+    el.title = 'No connection — showing the last data saved on this device. Changes will sync once back online.';
+  }
+}
+async function bootCloudSync(){
+  setSyncBadge('syncing');
+  // Give the Firebase module script a moment to attach itself to window.
+  for(let i=0; i<40 && !window.KBS_FB; i++){ await new Promise(r=>setTimeout(r,50)); }
+  if(!window.KBS_FB){ setSyncBadge('offline'); cloudReady = true; return; }
+
+  const result = await window.KBS_FB.loadState(6000);
+  if(result.ok && result.exists){
+    applyRemoteState(result.data);
+    setSyncBadge('synced');
+  } else if(result.ok && !result.exists){
+    // First device ever to open the app — seed the shared doc with what's here.
+    pushToCloud();
+  } else {
+    setSyncBadge('offline'); // couldn't reach Firestore — carry on with local cache
+  }
+  cloudReady = true;
+
+  window.KBS_FB.subscribe(data=>{
+    applyRemoteState(data);
+    setSyncBadge('synced');
+    if(document.getElementById('app').style.display === 'flex'){
+      renderAll(); applyRoleGating();
+    }
+  });
+}
+
+/* ============ TRASH / RECYCLE BIN ============ */
+const TRASH_RETENTION_DAYS = 90;
+function moveToTrash(type, label, data){
+  trash.push({ id: uid(), type, label, data, deletedAt: new Date().toISOString(), deletedBy: currentRole? roles[currentRole].label : 'Unknown' });
+}
+function purgeOldTrash(){
+  const cutoff = Date.now() - TRASH_RETENTION_DAYS*24*60*60*1000;
+  const before = trash.length;
+  trash = trash.filter(t => new Date(t.deletedAt).getTime() > cutoff);
+  if(trash.length !== before) saveAll();
+}
+const TRASH_TARGETS = {
+  member: ()=>members, contribution: ()=>contributions, notice: ()=>notices,
+  welfare: ()=>welfareEntries, fine: ()=>fines, meeting: ()=>meetings
+};
+function restoreFromTrash(trashId){
+  if(!can('canAdmin')){ toast('Only the Chairman can do this'); return; }
+  const entry = trash.find(t=>t.id===trashId);
+  if(!entry) return;
+  const arr = TRASH_TARGETS[entry.type] && TRASH_TARGETS[entry.type]();
+  if(arr) arr.push(entry.data);
+  trash = trash.filter(t=>t.id!==trashId);
+  saveAll(); renderAll(); toast(entry.label + ' restored');
+}
+function permanentlyDeleteTrashItem(trashId){
+  if(!can('canAdmin')){ toast('Only the Chairman can permanently delete'); return; }
+  if(!confirm('This permanently erases this record. It cannot be recovered. Continue?')) return;
+  trash = trash.filter(t=>t.id!==trashId);
+  saveAll(); renderTrash(); toast('Permanently deleted');
+}
+function emptyTrash(){
+  if(!can('canAdmin')){ toast('Only the Chairman can empty the trash'); return; }
+  if(trash.length===0){ toast('Trash is already empty'); return; }
+  if(!confirm('This permanently erases all '+trash.length+' item(s) in the trash. This cannot be undone. Continue?')) return;
+  trash = [];
+  saveAll(); renderTrash(); toast('Trash emptied');
+}
+function renderTrash(){
+  const wrap = document.getElementById('trashList');
+  if(!wrap) return;
+  const countEl = document.getElementById('trashCount');
+  if(countEl) countEl.textContent = trash.length + ' item(s)';
+  const list = [...trash].sort((a,b)=>new Date(b.deletedAt)-new Date(a.deletedAt));
+  wrap.innerHTML = list.length ? list.map(t=>`
+    <div class="rcard">
+      <div class="rcard-main">
+        <div class="rcard-title">${t.label}</div>
+        <div class="rcard-sub">${t.type} &middot; deleted ${fmtDate(t.deletedAt)} by ${t.deletedBy}</div>
+      </div>
+      <div class="rcard-actions">
+        ${can('canAdmin') ? `<button class="btn small green" onclick="restoreFromTrash('${t.id}')">Restore</button>` : ''}
+        ${can('canAdmin') ? `<button class="btn small danger" onclick="permanentlyDeleteTrashItem('${t.id}')">Delete forever</button>` : ''}
+      </div>
+    </div>
+  `).join('') : '<div class="empty-note" style="color:rgba(247,243,232,0.6);">Trash is empty. Deleted items stay here until restored or permanently removed.</div>';
+}
+function fmtKsh(n){ return 'KSh ' + Number(n||0).toLocaleString('en-KE', {maximumFractionDigits:0}); }
+function fmtDate(d){ return new Date(d).toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'}); }
+function waLink(phone, text){
+  let p = (phone||'').replace(/\D/g,'');
+  if(p.startsWith('0')) p = '254' + p.slice(1);
+  else if(!p.startsWith('254')) p = '254' + p;
+  return 'https://wa.me/' + p + '?text=' + encodeURIComponent(text);
+}
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ============ THEME ============ */
+function applyTheme(){
+  document.body.classList.toggle('light', theme==='light');
+  const btn = document.getElementById('themeToggle');
+  if(btn) btn.textContent = theme==='light' ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  theme = theme==='light' ? 'dark' : 'light';
+  DB.set('theme', theme);
+  applyTheme();
+  if(document.getElementById('page-dashboard') && document.getElementById('page-dashboard').classList.contains('active')){
+    drawSavingsChart(); drawLoanChart();
+  }
+}
+applyTheme();
+
+/* ============ PWA: SERVICE WORKER + INSTALL ============ */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', e=>{
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  if(!DB.get('installDismissed', false)){
+    document.getElementById('installBanner').classList.add('show');
+  }
+});
+function dismissInstallBanner(){
+  document.getElementById('installBanner').classList.remove('show');
+  DB.set('installDismissed', true);
+}
+function triggerInstall(){
+  document.getElementById('installBanner').classList.remove('show');
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.finally(()=>{ deferredInstallPrompt = null; });
+  }
+}
+window.addEventListener('appinstalled', ()=>{
+  document.getElementById('installBanner').classList.remove('show');
+  toast('Pioneer KBS installed');
+});
+
+/* ============ LOGIN ============ */
+let pinBuffer = '';
+const pinRow = document.getElementById('pinRow');
+const keypad = document.getElementById('keypad');
+function renderPinDots(){
+  pinRow.innerHTML='';
+  for(let i=0;i<4;i++){
+    const d = document.createElement('div');
+    d.className='pin-dot';
+    d.textContent = i < pinBuffer.length ? '•' : '';
+    pinRow.appendChild(d);
+  }
+}
+function buildKeypad(){
+  const keys = ['1','2','3','4','5','6','7','8','9','clear','0','back'];
+  keypad.innerHTML='';
+  keys.forEach(k=>{
+    const b = document.createElement('button');
+    if(k==='clear'){ b.textContent='Clear'; b.className='wide'; }
+    else if(k==='back'){ b.textContent='⌫'; b.className='wide'; }
+    else { b.textContent = k; }
+    b.onclick = ()=>handleKey(k);
+    keypad.appendChild(b);
+  });
+}
+function handleKey(k){
+  haptic(6);
+  if(k==='clear'){ pinBuffer=''; }
+  else if(k==='back'){ pinBuffer = pinBuffer.slice(0,-1); }
+  else if(pinBuffer.length<4){ pinBuffer += k; }
+  renderPinDots();
+  document.getElementById('loginError').textContent='';
+  if(pinBuffer.length===4){ tryLogin(); }
+}
+function tryLogin(){
+  const matched = Object.keys(roles).find(r => roles[r].pin === pinBuffer);
+  if(matched){
+    currentRole = matched;
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    pinBuffer='';
+    initApp();
+  } else {
+    document.getElementById('loginError').textContent='Incorrect PIN. Try again.';
+    setTimeout(()=>{ pinBuffer=''; renderPinDots(); }, 400);
+  }
+}
+function logout(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  currentRole = null;
+  pinBuffer=''; renderPinDots();
+}
+buildKeypad(); renderPinDots();
+
+/* ============ HAPTICS ============ */
+function haptic(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms||8); }catch(e){} }
+
+/* ============ NAV ============ */
+const MORE_PAGES = ['dividends','notices','reports','settings','welfare','fines','meetings','rotation','trash','elections','activitylog','agm','about'];
+const MORE_ITEMS = [
+  {page:'welfare',   ic:'🩹', label:'Welfare Fund'},
+  {page:'fines',     ic:'⚠️', label:'Fines & Penalties'},
+  {page:'meetings',  ic:'🗓️', label:'Meetings'},
+  {page:'rotation',  ic:'🔄', label:'Merry-Go-Round'},
+  {page:'elections', ic:'🗳️', label:'Elections'},
+  {page:'dividends', ic:'📊', label:'Dividends'},
+  {page:'agm',       ic:'📑', label:'AGM Report'},
+  {page:'notices',   ic:'📣', label:'Notices'},
+  {page:'reports',   ic:'🧾', label:'Reports'},
+  {page:'activitylog', ic:'📜', label:'Activity Log'},
+  {page:'trash',     ic:'🗑️', label:'Trash'},
+  {page:'about',     ic:'ℹ️', label:'About'},
+  {page:'settings',  ic:'⚙️', label:'Settings'}
+];
+function switchPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('nav.bottombar button').forEach(b=>b.classList.remove('active'));
+  const target = MORE_PAGES.includes(page) ? 'more' : page;
+  const btn = document.querySelector(`nav.bottombar button[data-page="${target}"]`);
+  if(btn) btn.classList.add('active');
+  renderAll();
+  updateFabVisibility();
+}
+function openMoreSheet(){
+  haptic();
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>More</h3>
+    ${MORE_ITEMS.map(it=>`<div class="more-sheet-item" onclick="switchPage('${it.page}'); closeModal();"><span class="ic">${it.ic}</span>${it.label}</div>`).join('')}
+    <div class="more-sheet-item" onclick="closeModal(); logout();"><span class="ic">🚪</span>Log out</div>
+  `);
+}
+document.getElementById('bottomNav').addEventListener('click', e=>{
+  const btn = e.target.closest('button[data-page]');
+  if(!btn) return;
+  haptic();
+  if(btn.dataset.page==='more'){ openMoreSheet(); return; }
+  switchPage(btn.dataset.page);
+});
+
+/* ============ INIT ============ */
+function initApp(){
+  document.getElementById('todayDate').textContent = fmtDate(new Date());
+  document.getElementById('interestRate').value = interestRate;
+  const agmYearSel = document.getElementById('agmYear');
+  if(agmYearSel && agmYearSel.options.length===0){
+    const y = new Date().getFullYear();
+    for(let i=0;i<5;i++){ const opt = document.createElement('option'); opt.value = y-i; opt.textContent = y-i; agmYearSel.appendChild(opt); }
+  }
+  const roleSub = document.querySelector('.brand-text .sub');
+  if(roleSub) roleSub.textContent = roles[currentRole].label + (currentRole==='member' ? ' · View Only' : ' · Office Register');
+  autoFlagOverdueLoans();
+  purgeOldTrash();
+  renderAll();
+  updateFabVisibility();
+  applyRoleGating();
+  checkDueReminders();
+  updateReminderPermissionUI();
+}
+function applyRoleGating(){
+  // Settings: admin-only sections
+  document.querySelectorAll('.admin-only').forEach(el=>{
+    el.style.display = can('canAdmin') ? '' : 'none';
+  });
+  document.querySelectorAll('.finance-only').forEach(el=>{
+    el.style.display = can('canFinance') ? '' : 'none';
+  });
+  const changePinPanel = document.getElementById('changePinPanel');
+  if(changePinPanel) changePinPanel.style.display = currentRole==='member' ? 'none' : '';
+  const roleLabel = document.getElementById('roleLabel');
+  if(roleLabel) roleLabel.textContent = 'Logged in as ' + roles[currentRole].label;
+  if(can('canAdmin')) renderOfficerPins();
+}
+/* ============ DUE-DATE REMINDERS (local, best-effort) ============ */
+// Note: these fire only while the app is open on this device — there is no
+// server pushing notifications when the app/browser is fully closed.
+function updateReminderPermissionUI(){
+  const box = document.getElementById('reminderPermissionBox');
+  if(!box) return;
+  if(!('Notification' in window)){ box.innerHTML = '<p style="font-size:12px;color:var(--text2);">Notifications aren\'t supported on this browser.</p>'; return; }
+  if(Notification.permission==='granted'){
+    box.innerHTML = '<p style="font-size:12px;color:var(--green);">✓ Reminders enabled on this device.</p>';
+  } else if(Notification.permission==='denied'){
+    box.innerHTML = '<p style="font-size:12px;color:var(--text2);">Notifications are blocked for this site in your browser settings.</p>';
+  } else {
+    box.innerHTML = '<button class="btn small green" onclick="enableReminders()">Enable due-date reminders</button>';
+  }
+}
+function enableReminders(){
+  if(!('Notification' in window)){ toast('Not supported on this browser'); return; }
+  Notification.requestPermission().then(()=>{ updateReminderPermissionUI(); checkDueReminders(true); });
+}
+function checkDueReminders(force){
+  if(!('Notification' in window) || Notification.permission!=='granted') return;
+  const lastCheck = DB.get('lastReminderCheck', null);
+  const todayKey = new Date().toDateString();
+  if(!force && lastCheck === todayKey) return;
+  DB.set('lastReminderCheck', todayKey);
+
+  const in3days = new Date(); in3days.setDate(in3days.getDate()+3);
+  const now = new Date();
+  let dueSoon = 0, overdue = 0;
+  loans.filter(l=>l.status==='approved'||l.status==='defaulting').forEach(l=>{
+    const prog = installmentProgress(l);
+    if(!prog || !prog.next) return;
+    const due = new Date(prog.next.dueDate);
+    if(due < now) overdue++;
+    else if(due <= in3days) dueSoon++;
+  });
+  if(overdue>0 || dueSoon>0){
+    const parts = [];
+    if(overdue>0) parts.push(overdue+' loan(s) overdue');
+    if(dueSoon>0) parts.push(dueSoon+' due within 3 days');
+    try{
+      new Notification('Pioneer KBS — loan reminders', { body: parts.join(', ') + '. Open the app to review.' });
+    }catch(e){}
+  }
+}
+
+function renderAll(){
+  renderDashboard();
+  renderMembers();
+  renderContributions();
+  renderLoans();
+  renderNotices();
+  renderWelfare();
+  renderFines();
+  renderMeetings();
+  renderRotation();
+  renderTrash();
+  renderElections();
+  renderActivityLog();
+}
+
+/* ============ HELPERS: member lookups ============ */
+function memberById(id){ return members.find(m=>m.id===id); }
+function memberSavingsBalance(id){
+  return contributions.filter(c=>c.memberId===id).reduce((sum,c)=> sum + (c.type==='deposit'? c.amount : -c.amount), 0);
+}
+function loanBalance(loan){
+  const payable = loan.amount + (loan.amount * (loan.interestRate/100));
+  const paid = (loan.repayments||[]).reduce((s,r)=>s+r.amount,0);
+  return Math.max(0, payable - paid);
+}
+function generateInstallments(amount, interestRate, count, frequency, startDate){
+  const payable = amount + (amount * (interestRate/100));
+  const n = Math.max(1, count);
+  const base = Math.floor(payable / n);
+  const installments = [];
+  let running = 0;
+  const start = new Date(startDate);
+  for(let i=1;i<=n;i++){
+    const due = new Date(start);
+    if(frequency==='weekly') due.setDate(due.getDate() + 7*i);
+    else due.setMonth(due.getMonth() + i);
+    const amt = (i===n) ? (payable - running) : base;
+    running += amt;
+    installments.push({ number: i, dueDate: due.toISOString().slice(0,10), amount: Math.round(amt) });
+  }
+  return installments;
+}
+function installmentProgress(loan){
+  if(!loan.installments || loan.installments.length===0) return null;
+  const paid = (loan.repayments||[]).reduce((s,r)=>s+r.amount,0);
+  let running = 0, coveredCount = 0, next = null;
+  for(const inst of loan.installments){
+    running += inst.amount;
+    if(paid >= running) coveredCount++;
+    else if(!next) next = inst;
+  }
+  return { total: loan.installments.length, covered: coveredCount, next };
+}
+
+/* ============ SELF-SERVICE IDENTITY (shared Member PIN) ============ */
+function ensureMemberIdentity(onReady){
+  if(currentRole !== 'member'){ onReady(); return; }
+  if(currentMemberId && memberById(currentMemberId)){ onReady(); return; }
+  const active = members.filter(m=>m.status==='active');
+  if(active.length===0){ toast('No active members registered yet'); return; }
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>Who are you?</h3>
+    <p style="font-size:12.5px;color:var(--text2);margin-bottom:12px;">Select your name so the sacco office knows who this action belongs to. You won't be asked again this session.</p>
+    <div class="field"><label>Your name</label>
+      <select id="identity_member">${active.map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}</select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="confirmIdentity()">Continue</button>
+    </div>
+  `);
+  window._identityCallback = onReady;
+}
+function confirmIdentity(){
+  currentMemberId = val('identity_member');
+  closeModal();
+  if(window._identityCallback){ const cb = window._identityCallback; window._identityCallback = null; cb(); }
+}
+
+/* ============ DASHBOARD ============ */
+function renderDashboard(){
+  const reminderEl = document.getElementById('backupReminder');
+  if(reminderEl){
+    const daysSince = lastBackupAt ? Math.floor((Date.now()-new Date(lastBackupAt).getTime())/(1000*60*60*24)) : null;
+    if(daysSince===null || daysSince>=14){
+      reminderEl.innerHTML = `
+        <div class="backup-banner">
+          <div>
+            <div class="bb-title">${daysSince===null? 'No backup taken yet' : 'Backup is '+daysSince+' days old'}</div>
+            <div class="bb-sub">Trash protects against accidental deletes — a backup file protects against a lost or reset phone.</div>
+          </div>
+          <button class="btn small green" onclick="switchPage('settings')">Back up now</button>
+        </div>`;
+    } else {
+      reminderEl.innerHTML = '';
+    }
+  }
+  const totalMembers = members.length;
+  const activeMembers = members.filter(m=>m.status==='active').length;
+  const totalSavings = contributions.reduce((s,c)=> s + (c.type==='deposit'? c.amount : -c.amount), 0);
+  const activeLoans = loans.filter(l=>l.status==='approved'||l.status==='defaulting');
+  const totalLoanOut = activeLoans.reduce((s,l)=>s+loanBalance(l),0);
+  const defaulters = loans.filter(l=>l.status==='defaulting').length;
+  const todayStr = new Date().toDateString();
+  const todayCollections = contributions.filter(c=>c.type==='deposit' && new Date(c.date).toDateString()===todayStr).reduce((s,c)=>s+c.amount,0);
+  const finesOutstanding = fines.filter(x=>!x.paid).reduce((s,x)=>s+x.amount,0);
+
+  document.getElementById('statsHero').innerHTML = `
+    <div class="stat-hero">
+      <div class="sh-top"><span class="sh-icon">💰</span><span class="sh-label">Total Savings</span></div>
+      <div class="sh-value">${fmtKsh(totalSavings)}</div>
+    </div>
+    <div class="stat-hero">
+      <div class="sh-top"><span class="sh-icon">🩹</span><span class="sh-label">Welfare Fund</span></div>
+      <div class="sh-value">${fmtKsh(welfareBalance())}</div>
+    </div>
+  `;
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card"><div class="stat-label">👥 Members</div><div class="stat-value">${totalMembers}</div></div>
+    <div class="stat-card"><div class="stat-label">🏍️ Active Riders</div><div class="stat-value">${activeMembers}</div></div>
+    <div class="stat-card"><div class="stat-label">📋 Loans Outstanding</div><div class="stat-value">${fmtKsh(totalLoanOut)}</div></div>
+    <div class="stat-card ${defaulters>0?'alert':''}"><div class="stat-label">⛔ Defaulters</div><div class="stat-value">${defaulters}</div></div>
+    <div class="stat-card ${finesOutstanding>0?'alert':''}"><div class="stat-label">⚠️ Fines Outstanding</div><div class="stat-value">${fmtKsh(finesOutstanding)}</div></div>
+    <div class="stat-card"><div class="stat-label">📅 Today's Collections</div><div class="stat-value">${fmtKsh(todayCollections)}</div></div>
+  `;
+
+  drawSavingsChart();
+  drawLoanChart();
+
+  const recent = [...contributions].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5);
+  document.getElementById('recentContrib').innerHTML = recent.length ? recent.map(c=>{
+    const m = memberById(c.memberId);
+    return `<div class="mini-row"><span class="name">${m? m.name : 'Unknown'} <span style="color:var(--text2);font-weight:400;">— ${c.type}</span></span><span class="val">${fmtKsh(c.amount)}</span></div>`;
+  }).join('') : '<div class="empty-note">No savings recorded yet.</div>';
+
+  const atRisk = loans.filter(l=>l.status==='defaulting' || l.status==='pending');
+  document.getElementById('loanAlerts').innerHTML = atRisk.length ? atRisk.map(l=>{
+    const m = memberById(l.memberId);
+    return `<div class="mini-row"><span class="name">${m? m.name:'Unknown'}</span><span class="val stamp ${l.status}">${l.status}</span></div>`;
+  }).join('') : '<div class="empty-note">No loans need attention right now.</div>';
+}
+
+/* ============ CANVAS CHARTS (no external library, works offline) ============ */
+function fitCanvas(canvas){
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const h = canvas.getAttribute('height') || 160;
+  canvas.width = rect.width * dpr;
+  canvas.height = h * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return {ctx, w: rect.width, h: Number(h)};
+}
+function chartColors(){
+  const isLight = document.body.classList.contains('light');
+  return { grid: isLight? 'rgba(0,0,0,.08)':'rgba(255,255,255,.08)', text: isLight? 'rgba(11,11,15,.5)':'rgba(255,255,255,.5)' };
+}
+function drawSavingsChart(){
+  const canvas = document.getElementById('savingsChart');
+  if(!canvas) return;
+  const {ctx, w, h} = fitCanvas(canvas);
+  ctx.clearRect(0,0,w,h);
+  const col = chartColors();
+
+  // build last 6 months net savings, cumulative
+  const months = [];
+  const now = new Date();
+  for(let i=5;i>=0;i--){
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    months.push({label: d.toLocaleDateString('en-GB',{month:'short'}), y: d.getFullYear(), m: d.getMonth()});
+  }
+  let running = 0;
+  const cumBefore = contributions.filter(c=>{
+    const d = new Date(c.date);
+    return d < new Date(months[0].y, months[0].m, 1);
+  }).reduce((s,c)=>s+(c.type==='deposit'?c.amount:-c.amount),0);
+  running = cumBefore;
+  const points = months.map(mo=>{
+    const monthTotal = contributions.filter(c=>{
+      const d = new Date(c.date);
+      return d.getFullYear()===mo.y && d.getMonth()===mo.m;
+    }).reduce((s,c)=>s+(c.type==='deposit'?c.amount:-c.amount),0);
+    running += monthTotal;
+    return {label: mo.label, value: running};
+  });
+
+  const padL=44, padR=10, padT=14, padB=24;
+  const plotW = w-padL-padR, plotH = h-padT-padB;
+  const maxV = Math.max(...points.map(p=>p.value), 1);
+  const minV = Math.min(...points.map(p=>p.value), 0);
+  const range = (maxV-minV) || 1;
+
+  // grid lines
+  ctx.strokeStyle = col.grid; ctx.lineWidth = 1; ctx.font='10px Barlow';
+  ctx.fillStyle = col.text;
+  for(let i=0;i<=3;i++){
+    const y = padT + plotH*i/3;
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+    const val = maxV - (range*i/3);
+    ctx.fillText(Math.round(val/1000)+'k', 2, y+3);
+  }
+  // line
+  ctx.strokeStyle = '#FF6B00'; ctx.lineWidth = 2.5; ctx.beginPath();
+  points.forEach((p,i)=>{
+    const x = padL + plotW*i/(points.length-1);
+    const y = padT + plotH*(1-(p.value-minV)/range);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  // dots + labels
+  points.forEach((p,i)=>{
+    const x = padL + plotW*i/(points.length-1);
+    const y = padT + plotH*(1-(p.value-minV)/range);
+    ctx.fillStyle = '#FF6B00';
+    ctx.beginPath(); ctx.arc(x,y,3,0,7); ctx.fill();
+    ctx.fillStyle = col.text; ctx.textAlign='center';
+    ctx.fillText(p.label, x, h-6);
+  });
+  ctx.textAlign='left';
+}
+function drawLoanChart(){
+  const canvas = document.getElementById('loanChart');
+  if(!canvas) return;
+  const {ctx, w, h} = fitCanvas(canvas);
+  ctx.clearRect(0,0,w,h);
+  const col = chartColors();
+
+  const statuses = ['pending','approved','paid','defaulting','rejected'];
+  const colors = {pending:'#FF6B00', approved:'#22C55E', paid:'#3B82F6', defaulting:'#EF4444', rejected:'#6B7280'};
+  const counts = statuses.map(s=> loans.filter(l=>l.status===s).length);
+  const maxC = Math.max(...counts, 1);
+
+  const padL=10, padR=10, padT=10, padB=24;
+  const plotW = w-padL-padR, plotH = h-padT-padB;
+  const barW = plotW/statuses.length*0.55;
+  const gap = plotW/statuses.length;
+
+  ctx.font='10px Barlow';
+  statuses.forEach((s,i)=>{
+    const x = padL + gap*i + (gap-barW)/2;
+    const barH = counts[i]/maxC * plotH;
+    const y = padT + plotH - barH;
+    ctx.fillStyle = colors[s];
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(x,y,barW,barH,4) : ctx.rect(x,y,barW,barH);
+    ctx.fill();
+    ctx.fillStyle = col.text; ctx.textAlign='center';
+    ctx.fillText(counts[i], x+barW/2, y-4>padT? y-4 : padT+10);
+    ctx.fillText(s, x+barW/2, h-8);
+  });
+  ctx.textAlign='left';
+}
+window.addEventListener('resize', ()=>{ if(document.getElementById('page-dashboard').classList.contains('active')){ drawSavingsChart(); drawLoanChart(); } });
+
+/* ============ MEMBERS ============ */
+function renderMembers(){
+  const search = (document.getElementById('memberSearch').value||'').toLowerCase();
+  const filter = document.getElementById('memberFilter').value;
+  let list = members.filter(m=>{
+    const matchSearch = !search || (m.name+m.idNumber+m.motoReg+m.phone).toLowerCase().includes(search);
+    const matchFilter = filter==='all' || m.status===filter;
+    return matchSearch && matchFilter;
+  });
+  document.getElementById('memberCount').textContent = members.length + ' registered';
+  document.getElementById('membersList').innerHTML = list.length ? list.map(m=>{
+    const bal = memberSavingsBalance(m.id);
+    const goal = Number(m.goalAmount)||0;
+    const pct = goal>0 ? Math.min(100, Math.round((bal/goal)*100)) : 0;
+    return `<div class="rcard">
+      <div class="rcard-main">
+        <div class="rcard-title">${m.name}</div>
+        <div class="rcard-sub">${m.motoReg || 'No reg'} &middot; ${m.route || 'No route'}</div>
+        <div class="rcard-meta">ID ${m.idNumber || '—'} &middot; ${m.phone || '—'} &middot; joined ${fmtDate(m.joinDate)}</div>
+        ${goal>0 ? `<div class="goal-wrap">
+          <div class="goal-bar-track"><div class="goal-bar-fill" style="width:${pct}%;"></div></div>
+          <div class="goal-label"><span>${pct}% of savings goal</span><span>${fmtKsh(goal)} target</span></div>
+        </div>` : ''}
+      </div>
+      <div class="rcard-actions">
+        <span class="stamp ${m.status}">${m.status}</span>
+        <div class="rcard-amount">${fmtKsh(bal)}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
+          ${m.phone ? `<a class="btn small wa" style="text-decoration:none;" target="_blank" href="${waLink(m.phone,'Habari '+m.name+', this is Pioneer Kapseret Boda Boda Sacco.')}">Chat</a>` : ''}
+          <button class="btn small ghost" onclick="statementModal('${m.id}')">Statement</button>
+          <button class="btn small ghost" onclick="idCardModal('${m.id}')">ID Card</button>
+          ${can('canMembers') ? `<button class="btn small ghost" onclick="editMember('${m.id}')">Edit</button>` : ''}
+          ${can('canAdmin') ? `<button class="btn small danger" onclick="deleteMember('${m.id}')">Del</button>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty-note" style="color:rgba(247,243,232,0.6);">No members match. Tap + to register one.</div>';
+
+  const filterSel = document.getElementById('contribMemberFilter');
+  const current = filterSel.value;
+  filterSel.innerHTML = '<option value="all">All members</option>' + members.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+  filterSel.value = current || 'all';
+}
+document.getElementById('memberSearch').addEventListener('input', renderMembers);
+document.getElementById('memberFilter').addEventListener('change', renderMembers);
+
+function memberModal(existing){
+  const isEdit = !!existing;
+  const m = existing || {id:uid(), name:'', idNumber:'', phone:'', motoReg:'', route:'', joinDate: new Date().toISOString().slice(0,10), status:'active', goalAmount:''};
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>${isEdit?'Edit Member':'Register Member'}</h3>
+    <div class="field"><label>Full name</label><input id="f_name" value="${m.name}"></div>
+    <div class="field"><label>National ID number</label><input id="f_idnum" value="${m.idNumber}"></div>
+    <div class="field"><label>Phone number</label><input id="f_phone" value="${m.phone}" placeholder="07XX XXX XXX"></div>
+    <div class="field"><label>Motorcycle registration</label><input id="f_moto" value="${m.motoReg}" placeholder="KMEA 123X"></div>
+    <div class="field"><label>Route / stage</label><input id="f_route" value="${m.route}" placeholder="Kapseret - Cheptiret"></div>
+    <div class="field"><label>Join date</label><input type="date" id="f_join" value="${m.joinDate}"></div>
+    <div class="field"><label>Savings goal (KSh, optional)</label><input type="number" id="f_goal" value="${m.goalAmount||''}" placeholder="e.g. 50000"></div>
+    <div class="field"><label>Status</label>
+      <select id="f_status">
+        <option value="active" ${m.status==='active'?'selected':''}>Active</option>
+        <option value="inactive" ${m.status==='inactive'?'selected':''}>Inactive</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="saveMember('${m.id}', ${isEdit})">Save member</button>
+    </div>
+  `);
+}
+function saveMember(id, isEdit){
+  if(!can('canMembers')){ toast('Only the Chairman can do this'); return; }
+  const data = {
+    id, name: val('f_name'), idNumber: val('f_idnum'), phone: val('f_phone'),
+    motoReg: val('f_moto').toUpperCase(), route: val('f_route'),
+    joinDate: val('f_join'), status: val('f_status'), goalAmount: val('f_goal')
+  };
+  if(!data.name){ toast('Enter a name'); return; }
+  if(isEdit){
+    const i = members.findIndex(m=>m.id===id);
+    members[i] = data;
+  } else {
+    members.push(data);
+  }
+  logActivity(isEdit?'Member edited':'Member registered', data.name);
+  saveAll(); closeModal(); renderAll(); toast('Member saved');
+}
+function editMember(id){ memberModal(memberById(id)); }
+function deleteMember(id){
+  if(!can('canAdmin')){ toast('Only the Chairman can do this'); return; }
+  const m = memberById(id);
+  if(!m) return;
+  if(!confirm('Move '+m.name+' to Trash? Their savings/loan history stays intact and this can be undone from Trash.')) return;
+  moveToTrash('member', m.name, m);
+  members = members.filter(x=>x.id!==id);
+  logActivity('Member removed', m.name);
+  saveAll(); renderAll(); toast('Member moved to Trash');
+}
+
+/* ============ PRINTABLE STATEMENT ============ */
+function statementModal(memberId){
+  const m = memberById(memberId);
+  if(!m) return;
+  const myContribs = contributions.filter(c=>c.memberId===memberId).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const myLoans = loans.filter(l=>l.memberId===memberId);
+  const bal = memberSavingsBalance(memberId);
+
+  const contribRows = myContribs.map(c=>`<tr><td>${fmtDate(c.date)}</td><td>${c.type}</td><td>${c.method}</td><td>${c.type==='deposit'?'+':'-'}${fmtKsh(c.amount)}</td></tr>`).join('') || '<tr><td colspan="4">No savings entries</td></tr>';
+  const loanRows = myLoans.map(l=>`<tr><td>${fmtDate(l.dateIssued)}</td><td>${fmtKsh(l.amount)}</td><td>${l.status}</td><td>${fmtKsh(loanBalance(l))}</td></tr>`).join('') || '<tr><td colspan="4">No loans</td></tr>';
+
+  const html = `
+    <div class="stmt-head">
+      <h2>PIONEER KAPSERET BODA BODA SACCO</h2>
+      <div class="sub">Member Statement &middot; Generated ${fmtDate(new Date())}</div>
+    </div>
+    <p style="font-size:13px;margin-bottom:4px;"><strong>${m.name}</strong> &middot; ID ${m.idNumber||'—'} &middot; ${m.motoReg||'—'}</p>
+    <p style="font-size:13px;margin-bottom:14px;">Member since ${fmtDate(m.joinDate)} &middot; Current savings balance: <strong>${fmtKsh(bal)}</strong></p>
+    <h4 style="font-family:'Barlow Condensed',sans-serif;font-size:16px;margin-bottom:4px;">Savings History</h4>
+    <table class="stmt-table"><thead><tr><th>Date</th><th>Type</th><th>Method</th><th>Amount</th></tr></thead><tbody>${contribRows}</tbody></table>
+    <h4 style="font-family:'Barlow Condensed',sans-serif;font-size:16px;margin:16px 0 4px;">Loan History</h4>
+    <table class="stmt-table"><thead><tr><th>Issued</th><th>Amount</th><th>Status</th><th>Balance</th></tr></thead><tbody>${loanRows}</tbody></table>
+  `;
+  document.getElementById('printArea').innerHTML = html;
+
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>Statement — ${m.name}</h3>
+    <div style="max-height:50vh;overflow-y:auto;background:var(--bg3);border-radius:var(--radius-sm);padding:12px;color:var(--text);">${html}</div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Close</button>
+      <button class="btn green" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  `);
+}
+
+/* ============ DIGITAL ID CARD ============ */
+function idCardModal(memberId){
+  const m = memberById(memberId);
+  if(!m) return;
+  const initials = m.name.split(' ').filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+  const qrData = `KBS-MEMBER|${m.name}|${m.idNumber||''}|${m.motoReg||''}|${m.id}`;
+  const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=140x140&margin=0&data=' + encodeURIComponent(qrData);
+
+  const cardHtml = `
+    <div class="id-card">
+      <div class="id-card-top">
+        <div class="id-card-brand"><div class="badge"><img src="logo.png" alt="KBS"></div><div class="name">Pioneer Kapseret Sacco</div></div>
+        <div class="id-card-status">${m.status}</div>
+      </div>
+      <div class="id-card-mid">
+        <div class="id-card-avatar">${initials||'?'}</div>
+        <div class="id-card-info">
+          <div class="id-name">${m.name}</div>
+          <div class="id-sub">Member since ${fmtDate(m.joinDate)}</div>
+        </div>
+      </div>
+      <div class="id-card-bottom">
+        <div class="id-card-fields">
+          ID: <b>${m.idNumber||'—'}</b><br>
+          Moto: <b>${m.motoReg||'—'}</b><br>
+          Route: <b>${m.route||'—'}</b>
+        </div>
+        <div class="id-card-qr"><img src="${qrUrl}" alt="QR"></div>
+      </div>
+    </div>
+  `;
+  document.getElementById('printArea').innerHTML = cardHtml;
+
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>ID Card — ${m.name}</h3>
+    ${cardHtml}
+    <p style="font-size:11px;color:var(--text2);text-align:center;margin-top:10px;">QR code needs an internet connection to load and to scan-verify.</p>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Close</button>
+      <button class="btn green" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  `);
+}
+
+/* ============ CONTRIBUTIONS ============ */
+function renderContributions(){
+  const memberFilter = document.getElementById('contribMemberFilter').value;
+  const typeFilter = document.getElementById('contribTypeFilter').value;
+  let list = [...contributions].sort((a,b)=>new Date(b.date)-new Date(a.date)).filter(c=>{
+    return (memberFilter==='all'||c.memberId===memberFilter) && (typeFilter==='all'||c.type===typeFilter);
+  });
+  document.getElementById('contribCount').textContent = contributions.length + ' entries';
+  document.getElementById('contribList').innerHTML = list.length ? list.map(c=>{
+    const m = memberById(c.memberId);
+    return `<div class="rcard">
+      <div class="rcard-main">
+        <div class="rcard-title">${m? m.name : 'Unknown member'}</div>
+        <div class="rcard-sub">${fmtDate(c.date)} &middot; ${c.method}</div>
+        ${c.note? `<div class="rcard-meta">${c.note}</div>`:''}
+      </div>
+      <div class="rcard-actions">
+        <span class="stamp ${c.type==='deposit'?'paid':'pending'}">${c.type}</span>
+        <div class="rcard-amount">${c.type==='deposit'?'+':'-'}${fmtKsh(c.amount)}</div>
+        <button class="btn small danger" onclick="deleteContribution('${c.id}')" ${can('canFinance')?'':'style="display:none;"'}>Del</button>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty-note" style="color:rgba(247,243,232,0.6);">No entries. Tap + to record savings or a withdrawal.</div>';
+}
+document.getElementById('contribMemberFilter').addEventListener('change', renderContributions);
+document.getElementById('contribTypeFilter').addEventListener('change', renderContributions);
+
+function contributionModal(){
+  if(members.length===0){ toast('Register a member first'); return; }
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>Record Savings Entry</h3>
+    <div class="field"><label>Member</label>
+      <select id="c_member">${members.map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}</select>
+    </div>
+    <div class="field"><label>Type</label>
+      <select id="c_type"><option value="deposit">Deposit (saving)</option><option value="withdrawal">Withdrawal</option></select>
+    </div>
+    <div class="field"><label>Amount (KSh)</label><input type="number" id="c_amount" placeholder="500"></div>
+    <div class="field"><label>Method</label>
+      <select id="c_method"><option value="Cash">Cash</option><option value="M-Pesa">M-Pesa</option></select>
+    </div>
+    <div class="field"><label>Date</label><input type="date" id="c_date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="field"><label>Note (optional)</label><input id="c_note" placeholder="e.g. weekly contribution"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="saveContribution()">Save entry</button>
+    </div>
+  `);
+}
+function saveContribution(){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const amount = Number(val('c_amount'));
+  if(!amount || amount<=0){ toast('Enter a valid amount'); return; }
+  const memberId = val('c_member'), type = val('c_type');
+  contributions.push({
+    id: uid(), memberId, type, amount,
+    method: val('c_method'), date: val('c_date'), note: val('c_note')
+  });
+  const m = memberById(memberId);
+  logActivity(type==='deposit'?'Deposit recorded':'Withdrawal recorded', (m?m.name:'Unknown')+' — '+fmtKsh(amount));
+  saveAll(); closeModal(); renderAll(); toast('Entry recorded');
+}
+function deleteContribution(id){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const c = contributions.find(x=>x.id===id);
+  if(!c) return;
+  const m = memberById(c.memberId);
+  if(!confirm('Move this savings entry to Trash?')) return;
+  moveToTrash('contribution', (m?m.name:'Unknown')+' — '+fmtKsh(c.amount)+' '+c.type, c);
+  contributions = contributions.filter(x=>x.id!==id);
+  saveAll(); renderAll(); toast('Entry moved to Trash');
+}
+
+/* ============ LOANS ============ */
+function renderLoans(){
+  const filter = document.getElementById('loanFilter').value;
+  let list = loans.filter(l=> filter==='all' || l.status===filter);
+  list = [...list].sort((a,b)=>new Date(b.dateIssued)-new Date(a.dateIssued));
+  document.getElementById('loanCount').textContent = loans.length + ' total';
+  document.getElementById('loansList').innerHTML = list.length ? list.map(l=>{
+    const m = memberById(l.memberId);
+    const bal = loanBalance(l);
+    const prog = installmentProgress(l);
+    const reminderText = 'Habari '+(m?m.name:'')+', this is Pioneer Kapseret Boda Boda Sacco. You have an outstanding loan balance of '+fmtKsh(bal)+'. Kindly clear it or reach out to arrange a repayment plan. Asante.';
+    const financeActions = can('canFinance') ? `
+          ${l.status==='pending' ? `<button class="btn small green" onclick="setLoanStatus('${l.id}','approved')">Approve</button><button class="btn small danger" onclick="setLoanStatus('${l.id}','rejected')">Reject</button>` : ''}
+          ${(l.status==='approved') ? `<button class="btn small ghost" onclick="repayModal('${l.id}')">Repay</button><button class="btn small danger" onclick="setLoanStatus('${l.id}','defaulting')">Mark default</button>` : ''}
+          ${l.status==='defaulting' ? `<button class="btn small ghost" onclick="repayModal('${l.id}')">Repay</button>` : ''}
+    ` : '';
+    const reminderActions = (l.status==='defaulting' && m) ? `
+          <a class="btn small wa" style="text-decoration:none;" target="_blank" href="${waLink(m.phone, reminderText)}">WhatsApp</a>
+          <a class="btn small ghost" style="text-decoration:none;" href="sms:${m.phone}?body=${encodeURIComponent(reminderText)}">SMS</a>
+    ` : '';
+    const scheduleLine = prog ? `${prog.covered} of ${prog.total} installments${prog.next? ' &middot; next '+fmtKsh(prog.next.amount)+' due '+fmtDate(prog.next.dueDate) : ' &middot; fully scheduled'}` : (l.dueDate? 'due '+fmtDate(l.dueDate) : '');
+    return `<div class="rcard">
+      <div class="rcard-main">
+        <div class="rcard-title">${m? m.name : 'Unknown member'}</div>
+        <div class="rcard-sub">${fmtKsh(l.amount)} principal &middot; ${l.interestRate}% flat &middot; issued ${fmtDate(l.dateIssued)}</div>
+        <div class="rcard-meta">${l.purpose || 'No purpose noted'} ${l.guarantor? '&middot; guarantor: '+l.guarantor:''}</div>
+        ${scheduleLine ? `<div class="rcard-meta">${scheduleLine}</div>` : ''}
+      </div>
+      <div class="rcard-actions">
+        <span class="stamp ${l.status}">${l.status}</span>
+        <div class="rcard-amount">${fmtKsh(bal)} left</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
+          ${financeActions}${reminderActions}
+        </div>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty-note" style="color:rgba(247,243,232,0.6);">No loans in this filter.</div>';
+}
+document.getElementById('loanFilter').addEventListener('change', renderLoans);
+
+/* ============ OVERDUE AUTO-FLAG ============ */
+function autoFlagOverdueLoans(){
+  const today = new Date();
+  let changed = false;
+  loans.forEach(l=>{
+    if(l.status!=='approved') return;
+    const prog = installmentProgress(l);
+    const overdue = prog ? (prog.next && new Date(prog.next.dueDate) < today)
+                          : (l.dueDate && new Date(l.dueDate) < today);
+    if(overdue){ l.status = 'defaulting'; changed = true; }
+  });
+  if(changed) saveAll();
+}
+
+
+function loanModal(){
+  if(!can('canFinance') && currentRole!=='member'){ toast('Only the Chairman or a member can start this'); return; }
+  if(members.length===0){ toast('Register a member first'); return; }
+  if(currentRole==='member'){
+    ensureMemberIdentity(()=>openLoanForm(currentMemberId, true));
+  } else {
+    openLoanForm(null, false);
+  }
+}
+function openLoanForm(lockedMemberId, isSelfService){
+  const m = lockedMemberId ? memberById(lockedMemberId) : null;
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>${isSelfService ? 'Apply for a Loan' : 'New Loan Application'}</h3>
+    ${isSelfService ? `
+      <p style="font-size:12.5px;color:var(--text2);margin-bottom:12px;">Applying as <strong>${m? m.name : ''}</strong>. Your application goes to the Chairman for approval.</p>
+      <input type="hidden" id="l_member" value="${lockedMemberId}">
+    ` : `
+      <div class="field"><label>Member</label>
+        <select id="l_member">${members.map(mm=>`<option value="${mm.id}">${mm.name}</option>`).join('')}</select>
+      </div>
+    `}
+    <div class="field"><label>Amount (KSh)</label><input type="number" id="l_amount" placeholder="10000"></div>
+    <div class="field"><label>Interest rate (% flat)</label><input type="number" id="l_rate" value="${interestRate}" ${isSelfService?'readonly':''}></div>
+    <div class="field"><label>Purpose</label><input id="l_purpose" placeholder="e.g. spare parts, insurance renewal"></div>
+    <div class="field"><label>Guarantor (member name)</label><input id="l_guarantor"></div>
+    <div class="field"><label>Date issued</label><input type="date" id="l_date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="field"><label>Repayment period</label>
+      <select id="l_count">
+        <option value="1">Lump sum (1 payment)</option>
+        <option value="2">2 installments</option>
+        <option value="3">3 installments</option>
+        <option value="4">4 installments</option>
+        <option value="6">6 installments</option>
+        <option value="12">12 installments</option>
+      </select>
+    </div>
+    <div class="field"><label>Frequency</label>
+      <select id="l_freq"><option value="monthly">Monthly</option><option value="weekly">Weekly</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="saveLoan(${isSelfService})">Submit application</button>
+    </div>
+  `);
+}
+function saveLoan(isSelfService){
+  if(!can('canFinance') && !(isSelfService && currentRole==='member')){ toast('Only the Chairman or a member can do this'); return; }
+  const amount = Number(val('l_amount'));
+  if(!amount || amount<=0){ toast('Enter a valid amount'); return; }
+  const rate = Number(val('l_rate'))||0;
+  const count = Number(val('l_count'))||1;
+  const freq = val('l_freq');
+  const dateIssued = val('l_date');
+  const memberId = val('l_member');
+  const installments = generateInstallments(amount, rate, count, freq, dateIssued);
+  loans.push({
+    id: uid(), memberId, amount, interestRate: rate,
+    purpose: val('l_purpose'), guarantor: val('l_guarantor'), dateIssued,
+    dueDate: installments[installments.length-1].dueDate,
+    installments,
+    status:'pending', repayments: [],
+    appliedBy: isSelfService ? 'member' : (currentRole? roles[currentRole].label : 'office')
+  });
+  const m = memberById(memberId);
+  logActivity('Loan applied', (m?m.name:'Unknown')+' — '+fmtKsh(amount)+(isSelfService?' (self-service)':''));
+  saveAll(); closeModal(); renderAll(); toast('Loan application submitted');
+}
+function setLoanStatus(id, status){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const l = loans.find(x=>x.id===id);
+  l.status = status;
+  const m = memberById(l.memberId);
+  logActivity('Loan '+status, (m?m.name:'Unknown')+' — '+fmtKsh(l.amount));
+  saveAll(); renderAll(); toast('Loan marked ' + status);
+}
+function repayModal(loanId){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const l = loans.find(x=>x.id===loanId);
+  const m = memberById(l.memberId);
+  const prog = installmentProgress(l);
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>Repayment — ${m? m.name:''}</h3>
+    <p style="font-size:12.5px;color:var(--text2);margin-bottom:12px;">Balance remaining: <strong>${fmtKsh(loanBalance(l))}</strong>${prog? '<br>Installments: '+prog.covered+' of '+prog.total+' covered'+(prog.next? ' · next '+fmtKsh(prog.next.amount)+' due '+fmtDate(prog.next.dueDate) : ''):''}</p>
+    <div class="field"><label>Amount (KSh)</label><input type="number" id="r_amount" placeholder="1000"></div>
+    <div class="field"><label>Date</label><input type="date" id="r_date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="saveRepayment('${loanId}')">Record repayment</button>
+    </div>
+  `);
+}
+function saveRepayment(loanId){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const amount = Number(val('r_amount'));
+  if(!amount || amount<=0){ toast('Enter a valid amount'); return; }
+  const l = loans.find(x=>x.id===loanId);
+  l.repayments = l.repayments || [];
+  l.repayments.push({amount, date: val('r_date')});
+  if(loanBalance(l) <= 0){ l.status = 'paid'; }
+  else if(l.status==='defaulting'){ /* stays defaulting until cleared, admin can re-check */ }
+  const m = memberById(l.memberId);
+  logActivity('Repayment recorded', (m?m.name:'Unknown')+' — '+fmtKsh(amount));
+  saveAll(); closeModal(); renderAll(); toast('Repayment recorded');
+}
+
+/* ============ NOTICES ============ */
+function renderNotices(){
+  const list = [...notices].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  document.getElementById('noticeCount').textContent = notices.length + ' posted';
+  document.getElementById('noticesList').innerHTML = list.length ? list.map(n=>`
+    <div class="notice-card">
+      <div class="notice-date">${fmtDate(n.date)}</div>
+      <div class="notice-text">${n.text}</div>
+      <div style="display:flex;gap:6px;margin-top:8px;">
+        <a class="btn small wa" style="text-decoration:none;" target="_blank" href="https://wa.me/?text=${encodeURIComponent('PIONEER KAPSERET BODA BODA SACCO NOTICE:\\n\\n'+n.text)}">Broadcast</a>
+        ${can('canNotices') ? `<button class="btn small danger" onclick="deleteNotice('${n.id}')">Delete</button>` : ''}
+      </div>
+    </div>
+  `).join('') : '<div class="empty-note" style="color:rgba(247,243,232,0.6);">No notices yet. Tap + to post one to members.</div>';
+}
+function noticeModal(){
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>Post a Notice</h3>
+    <div class="field"><label>Notice text</label><textarea id="n_text" placeholder="e.g. General meeting Saturday 10am at the stage office"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="saveNotice()">Post notice</button>
+    </div>
+  `);
+}
+function saveNotice(){
+  if(!can('canNotices')){ toast('Only the Chairman can do this'); return; }
+  const text = val('n_text');
+  if(!text){ toast('Write something first'); return; }
+  notices.push({id: uid(), text, date: new Date().toISOString()});
+  logActivity('Notice posted', text.slice(0,40));
+  saveAll(); closeModal(); renderAll(); toast('Notice posted');
+}
+function deleteNotice(id){
+  if(!can('canNotices')){ toast('Only the Chairman can do this'); return; }
+  const n = notices.find(x=>x.id===id);
+  if(!n) return;
+  if(!confirm('Move this notice to Trash?')) return;
+  moveToTrash('notice', n.text.slice(0,40), n);
+  notices = notices.filter(x=>x.id!==id);
+  saveAll(); renderAll(); toast('Notice moved to Trash');
+}
+
+/* ============ WELFARE FUND ============ */
+function welfareBalance(){
+  return welfareEntries.reduce((s,w)=> s + (w.type==='contribution'? w.amount : -w.amount), 0);
+}
+function renderWelfare(){
+  const filter = document.getElementById('welfareTypeFilter');
+  if(!filter) return;
+  const f = filter.value;
+  document.getElementById('welfareBalance').textContent = fmtKsh(welfareBalance()) + ' in fund';
+  let list = [...welfareEntries].sort((a,b)=>new Date(b.date)-new Date(a.date)).filter(w=> f==='all' || w.type===f);
+  document.getElementById('welfareList').innerHTML = list.length ? list.map(w=>{
+    const m = memberById(w.memberId);
+    return `<div class="rcard">
+      <div class="rcard-main">
+        <div class="rcard-title">${m? m.name : 'General'}</div>
+        <div class="rcard-sub">${fmtDate(w.date)}</div>
+        ${w.note? `<div class="rcard-meta">${w.note}</div>`:''}
+      </div>
+      <div class="rcard-actions">
+        <span class="stamp ${w.type==='contribution'?'paid':'pending'}">${w.type}</span>
+        <div class="rcard-amount">${w.type==='contribution'?'+':'-'}${fmtKsh(w.amount)}</div>
+        ${can('canFinance') ? `<button class="btn small danger" onclick="deleteWelfare('${w.id}')">Del</button>` : ''}
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty-note" style="color:rgba(247,243,232,0.6);">No welfare entries yet.</div>';
+}
+document.addEventListener('change', e=>{ if(e.target.id==='welfareTypeFilter') renderWelfare(); });
+function welfareModal(){
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>Welfare Fund Entry</h3>
+    <div class="field"><label>Type</label>
+      <select id="w_type"><option value="contribution">Contribution (into fund)</option><option value="payout">Payout (support to a member)</option></select>
+    </div>
+    <div class="field"><label>Member</label>
+      <select id="w_member">${members.map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}</select>
+    </div>
+    <div class="field"><label>Amount (KSh)</label><input type="number" id="w_amount" placeholder="200"></div>
+    <div class="field"><label>Date</label><input type="date" id="w_date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="field"><label>Note (e.g. reason for payout)</label><input id="w_note" placeholder="e.g. hospital support after accident"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="saveWelfare()">Save entry</button>
+    </div>
+  `);
+}
+function saveWelfare(){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const amount = Number(val('w_amount'));
+  if(!amount || amount<=0){ toast('Enter a valid amount'); return; }
+  const memberId = val('w_member'), type = val('w_type');
+  welfareEntries.push({ id: uid(), type, memberId, amount, date: val('w_date'), note: val('w_note') });
+  const m = memberById(memberId);
+  logActivity(type==='contribution'?'Welfare contribution':'Welfare payout', (m?m.name:'General')+' — '+fmtKsh(amount));
+  saveAll(); closeModal(); renderAll(); toast('Welfare entry saved');
+}
+function deleteWelfare(id){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const w = welfareEntries.find(x=>x.id===id);
+  if(!w) return;
+  const m = memberById(w.memberId);
+  if(!confirm('Move this welfare entry to Trash?')) return;
+  moveToTrash('welfare', (m?m.name:'General')+' — '+fmtKsh(w.amount)+' '+w.type, w);
+  welfareEntries = welfareEntries.filter(x=>x.id!==id);
+  saveAll(); renderAll(); toast('Entry moved to Trash');
+}
+
+/* ============ FINES & PENALTIES ============ */
+function renderFines(){
+  const filterEl = document.getElementById('finesFilter');
+  if(!filterEl) return;
+  const f = filterEl.value;
+  const outstanding = fines.filter(x=>!x.paid).reduce((s,x)=>s+x.amount,0);
+  document.getElementById('finesOutstanding').textContent = fmtKsh(outstanding) + ' outstanding';
+  let list = [...fines].sort((a,b)=>new Date(b.date)-new Date(a.date)).filter(x=> f==='all' || (f==='paid'? x.paid : !x.paid));
+  document.getElementById('finesList').innerHTML = list.length ? list.map(x=>{
+    const m = memberById(x.memberId);
+    return `<div class="rcard">
+      <div class="rcard-main">
+        <div class="rcard-title">${m? m.name : 'Unknown'}</div>
+        <div class="rcard-sub">${fmtDate(x.date)}</div>
+        <div class="rcard-meta">${x.reason||'No reason noted'}</div>
+      </div>
+      <div class="rcard-actions">
+        <span class="stamp ${x.paid?'paid':'pending'}">${x.paid?'paid':'unpaid'}</span>
+        <div class="rcard-amount">${fmtKsh(x.amount)}</div>
+        ${can('canFinance') ? `<div style="display:flex;gap:6px;">
+          ${!x.paid? `<button class="btn small green" onclick="toggleFinePaid('${x.id}')">Mark paid</button>`:''}
+          <button class="btn small danger" onclick="deleteFine('${x.id}')">Del</button>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty-note" style="color:rgba(247,243,232,0.6);">No fines recorded.</div>';
+}
+document.addEventListener('change', e=>{ if(e.target.id==='finesFilter') renderFines(); });
+function fineModal(){
+  if(members.length===0){ toast('Register a member first'); return; }
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>Add Fine</h3>
+    <div class="field"><label>Member</label>
+      <select id="fn_member">${members.map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}</select>
+    </div>
+    <div class="field"><label>Reason</label><input id="fn_reason" placeholder="e.g. missed meeting, no reflector jacket"></div>
+    <div class="field"><label>Amount (KSh)</label><input type="number" id="fn_amount" placeholder="100"></div>
+    <div class="field"><label>Date</label><input type="date" id="fn_date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="saveFine()">Save fine</button>
+    </div>
+  `);
+}
+function saveFine(){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const amount = Number(val('fn_amount'));
+  if(!amount || amount<=0){ toast('Enter a valid amount'); return; }
+  const memberId = val('fn_member');
+  fines.push({ id: uid(), memberId, reason: val('fn_reason'), amount, date: val('fn_date'), paid:false });
+  const m = memberById(memberId);
+  logActivity('Fine issued', (m?m.name:'Unknown')+' — '+fmtKsh(amount));
+  saveAll(); closeModal(); renderAll(); toast('Fine recorded');
+}
+function toggleFinePaid(id){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const f = fines.find(x=>x.id===id);
+  f.paid = true;
+  saveAll(); renderAll();
+}
+function deleteFine(id){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const f = fines.find(x=>x.id===id);
+  if(!f) return;
+  const m = memberById(f.memberId);
+  if(!confirm('Move this fine to Trash?')) return;
+  moveToTrash('fine', (m?m.name:'Unknown')+' — '+fmtKsh(f.amount), f);
+  fines = fines.filter(x=>x.id!==id);
+  saveAll(); renderAll(); toast('Fine moved to Trash');
+}
+
+/* ============ MEETINGS ============ */
+function renderMeetings(){
+  const list = [...meetings].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const meetingCount = document.getElementById('meetingCount');
+  if(meetingCount) meetingCount.textContent = meetings.length + ' held';
+  const wrap = document.getElementById('meetingsList');
+  if(!wrap) return;
+  wrap.innerHTML = list.length ? list.map(mt=>{
+    const activeTotal = members.filter(m=>m.status==='active').length;
+    return `<div class="rcard">
+      <div class="rcard-main">
+        <div class="rcard-title">${mt.topic || 'Sacco meeting'}</div>
+        <div class="rcard-sub">${fmtDate(mt.date)}</div>
+        <div class="rcard-meta">${mt.presentMemberIds.length} / ${activeTotal} active members present</div>
+      </div>
+      <div class="rcard-actions">
+        ${can('canMembers') ? `<button class="btn small danger" onclick="deleteMeeting('${mt.id}')">Del</button>` : ''}
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty-note" style="color:rgba(247,243,232,0.6);">No meetings logged yet.</div>';
+}
+function meetingModal(){
+  const activeMembers = members.filter(m=>m.status==='active');
+  if(activeMembers.length===0){ toast('Register an active member first'); return; }
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>New Meeting</h3>
+    <div class="field"><label>Date</label><input type="date" id="mt_date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="field"><label>Topic / agenda</label><input id="mt_topic" placeholder="e.g. Monthly general meeting"></div>
+    <div class="field"><label>Attendance — tick who is present</label>
+      <div style="max-height:220px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;">
+        ${activeMembers.map(m=>`<label style="display:flex;align-items:center;gap:8px;padding:6px 2px;font-size:13.5px;"><input type="checkbox" class="mt-present" value="${m.id}" checked style="width:auto;"> ${m.name}</label>`).join('')}
+      </div>
+    </div>
+    <div class="field"><label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="mt_finecheck" style="width:auto;"> Auto-fine absentees</label></div>
+    <div class="field"><label>Absence fine amount (KSh)</label><input type="number" id="mt_fineamount" placeholder="100"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="saveMeeting()">Save meeting</button>
+    </div>
+  `);
+}
+function saveMeeting(){
+  if(!can('canMembers')){ toast('Only the Chairman can do this'); return; }
+  const presentIds = Array.from(document.querySelectorAll('.mt-present:checked')).map(el=>el.value);
+  const meetingId = uid();
+  const topic = val('mt_topic');
+  meetings.push({ id: meetingId, date: val('mt_date'), topic, presentMemberIds: presentIds });
+  const fineOn = document.getElementById('mt_finecheck').checked;
+  const fineAmount = Number(val('mt_fineamount'))||0;
+  if(fineOn && fineAmount>0){
+    const activeMembers = members.filter(m=>m.status==='active');
+    activeMembers.filter(m=>!presentIds.includes(m.id)).forEach(m=>{
+      fines.push({ id: uid(), memberId: m.id, reason: 'Absent from meeting on '+fmtDate(val('mt_date')), amount: fineAmount, date: val('mt_date'), paid:false });
+    });
+  }
+  logActivity('Meeting logged', (topic||'Sacco meeting')+' — '+presentIds.length+' present');
+  saveAll(); closeModal(); renderAll(); toast('Meeting logged');
+}
+function deleteMeeting(id){
+  if(!can('canMembers')){ toast('Only the Chairman can do this'); return; }
+  const mt = meetings.find(x=>x.id===id);
+  if(!mt) return;
+  if(!confirm('Move this meeting record to Trash?')) return;
+  moveToTrash('meeting', (mt.topic||'Sacco meeting')+' — '+fmtDate(mt.date), mt);
+  meetings = meetings.filter(x=>x.id!==id);
+  saveAll(); renderAll(); toast('Meeting moved to Trash');
+}
+
+/* ============ MERRY-GO-ROUND ============ */
+function renderRotation(){
+  const currentEl = document.getElementById('rotationCurrent');
+  if(!currentEl) return;
+  const rotAmountInput = document.getElementById('rot_amount');
+  if(rotAmountInput && document.activeElement !== rotAmountInput) rotAmountInput.value = rotation.amount || '';
+
+  if(rotation.order.length===0){
+    currentEl.innerHTML = '<div class="empty-note">Add members to the rotation order below to start.</div>';
+  } else {
+    const idx = rotation.currentIndex % rotation.order.length;
+    const m = memberById(rotation.order[idx]);
+    const payout = (rotation.amount||0) * rotation.order.length;
+    currentEl.innerHTML = `
+      <div class="mini-row"><span class="name">Next to receive</span><span class="val">${m? m.name : 'Unknown'}</span></div>
+      <div class="mini-row"><span class="name">Round payout</span><span class="val">${fmtKsh(payout)}</span></div>
+      ${can('canFinance') ? `<button class="btn green" style="margin-top:10px;width:100%;" onclick="advanceRotation()">Record payout &amp; advance</button>` : ''}
+    `;
+  }
+
+  const orderWrap = document.getElementById('rotationOrderList');
+  orderWrap.innerHTML = rotation.order.length ? rotation.order.map((mid,i)=>{
+    const m = memberById(mid);
+    return `<div class="mini-row"><span class="name">${i+1}. ${m? m.name : 'Unknown'}${i===rotation.currentIndex%Math.max(rotation.order.length,1)? ' <span class="stamp pending" style="margin-left:6px;">turn</span>':''}</span>${can('canFinance') ? `<button class="btn small danger" onclick="removeFromRotation('${mid}')">Remove</button>` : ''}</div>`;
+  }).join('') : '<div class="empty-note">No members in the rotation yet.</div>';
+
+  const histWrap = document.getElementById('rotationHistory');
+  const hist = [...rotation.history].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  histWrap.innerHTML = hist.length ? hist.map(h=>{
+    const m = memberById(h.memberId);
+    return `<div class="mini-row"><span class="name">Round ${h.round} — ${m? m.name:'Unknown'}</span><span class="val">${fmtKsh(h.amount)} on ${fmtDate(h.date)}</span></div>`;
+  }).join('') : '<div class="empty-note">No payouts recorded yet.</div>';
+}
+function saveRotationAmount(){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  rotation.amount = Number(document.getElementById('rot_amount').value) || 0;
+  saveAll(); toast('Rotation amount saved');
+}
+function rotationAddMemberModal(){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const available = members.filter(m=>!rotation.order.includes(m.id));
+  if(available.length===0){ toast('All members are already in the rotation'); return; }
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>Add to Rotation</h3>
+    <div class="field"><label>Member</label>
+      <select id="rot_newmember">${available.map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}</select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="confirmAddToRotation()">Add</button>
+    </div>
+  `);
+}
+function confirmAddToRotation(){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  rotation.order.push(val('rot_newmember'));
+  saveAll(); closeModal(); renderRotation(); toast('Added to rotation');
+}
+function removeFromRotation(memberId){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  const idx = rotation.order.indexOf(memberId);
+  if(idx===-1) return;
+  const m = memberById(memberId);
+  if(!confirm('Remove '+(m?m.name:'this member')+' from the rotation order? They can be re-added anytime.')) return;
+  rotation.order.splice(idx,1);
+  if(rotation.currentIndex >= rotation.order.length) rotation.currentIndex = 0;
+  saveAll(); renderRotation();
+}
+function advanceRotation(){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  if(rotation.order.length===0) return;
+  const idx = rotation.currentIndex % rotation.order.length;
+  const memberId = rotation.order[idx];
+  const payout = (rotation.amount||0) * rotation.order.length;
+  rotation.history.push({ round: rotation.history.length+1, memberId, amount: payout, date: new Date().toISOString().slice(0,10) });
+  rotation.currentIndex = (idx+1) % rotation.order.length;
+  saveAll(); renderRotation(); toast('Payout recorded, moved to next member');
+}
+
+/* ============ ELECTIONS ============ */
+function renderElections(){
+  const wrap = document.getElementById('electionsList');
+  if(!wrap) return;
+  const list = [...elections].sort((a,b)=>new Date(b.createdDate)-new Date(a.createdDate));
+  wrap.innerHTML = list.length ? list.map(el=>{
+    const positionsHtml = el.positions.map(p=>{
+      const totalVotes = p.candidates.reduce((s,c)=>s+c.votes,0);
+      const alreadyVoted = currentMemberId && p.voterIds.includes(currentMemberId);
+      const canVoteHere = el.status==='open' && currentRole==='member' && !alreadyVoted;
+      const candidatesHtml = p.candidates.map(c=>{
+        const pct = totalVotes>0 ? Math.round((c.votes/totalVotes)*100) : 0;
+        return `<div class="mini-row">
+          <span class="name">${c.name}${(el.status==='closed'||can('canAdmin'))? ' — '+c.votes+' vote'+(c.votes===1?'':'s')+' ('+pct+'%)' : ''}</span>
+          ${canVoteHere ? `<button class="btn small green" onclick="castVote('${el.id}','${p.id}','${c.id}')">Vote</button>` : ''}
+        </div>`;
+      }).join('');
+      return `<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);">
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">${p.title}</div>
+        ${candidatesHtml}
+        ${alreadyVoted ? '<div class="empty-note" style="padding:4px 0;">You already voted for this position.</div>' : ''}
+      </div>`;
+    }).join('');
+    return `<div class="rcard" style="flex-direction:column;align-items:stretch;">
+      <div class="rcard-main" style="width:100%;">
+        <div class="rcard-title">${el.title}</div>
+        <div class="rcard-sub">${fmtDate(el.createdDate)}</div>
+        ${positionsHtml}
+      </div>
+      ${can('canAdmin') ? `<div style="margin-top:12px;display:flex;gap:6px;">
+        ${el.status==='open' ? `<button class="btn small danger" onclick="closeElection('${el.id}')">Close voting</button>` : `<span class="stamp paid">closed</span>`}
+      </div>` : ''}
+    </div>`;
+  }).join('') : '<div class="empty-note" style="color:rgba(247,243,232,0.6);">No elections yet.</div>';
+}
+function electionModal(){
+  if(!can('canAdmin')){ toast('Only the Chairman can do this'); return; }
+  if(members.filter(m=>m.status==='active').length===0){ toast('Register active members first'); return; }
+  openModal(`
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>New Election</h3>
+    <div class="field"><label>Election title</label><input id="el_title" placeholder="e.g. 2027 Leadership Elections"></div>
+    <div class="field"><label>Position 1 title</label><input id="el_pos1" placeholder="e.g. Chairman"></div>
+    <div class="field"><label>Candidates for position 1 (comma separated)</label><input id="el_cand1" placeholder="e.g. John Kiptoo, Mary Wanjiru"></div>
+    <div class="field"><label>Position 2 title (optional)</label><input id="el_pos2" placeholder="e.g. Treasurer"></div>
+    <div class="field"><label>Candidates for position 2</label><input id="el_cand2" placeholder="Leave blank if no position 2"></div>
+    <div class="field"><label>Position 3 title (optional)</label><input id="el_pos3" placeholder="e.g. Secretary"></div>
+    <div class="field"><label>Candidates for position 3</label><input id="el_cand3" placeholder="Leave blank if no position 3"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="saveElection()">Open for voting</button>
+    </div>
+  `);
+}
+function saveElection(){
+  if(!can('canAdmin')){ toast('Only the Chairman can do this'); return; }
+  const title = val('el_title');
+  if(!title){ toast('Enter an election title'); return; }
+  const positions = [];
+  for(let i=1;i<=3;i++){
+    const posTitle = val('el_pos'+i);
+    const candNames = val('el_cand'+i);
+    if(posTitle && candNames){
+      const candidates = candNames.split(',').map(n=>n.trim()).filter(Boolean).map(n=>({id:uid(), name:n, votes:0}));
+      if(candidates.length>0) positions.push({ id: uid(), title: posTitle, candidates, voterIds: [] });
+    }
+  }
+  if(positions.length===0){ toast('Add at least one position with candidates'); return; }
+  elections.push({ id: uid(), title, positions, status:'open', createdDate: new Date().toISOString().slice(0,10) });
+  logActivity('Election opened', title);
+  saveAll(); closeModal(); renderElections(); toast('Election opened for voting');
+}
+function castVote(electionId, positionId, candidateId){
+  ensureMemberIdentity(()=>{
+    const el = elections.find(e=>e.id===electionId);
+    if(!el || el.status!=='open') return;
+    const pos = el.positions.find(p=>p.id===positionId);
+    if(!pos) return;
+    if(pos.voterIds.includes(currentMemberId)){ toast('You already voted for this position'); return; }
+    const cand = pos.candidates.find(c=>c.id===candidateId);
+    if(!cand) return;
+    cand.votes += 1;
+    pos.voterIds.push(currentMemberId);
+    saveAll(); renderElections(); toast('Vote recorded — thank you');
+  });
+}
+function closeElection(id){
+  if(!can('canAdmin')){ toast('Only the Chairman can do this'); return; }
+  if(!confirm('Close voting for this election? Results become final and visible to everyone.')) return;
+  const el = elections.find(e=>e.id===id);
+  el.status = 'closed';
+  logActivity('Election closed', el.title);
+  saveAll(); renderElections(); toast('Election closed');
+}
+
+/* ============ DIVIDENDS ============ */
+function calculateDividends(){
+  const pool = Number(document.getElementById('divi_pool').value);
+  if(!pool || pool<=0){ toast('Enter a valid dividend pool amount'); return; }
+  const active = members.filter(m=>m.status==='active');
+  const balances = active.map(m=>({m, bal: Math.max(0, memberSavingsBalance(m.id))}));
+  const totalSavings = balances.reduce((s,x)=>s+x.bal,0);
+  const panel = document.getElementById('divi_results_panel');
+  const body = document.getElementById('divi_table_body');
+  if(totalSavings<=0){
+    toast('No savings recorded for active members yet');
+    return;
+  }
+  const rows = balances
+    .filter(x=>x.bal>0)
+    .sort((a,b)=>b.bal-a.bal)
+    .map(x=>{
+      const share = x.bal/totalSavings;
+      const payout = share*pool;
+      return `<tr><td>${x.m.name}</td><td>${fmtKsh(x.bal)}</td><td>${(share*100).toFixed(1)}%</td><td class="num">${fmtKsh(payout)}</td></tr>`;
+    }).join('');
+  body.innerHTML = rows;
+  panel.style.display = 'block';
+}
+
+/* ============ REPORTS ============ */
+function generateReport(){
+  const today = new Date().toDateString();
+  const totalSavings = contributions.reduce((s,c)=> s + (c.type==='deposit'? c.amount : -c.amount), 0);
+  const todayDeposits = contributions.filter(c=>c.type==='deposit' && new Date(c.date).toDateString()===today).reduce((s,c)=>s+c.amount,0);
+  const todayWithdrawals = contributions.filter(c=>c.type==='withdrawal' && new Date(c.date).toDateString()===today).reduce((s,c)=>s+c.amount,0);
+  const activeLoans = loans.filter(l=>l.status==='approved'||l.status==='defaulting');
+  const outstanding = activeLoans.reduce((s,l)=>s+loanBalance(l),0);
+  const defaulters = loans.filter(l=>l.status==='defaulting');
+
+  let out = `PIONEER KAPSERET BODA BODA SACCO\nDaily Office Report — ${fmtDate(new Date())}\n`;
+  out += `--------------------------------\n`;
+  out += `Registered members: ${members.length} (${members.filter(m=>m.status==='active').length} active)\n`;
+  out += `Total sacco savings: ${fmtKsh(totalSavings)}\n`;
+  out += `Today's deposits: ${fmtKsh(todayDeposits)}\n`;
+  out += `Today's withdrawals: ${fmtKsh(todayWithdrawals)}\n`;
+  out += `Loans outstanding: ${fmtKsh(outstanding)} across ${activeLoans.length} loan(s)\n`;
+  out += `Defaulters: ${defaulters.length}\n`;
+  if(defaulters.length){
+    out += defaulters.map(l=>{ const m=memberById(l.memberId); return `  - ${m? m.name:'Unknown'}: ${fmtKsh(loanBalance(l))} owing`; }).join('\n') + '\n';
+  }
+  out += `--------------------------------\nGenerated from the KBS digital passbook.`;
+  document.getElementById('reportBox').textContent = out;
+}
+function copyReport(){
+  const text = document.getElementById('reportBox').textContent;
+  navigator.clipboard.writeText(text).then(()=>toast('Report copied — paste into WhatsApp'));
+}
+function exportCSV(){
+  if(members.length===0){ toast('No members to export'); return; }
+  let csv = 'Name,ID Number,Phone,Moto Reg,Route,Join Date,Status,Savings Balance\n';
+  members.forEach(m=>{
+    csv += `"${m.name}","${m.idNumber}","${m.phone}","${m.motoReg}","${m.route}","${m.joinDate}","${m.status}","${memberSavingsBalance(m.id)}"\n`;
+  });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'kapseret-sacco-members.csv';
+  a.click(); URL.revokeObjectURL(url);
+  toast('CSV downloaded');
+}
+
+/* ============ AGM ANNUAL REPORT ============ */
+function generateAGMReport(){
+  const yearSel = document.getElementById('agmYear');
+  const year = Number(yearSel.value);
+  const inYear = d => new Date(d).getFullYear() === year;
+
+  const yearDeposits = contributions.filter(c=>c.type==='deposit' && inYear(c.date)).reduce((s,c)=>s+c.amount,0);
+  const yearWithdrawals = contributions.filter(c=>c.type==='withdrawal' && inYear(c.date)).reduce((s,c)=>s+c.amount,0);
+  const totalSavings = contributions.reduce((s,c)=> s + (c.type==='deposit'? c.amount : -c.amount), 0);
+  const loansIssued = loans.filter(l=>inYear(l.dateIssued));
+  const loansIssuedAmt = loansIssued.reduce((s,l)=>s+l.amount,0);
+  const yearRepayments = loans.reduce((s,l)=> s + (l.repayments||[]).filter(r=>inYear(r.date)).reduce((ss,r)=>ss+r.amount,0), 0);
+  const outstanding = loans.filter(l=>l.status==='approved'||l.status==='defaulting').reduce((s,l)=>s+loanBalance(l),0);
+  const newMembers = members.filter(m=>inYear(m.joinDate)).length;
+  const yearMeetings = meetings.filter(mt=>inYear(mt.date));
+  const activeCount = members.filter(m=>m.status==='active').length || 1;
+  const avgAttendance = yearMeetings.length ? Math.round(yearMeetings.reduce((s,mt)=>s+mt.presentMemberIds.length,0)/yearMeetings.length/activeCount*100) : 0;
+  const yearFines = fines.filter(f=>inYear(f.date)).reduce((s,f)=>s+f.amount,0);
+  const yearWelfareIn = welfareEntries.filter(w=>w.type==='contribution' && inYear(w.date)).reduce((s,w)=>s+w.amount,0);
+  const yearWelfareOut = welfareEntries.filter(w=>w.type==='payout' && inYear(w.date)).reduce((s,w)=>s+w.amount,0);
+  const yearRotationPayouts = rotation.history.filter(h=>inYear(h.date));
+
+  let out = `PIONEER KAPSERET BODA BODA SACCO\nAnnual General Meeting Report — ${year}\n`;
+  out += `================================\n\n`;
+  out += `MEMBERSHIP\nTotal members: ${members.length} (${activeCount} active)\nNew members joined in ${year}: ${newMembers}\n\n`;
+  out += `SAVINGS\nDeposits in ${year}: ${fmtKsh(yearDeposits)}\nWithdrawals in ${year}: ${fmtKsh(yearWithdrawals)}\nTotal sacco savings (current): ${fmtKsh(totalSavings)}\n\n`;
+  out += `LOANS\nLoans issued in ${year}: ${loansIssued.length} totalling ${fmtKsh(loansIssuedAmt)}\nRepayments received in ${year}: ${fmtKsh(yearRepayments)}\nCurrently outstanding: ${fmtKsh(outstanding)}\n\n`;
+  out += `WELFARE FUND\nContributions in ${year}: ${fmtKsh(yearWelfareIn)}\nPayouts in ${year}: ${fmtKsh(yearWelfareOut)}\nCurrent balance: ${fmtKsh(welfareBalance())}\n\n`;
+  out += `FINES\nTotal fines issued in ${year}: ${fmtKsh(yearFines)}\n\n`;
+  out += `MEETINGS\nMeetings held in ${year}: ${yearMeetings.length}\nAverage attendance: ${avgAttendance}%\n\n`;
+  out += `MERRY-GO-ROUND\nPayouts made in ${year}: ${yearRotationPayouts.length}\n\n`;
+  out += `================================\nPrepared for the ${year} Annual General Meeting.`;
+  document.getElementById('agmReportBox').textContent = out;
+}
+function copyAGMReport(){
+  const text = document.getElementById('agmReportBox').textContent;
+  navigator.clipboard.writeText(text).then(()=>toast('AGM report copied'));
+}
+
+/* ============ ACTIVITY LOG ============ */
+function renderActivityLog(){
+  const wrap = document.getElementById('activityLogList');
+  if(!wrap) return;
+  const countEl = document.getElementById('activityLogCount');
+  if(countEl) countEl.textContent = activityLog.length + ' entries';
+  const list = activityLog.slice(0, 150);
+  wrap.innerHTML = list.length ? list.map(a=>`
+    <div class="mini-row">
+      <span class="name">${a.action}<br><span style="font-weight:400;color:var(--text2);font-size:11.5px;">${a.detail}</span></span>
+      <span class="val" style="text-align:right;font-size:10.5px;">${a.role}<br>${fmtDate(a.date)}</span>
+    </div>
+  `).join('') : '<div class="empty-note">No activity recorded yet.</div>';
+}
+
+/* ============ SETTINGS ============ */
+function changePin(){
+  if(currentRole==='member'){ toast('The Chairman manages the shared Member PIN'); return; }
+  const cur = val('curPin'), nw = val('newPin');
+  if(cur !== roles[currentRole].pin){ toast('Current PIN is wrong'); return; }
+  if(!/^\d{4}$/.test(nw)){ toast('New PIN must be 4 digits'); return; }
+  roles[currentRole].pin = nw; saveAll(); toast('PIN updated');
+  document.getElementById('curPin').value=''; document.getElementById('newPin').value='';
+}
+function renderOfficerPins(){
+  const wrap = document.getElementById('officerPinsList');
+  if(!wrap) return;
+  wrap.innerHTML = Object.keys(roles).map(r=>{
+    const role = roles[r];
+    return `<div class="field" style="display:flex;align-items:flex-end;gap:8px;">
+      <div style="flex:1;"><label>${role.label}</label><input id="rpin_${r}" value="${role.pin}" maxlength="4" inputmode="numeric"></div>
+      <button class="btn small green" onclick="setOfficerPin('${r}')">Save</button>
+    </div>`;
+  }).join('');
+}
+function setOfficerPin(r){
+  if(!can('canAdmin')){ toast('Only the Chairman can do this'); return; }
+  const nw = document.getElementById('rpin_'+r).value.trim();
+  if(!/^\d{4}$/.test(nw)){ toast('PIN must be 4 digits'); return; }
+  roles[r].pin = nw;
+  logActivity('PIN reset', roles[r].label+' PIN changed');
+  saveAll(); toast(roles[r].label + ' PIN updated');
+}
+function saveInterest(){
+  if(!can('canFinance')){ toast('Only the Chairman can do this'); return; }
+  interestRate = Number(document.getElementById('interestRate').value) || 0;
+  saveAll(); toast('Default interest rate saved');
+}
+function wipeData(){
+  if(!can('canAdmin')){ toast('Only the Chairman can do this'); return; }
+  if(!confirm('This deletes ALL members, savings, loans and notices from this device. This cannot be undone. Continue?')) return;
+  if(!confirm('Are you absolutely sure? Type OK to confirm by pressing OK.')) return;
+  members=[]; contributions=[]; loans=[]; notices=[];
+  logActivity('Data erased', 'All members, savings, loans and notices wiped');
+  saveAll(); renderAll(); toast('All data erased');
+}
+
+/* ============ BACKUP & RESTORE ============ */
+function downloadBackup(){
+  if(!can('canAdmin')){ toast('Only the Chairman can do this'); return; }
+  const backup = {
+    exportedAt: new Date().toISOString(),
+    members, contributions, loans, notices, welfareEntries, fines, meetings, rotation, trash, activityLog, elections, interestRate,
+    roles: Object.fromEntries(Object.keys(roles).map(r=>[r,{label:roles[r].label, pin:roles[r].pin}]))
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'kbs-sacco-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click(); URL.revokeObjectURL(url);
+  lastBackupAt = new Date().toISOString();
+  DB.set('lastBackupAt', lastBackupAt);
+  logActivity('Backup downloaded', '');
+  renderDashboard();
+  toast('Backup downloaded');
+}
+function restoreBackup(file){
+  if(!file) return;
+  if(!can('canAdmin')){ toast('Only the Chairman can restore a backup'); return; }
+  if(!confirm('Restoring will REPLACE all current data on this device with the backup file. Continue?')) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    try{
+      const data = JSON.parse(e.target.result);
+      members = data.members || [];
+      contributions = data.contributions || [];
+      loans = data.loans || [];
+      notices = data.notices || [];
+      welfareEntries = data.welfareEntries || [];
+      fines = data.fines || [];
+      meetings = data.meetings || [];
+      rotation = data.rotation || {amount:0, order:[], currentIndex:0, history:[]};
+      trash = data.trash || [];
+      activityLog = data.activityLog || [];
+      elections = data.elections || [];
+      interestRate = data.interestRate ?? interestRate;
+      if(data.roles){
+        Object.keys(data.roles).forEach(r=>{
+          if(roles[r]) roles[r].pin = data.roles[r].pin;
+        });
+      }
+      logActivity('Backup restored', 'Data replaced from backup file');
+      saveAll(); renderAll(); renderOfficerPins();
+      document.getElementById('interestRate').value = interestRate;
+      toast('Backup restored');
+    }catch(err){
+      toast('Could not read that backup file');
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* ============ MODAL ENGINE ============ */
+function openModal(html){
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modalBg').classList.add('open');
+}
+function closeModal(){ document.getElementById('modalBg').classList.remove('open'); }
+document.getElementById('modalBg').addEventListener('click', e=>{ if(e.target.id==='modalBg') closeModal(); });
+function val(id){ return document.getElementById(id).value.trim(); }
+
+/* ============ FAB ROUTING ============ */
+function getActivePage(){
+  const el = document.querySelector('.page.active');
+  return el ? el.id.replace('page-','') : 'dashboard';
+}
+function openFabModal(){
+  haptic();
+  const active = getActivePage();
+  if(active==='members' && can('canMembers')) memberModal(null);
+  else if(active==='contributions' && can('canFinance')) contributionModal();
+  else if(active==='loans' && (can('canFinance') || currentRole==='member')) loanModal();
+  else if(active==='notices' && can('canNotices')) noticeModal();
+  else if(active==='welfare' && can('canFinance')) welfareModal();
+  else if(active==='fines' && can('canFinance')) fineModal();
+  else if(active==='meetings' && can('canMembers')) meetingModal();
+  else if(active==='elections' && can('canAdmin')) electionModal();
+  else toast('Your role cannot do that');
+}
+function updateFabVisibility(){
+  const active = getActivePage();
+  const fab = document.getElementById('fabBtn');
+  const allowedTab =
+    (active==='members' && can('canMembers')) ||
+    (active==='contributions' && can('canFinance')) ||
+    (active==='loans' && (can('canFinance') || currentRole==='member')) ||
+    (active==='notices' && can('canNotices')) ||
+    (active==='welfare' && can('canFinance')) ||
+    (active==='fines' && can('canFinance')) ||
+    (active==='meetings' && can('canMembers')) ||
+    (active==='elections' && can('canAdmin'));
+  fab.style.display = allowedTab ? 'flex' : 'none';
+}
+
+/* ============ SPLASH ============ */
+window.addEventListener('load', async ()=>{
+  const minWait = new Promise(r=>setTimeout(r, 650));
+  await Promise.all([bootCloudSync(), minWait]);
+  document.getElementById('splash').classList.add('hide');
+});
+</script>
+</body>
+</html>
